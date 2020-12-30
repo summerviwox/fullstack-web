@@ -1,5 +1,5 @@
 <template>
-  <div class="root">
+  <div class="vroot root">
     <div class="top">
       <div class="titles">
         <div class="title" @click="switchPage(0)" v-bind:style="{'color':currentIndex==0?'#0099FF':'#ffffff'}">主页</div>
@@ -10,6 +10,7 @@
     <div class="container">
       <router-view></router-view>
     </div>
+    <div class="footer"></div>
   </div>
 </template>
 

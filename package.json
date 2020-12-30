@@ -3,12 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "dev": "vue-cli-service serve --mode dev",
+    "pro": "vue-cli-service serve --mode pro",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "element-ui": "^2.14.1",
     "less": "^4.0.0",
     "less-loader": "^7.1.0",
     "vue": "^2.6.11",
