@@ -1,3 +1,13 @@
+@font-face {
+  font-family: 'JetBrainsMono';
+  src: url('../assets/webfont/JetBrainsMono-Regular.woff2');
+  font-style: normal;
+  font-weight: normal;
+}
+
+*{
+  font-family:"Fira Code";
+}
 .vroot{
   width: 100%;
   height: 100%;
@@ -18,10 +28,10 @@
   display: flex;
   flex-direction: row;
 }
-.myscroller{
+.myscroller,.hljs{
   &::-webkit-scrollbar{
-    width: 5px;
-    height: 5px;
+    width: 8px;
+    height: 8px;
     background: grey;
   }
   &::-webkit-scrollbar-thumb{
@@ -29,6 +39,7 @@
   }
   &::-webkit-scrollbar-track{
     background: #dcdcdc;
+    cursor: pointer;
   }
 }
 .textstyletitle{

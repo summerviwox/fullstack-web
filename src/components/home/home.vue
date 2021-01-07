@@ -1,12 +1,14 @@
 <template>
-<div class="root">
-  home
+<div class="vroot">
+  <markdown></markdown>
 </div>
 </template>
 
 <script>
+import Markdown from "../markdown/markdown";
 export default {
-name: "home"
+name: "home",
+  components: {Markdown}
 }
 </script>
 

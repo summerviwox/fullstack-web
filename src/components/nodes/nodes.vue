@@ -32,7 +32,7 @@ export default {
       this.$set(this.currentNodeData,'selected',false)
       this.$set(this,'currentNodeData',node)
       this.$set(this.currentNodeData,'selected',true)
-      console.log(node)
+      this.$emit("currentNode",node)
     }
   },
   mounted() {

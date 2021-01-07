@@ -32,6 +32,9 @@ export default {
       this.currentIndex = index
         this.$router.push({path:this.pageUrl[index]})
     }
+  },
+  mounted() {
+    this.switchPage(1)
   }
 }
 </script>

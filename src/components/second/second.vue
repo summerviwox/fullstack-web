@@ -1,22 +1,26 @@
 <template>
   <div class="hroot root">
-    <nodes class="menu myscroller"></nodes>
-    <div class="view"></div>
+    <nodes ref="nodes" class="menu myscroller" @currentNode="currentNode"></nodes>
+    <markdown ref="markdown" class="view"></markdown>
   </div>
 </template>
 
 <script>
 import Nodes from "../nodes/nodes";
+import Markdown from "../markdown/markdown";
 export default {
   name: "second",
-  components: {Nodes},
+  components: {Markdown, Nodes},
   data:function (){
     return{
 
     }
   },
   methods:{
-
+    //当前选中节点回调
+    currentNode(node){
+      this.$refs.markdown.marktext = node.markdown
+    }
   },
   mounted() {
 
