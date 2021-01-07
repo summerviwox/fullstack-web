@@ -1,28 +1,48 @@
+@import url("/src/common/common");
 .roota{
   cursor: pointer;
   .title{
     flex: 1;
     width: 0;
+    display: flex;
     white-space: nowrap;
     line-height: 40px;
-    color: #143e05;
-    font-size: 15px;
     height:40px;
-    background: white;
     margin-left:10px;
-
+    .text{
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 150px;
+    }
   }
   .line{
     height: 1px;
     background: #eeeeee;
   }
-  .image{
-    width: 15px;
+  .wimage{
+    width: 10px;
+    height: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-self: center;
    /deep/img{
-     width: 15px;
+     width: 10px;
+     height: 10px;
    }
+  }
+  .himage{
+    align-self: center;
+    width: 10px;
+    height: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    /deep/img{
+      width: 10px;
+      height: 10px;
+    }
   }
 }

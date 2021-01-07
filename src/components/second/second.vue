@@ -1,6 +1,6 @@
 <template>
   <div class="hroot root">
-    <nodes class="menu"></nodes>
+    <nodes class="menu myscroller"></nodes>
     <div class="view"></div>
   </div>
 </template>

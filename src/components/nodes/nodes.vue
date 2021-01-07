@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <node v-for="(item,index) in nodes" :key="index" :node="item" @changeNode="changeNode" @addNodes="addNodes"></node>
+    <node v-for="(item,index) in nodes" :key="index" :node="item" @changeNode="changeNode" @addNodes="addNodes" @currentNode="currentNode"></node>
   </div>
 </template>
 
@@ -12,7 +12,8 @@ export default {
   components: {Node},
   data:function (){
     return{
-      nodes:[]
+      nodes:[],
+      currentNodeData:{}
     }
   },
   methods:{
@@ -25,6 +26,13 @@ export default {
     },
     changeNode(node){
       this.nodes[node.index].showNodes = !this.nodes[node.index].showNodes
+    },
+    //当前选中节点回调
+    currentNode(node){
+      this.$set(this.currentNodeData,'selected',false)
+      this.$set(this,'currentNodeData',node)
+      this.$set(this.currentNodeData,'selected',true)
+      console.log(node)
     }
   },
   mounted() {

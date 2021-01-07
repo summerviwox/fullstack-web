@@ -1,16 +1,19 @@
 <template>
   <div class="roota">
-    <div class="h">
-      <div class="h" v-bind:style="{'margin-left':10+node.level*20+'px'}" v-if="node.node!=undefined&&node.node.length!=0">
-        <el-image v-if="node.showNodes" v-bind:style="{'margin-left':10+node.level*20+'px'}" fit="fill" :src="require('../../assets/down.png')" class="image" />
-        <el-image v-else fit="fill" :src="require('../../assets/down.png')" class="image" />
+    <div class="h" v-bind:style="{'background':node.selected?'lightgray':'white'}"  @click="ClickNodes(node.id)">
+      <div class="h" v-bind:style="{'margin-left':10+node.level*20+'px','visibility':getImageVisible()}">
+        <el-image v-if="node.showNodes"  fit="contain" :src="require('../../assets/down.png')" class="wimage" />
+        <el-image v-else fit="contain" :src="require('../../assets/right.png')" class="himage" />
       </div>
-      <div class="image" v-else v-bind:style="{'margin-left':10+node.level*20+'px'}"></div>
-      <div class="title" @click="ClickNodes(node.id)" @addNodes="addNodes">{{node.title}}</div>
+      <div class="title textstyletitle" :title="node.title">
+        <div class="text" :style="{'color':node.selected?'#0099FF':'#143e05'}">{{node.title}}</div>
+        <div class="childcount">{{getchildcount()}}</div>
+      </div>
+
     </div>
     <div class="line"></div>
     <div v-if="node.showNodes">
-      <node  v-for="(item,index) in node.node" :node="item" :key="index" @changeNode="changeNode" @addNodes="addNodes"></node>
+      <node  v-for="(item,index) in node.node" :node="item" :key="index" @currentNode="currentNode" @changeNode="changeNode" @addNodes="addNodes"></node>
     </div>
   </div>
 </template>
@@ -34,7 +37,8 @@ export default {
           utime:null,
           "type":0,
           showNodes:false,
-          node:[]
+          node:[],
+          selected:false
         }
       }
     }
@@ -44,28 +48,40 @@ export default {
     }
   },
   methods:{
+    getImageVisible(){
+      return (this.node!=undefined&&this.node.childCount!=0)?'visible':'hidden'
+    },
+    getchildcount(){
+      return this.node.childCount==0?"":"("+this.node.childCount+")"
+    },
     ClickNodes(id){
-      if(this.node.showNodes&&this.node.node!=undefined&&this.node.node.length!=0){
-        this.$emit("changeNode",this.node)
-        return
-      }
       this.$emit("changeNode",this.node)
-      api.getApi(api.selectWithOutHtmlDataByParentId,{
-        id:id
-      },res=> {
-        this.$emit("addNodes",{index:this.node.index,res:res})
-      })
+      this.$emit("currentNode",this.node)
+      if(!this.node.showNodes&&this.node.node!=undefined&&this.node.node.length!=0){
+        //关闭状态
+      }else{
+        api.getApi(api.selectWithOutHtmlDataByParentId,{
+          id:id
+        },res=> {
+          for(let i=0;i<res.length;i++){
+            res[i].index = i
+            res[i].level = this.node.level + 1
+            res[i].showNodes = false
+          }
+          this.$emit("addNodes",{index:this.node.index,res:res})
+        })
+      }
     },
     addNodes(data){
-      for(let i=0;i<data.res.length;i++){
-        data.res[i].index = i
-        data.res[i].level = this.node.node[data.index].level + 1
-        data.res[i].showNodes = false
-      }
       this.$set(this.node.node[data.index],'node', data.res)
     },
     changeNode(node){
+     // this.node.node[node.index].selected = true//选中
       this.node.node[node.index].showNodes = !this.node.node[node.index].showNodes
+    },
+    //当前选中节点回调
+    currentNode(node){
+      this.$emit("currentNode",node)
     }
   },
   mounted() {
