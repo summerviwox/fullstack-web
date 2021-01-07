@@ -28,11 +28,11 @@ export default {
       this.nodes[node.index].showNodes = !this.nodes[node.index].showNodes
     },
     //当前选中节点回调
-    currentNode(node){
+    currentNode(data){
       this.$set(this.currentNodeData,'selected',false)
-      this.$set(this,'currentNodeData',node)
+      this.$set(this,'currentNodeData',data.node)
       this.$set(this.currentNodeData,'selected',true)
-      this.$emit("currentNode",node)
+      this.$emit("currentNode",data)
     }
   },
   mounted() {

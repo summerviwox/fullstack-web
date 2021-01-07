@@ -56,7 +56,7 @@ export default {
     },
     ClickNodes(id){
       this.$emit("changeNode",this.node)
-      this.$emit("currentNode",this.node)
+      this.$emit("currentNode",{node:this.node,nodelist:[this.node.index]})
       if(!this.node.showNodes&&this.node.node!=undefined&&this.node.node.length!=0){
         //关闭状态
       }else{
@@ -80,8 +80,9 @@ export default {
       this.node.node[node.index].showNodes = !this.node.node[node.index].showNodes
     },
     //当前选中节点回调
-    currentNode(node){
-      this.$emit("currentNode",node)
+    currentNode(data){
+      data.nodelist.unshift(this.node.index)
+      this.$emit("currentNode",data)
     }
   },
   mounted() {
