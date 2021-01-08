@@ -56,7 +56,9 @@ export default {
     },
     ClickNodes(id){
       this.$emit("changeNode",this.node)
-      this.$emit("currentNode",{node:this.node,nodelist:[this.node.index]})
+      let nodelist = []
+      nodelist.push(this.node.index)
+      this.$emit("currentNode",this.node,nodelist)
       if(!this.node.showNodes&&this.node.node!=undefined&&this.node.node.length!=0){
         //关闭状态
       }else{
@@ -76,13 +78,14 @@ export default {
       this.$set(this.node.node[data.index],'node', data.res)
     },
     changeNode(node){
+      console.log( 555,this.node.node[node.index])
      // this.node.node[node.index].selected = true//选中
       this.node.node[node.index].showNodes = !this.node.node[node.index].showNodes
     },
     //当前选中节点回调
-    currentNode(data){
-      data.nodelist.unshift(this.node.index)
-      this.$emit("currentNode",data)
+    currentNode(node,nodelist){
+      nodelist.unshift(this.node.index)
+      this.$emit("currentNode",node,nodelist)
     }
   },
   mounted() {

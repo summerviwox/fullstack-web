@@ -8,6 +8,7 @@
 <script>
 import Nodes from "../nodes/nodes";
 import Markdown from "../markdown/markdown";
+import bus from "../../util/bus";
 export default {
   name: "second",
   components: {Markdown, Nodes},
@@ -18,20 +19,12 @@ export default {
   },
   methods:{
     //当前选中节点回调
-    currentNode(data){
-      console.log(data)
-      let dirs = this.getMidNode(this.$refs.nodes.nodes,data.nodelist,"");
-      console.log(dirs)
-      this.$refs.markdown.marktext = data.node.markdown
+    currentNode(node,nodelist){
+      let nodeview = this.$refs.nodes;
+      let dirs =nodeview.getMidNode(nodeview.nodes,nodelist,"")
+      this.$refs.markdown.marktext = node.markdown
+      bus.$emit("currentInfo",dirs)
     },
-    getMidNode(nodes,list,str){
-      if(list.length==0){
-        return str
-      }
-      str = str +nodes[list.shift()].title+'-'
-      console.log(str)
-      return this.getMidNode(nodes,list,str)
-    }
   },
   mounted() {
 

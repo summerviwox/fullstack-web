@@ -13,6 +13,7 @@ export default {
   data:function (){
     return{
       nodes:[],
+      nodelist:[],
       currentNodeData:{}
     }
   },
@@ -28,11 +29,26 @@ export default {
       this.nodes[node.index].showNodes = !this.nodes[node.index].showNodes
     },
     //当前选中节点回调
-    currentNode(data){
+    currentNode(node,nodelist){
       this.$set(this.currentNodeData,'selected',false)
-      this.$set(this,'currentNodeData',data.node)
+      this.$set(this,'currentNodeData',node)
       this.$set(this.currentNodeData,'selected',true)
-      this.$emit("currentNode",data)
+      this.nodelist=nodelist
+      this.$emit("currentNode",node,nodelist)
+    },
+    //输出层次结构
+    getMidNode(nodes,nodelist,str){
+      if(nodelist.length==0){
+        return str
+      }
+      let index = nodelist.shift()
+      if(nodelist.length==0){
+        str = str +nodes[index].title
+      }else{
+        str = str +nodes[index].title+ '&nbsp;<span>></span>&nbsp;'
+      }
+      nodes = nodes[index].node
+      return this.getMidNode(nodes,nodelist,str)
     }
   },
   mounted() {

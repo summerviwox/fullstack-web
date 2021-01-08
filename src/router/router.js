@@ -5,8 +5,8 @@ vue.use(VueRouter)
 const router = new VueRouter({
     routes:[
         {
-            path:'/main',
-            component:()=>import("@/components/main/main"),
+            path:'/all',
+            component:()=>import("@/components/all/all"),
             children:[
                 {
                     path:'/home',

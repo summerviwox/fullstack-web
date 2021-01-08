@@ -8,15 +8,22 @@
       </div>
     </div>
     <div class="container">
-      <router-view></router-view>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </div>
-    <div class="footer"></div>
+    <div class="footer">
+      <myfooter ref="footer"></myfooter>
+    </div>
   </div>
 </template>
 
 <script>
+import bus from "../../util/bus";
+import myfooter from "../footer/myfooter";
 export default {
-  name: "main",
+  name: "all",
+  components: {myfooter},
   data:function (){
     return{
       currentIndex:0,
@@ -24,21 +31,25 @@ export default {
         "/home",
         "/second",
         "/mine",
-      ]
+      ],
     }
   },
   methods:{
     switchPage(index){
       this.currentIndex = index
         this.$router.push({path:this.pageUrl[index]})
+    },
+    currentInfo(str){
+      this.$refs.footer.info = str
     }
   },
   mounted() {
     this.switchPage(1)
+    bus.$on("currentInfo",this.currentInfo)
   }
 }
 </script>
 
 <style scoped lang="less">
-@import "main";
+@import "all";
 </style>
