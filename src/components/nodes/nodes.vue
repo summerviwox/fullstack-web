@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Node from "../code/node";
+import Node from "../node/node";
 import api from "../../api/api";
 export default {
   name: "nodes",

@@ -1,6 +1,10 @@
 <template>
   <div class="hroot root">
-    <nodes ref="nodes" class="menu myscroller" @currentNode="currentNode"></nodes>
+    <div class="menu vroot">
+      <searchnodes v-show="currentMenuIndex==1" class="dir myscroller"></searchnodes>
+      <nodes v-show="currentMenuIndex==0" ref="nodes" class="dir myscroller" @currentNode="currentNode"></nodes>
+      <nodesearch @switchMenu="switchMenu"></nodesearch>
+    </div>
     <markdown ref="markdown" class="view"></markdown>
   </div>
 </template>
@@ -9,12 +13,14 @@
 import Nodes from "../nodes/nodes";
 import Markdown from "../markdown/markdown";
 import bus from "../../util/bus";
+import nodesearch from "../nodesearch/nodesearch";
+import Searchnodes from "../searchnodes/searchnodes";
 export default {
   name: "second",
-  components: {Markdown, Nodes},
+  components: {Searchnodes, Markdown, Nodes,nodesearch},
   data:function (){
     return{
-
+      currentMenuIndex:0
     }
   },
   methods:{
@@ -25,6 +31,9 @@ export default {
       this.$refs.markdown.marktext = node.markdown
       bus.$emit("currentInfo",dirs)
     },
+    switchMenu(index){
+      this.currentMenuIndex = index
+    }
   },
   mounted() {
 

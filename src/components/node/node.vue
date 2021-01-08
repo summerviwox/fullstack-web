@@ -78,8 +78,6 @@ export default {
       this.$set(this.node.node[data.index],'node', data.res)
     },
     changeNode(node){
-      console.log( 555,this.node.node[node.index])
-     // this.node.node[node.index].selected = true//选中
       this.node.node[node.index].showNodes = !this.node.node[node.index].showNodes
     },
     //当前选中节点回调
