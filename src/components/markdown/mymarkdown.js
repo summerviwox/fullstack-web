@@ -22,5 +22,6 @@ const md = require('markdown-it')({
         inline:false,
         hljs:require('highlight.js')
     })
+    .use(require('markdown-it-multimd-table'))
 
 export default md

@@ -1,7 +1,7 @@
 <template>
   <div class="root">
     <img @click="switchMenu"  class="switch" src="../../assets/switch.png"/>
-    <input class="text" v-model="text" maxlength="23" type="text"/>
+    <input @keyup.enter="onEnterSearch()" class="text" v-model="text" maxlength="23" type="text"/>
     <img class="img" src="../../assets/search.png"/>
   </div>
 </template>
@@ -19,6 +19,11 @@ export default {
     switchMenu(){
       this.currentMenu = 1-this.currentMenu
       this.$emit('switchMenu',this.currentMenu )
+    },
+    onEnterSearch(){
+      if(this.currentMenu==0){
+        this.switchMenu()
+      }
     }
   }
 }
