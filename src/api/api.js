@@ -41,18 +41,21 @@ const api = {
             typeof down ==="function"&&down(error)
         })
     },
-    postApi(moudle,params,go,down){
+    postApi(moudle,data,go,down){
         instance.request({
             url:url+moudle,
             method:"post",
-            params:params,
+            data:data,
         }).then(res=>{
-            typeof go ==="function"&&go(res)
+            typeof go ==="function"&&go(res.data)
         }).catch(error=>{
             typeof down ==="function"&&down(error)
         })
     },
-    selectWithOutHtmlDataByParentId:'/selectWithOutHtmlDataByParentId'
+    selectWithOutHtmlDataByParentId:'/selectWithOutHtmlDataByParentId',
+    search:'/search',
+    selectParentsById:'/selectParentsById',
+    selectMarkdownById:'/selectMarkdownById'
 }
 
 export default api

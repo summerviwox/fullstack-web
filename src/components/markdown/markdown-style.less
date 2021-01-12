@@ -1,25 +1,28 @@
 .html/deep/{
+  padding: 4px;
   table{
-    border: darkgrey 1px solid;
+    border: #999999 1px solid;
     border-collapse: collapse;
     tbody{
       tr{
         td{
-          border: 1px solid darkgrey;
+          border: 1px solid #999999;
         }
         &:nth-child(odd){
-          background-color: #CCE8EB;
+          background-color: #CCFFFF;
         }
         &:nth-child(even){
-          background-color: bisque;
+          background-color: #FFFFCC;
         }
       }
     }
     thead{
-      th{
-        background-color: darkgrey;
-        padding: 4px 4px;
-        border: 1px solid #cad9ea;
+      tr{
+        th{
+          background-color: darkgrey;
+          padding: 4px 4px;
+          border-right: 1px solid #cad9ea;
+        }
       }
     }
   }

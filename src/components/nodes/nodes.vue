@@ -1,15 +1,25 @@
 <template>
   <div class="root">
-    <node v-for="(item,index) in nodes" :key="index" :node="item" @changeNode="changeNode" @addNodes="addNodes" @currentNode="currentNode"></node>
+    <node :type="type" v-for="(item,index) in nodes" :key="index" :node="item" @changeNode="changeNode" @addNodes="addNodes" @currentNode="currentNode"></node>
   </div>
 </template>
 
 <script>
 import Node from "../node/node";
 import api from "../../api/api";
+const TYPE_NODE = {
+  NODE:"node",
+  STYLE:"style"
+}
 export default {
   name: "nodes",
   components: {Node},
+  props:{
+    type:{
+      type:String,
+      default:TYPE_NODE.NODE
+    }
+  },
   data:function (){
     return{
       nodes:[],
@@ -42,7 +52,8 @@ export default {
         return str
       }
       let index = nodelist.shift()
-      if(nodelist.length==0){
+      console.log("nodes",nodes,nodelist,nodelist.length,index)
+      if(nodelist.length===0){
         str = str +nodes[index].title
       }else{
         str = str +nodes[index].title+ '&nbsp;<span>></span>&nbsp;'

@@ -17,13 +17,23 @@ export default {
   },
   methods:{
     switchMenu(){
-      this.currentMenu = 1-this.currentMenu
+      this.currentMenu = (this.currentMenu+1)%3
+      switch (Number.parseInt(this.currentMenu)){
+        case 0:
+          console.log("目录")
+          break
+        case 1:
+          console.log("搜索")
+          break
+        case 2:
+          console.log("最近")
+          break
+      }
       this.$emit('switchMenu',this.currentMenu )
     },
     onEnterSearch(){
-      if(this.currentMenu==0){
-        this.switchMenu()
-      }
+      this.$emit('switchMenu',1)
+      this.$emit("onEnterSearch",this.text)
     }
   }
 }

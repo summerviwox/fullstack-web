@@ -41,11 +41,15 @@ export default {
     },
     currentInfo(str){
       this.$refs.footer.info = str
+    },
+    currentSearchNode(str){
+      this.$refs.footer.info = str
     }
   },
   mounted() {
     this.switchPage(1)
     bus.$on("currentInfo",this.currentInfo)
+    bus.$on("currentSearchNode",this.currentSearchNode)
   }
 }
 </script>
