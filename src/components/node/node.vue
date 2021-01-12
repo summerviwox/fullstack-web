@@ -1,8 +1,8 @@
 <template>
   <div class="roota">
-    <div class="h" v-bind:style="{'background':node.selected?'lightgray':'white'}"  @click="ClickNodes(node.id)">
+    <div class="h" v-bind:style="{'background':node.selected?'lightgray':'white'}"  @click="clickNode(node.id)">
       <div class="h" v-bind:style="{'margin-left':10+node.level*20+'px','visibility':getImageVisible()}">
-        <el-image v-if="node.showNodes"  fit="contain" :src="require('../../assets/down.png')" class="wimage" />
+        <el-image  v-if="node.showNodes"  fit="contain" :src="require('../../assets/down.png')" class="wimage" />
         <el-image v-else fit="contain" :src="require('../../assets/right.png')" class="himage" />
       </div>
       <div class="title textstyletitle" :title="node.title">
@@ -20,7 +20,10 @@
 
 <script>
 import api from "../../api/api";
-
+const TYPE_NODE = {
+  NODE:"node",
+  STYLE:"style"
+}
 export default {
   name: "node",
   props:{
@@ -41,6 +44,10 @@ export default {
           selected:false
         }
       }
+    },
+    type:{
+      type:String,
+      default:TYPE_NODE.NODE
     }
   },
   data:function (){
@@ -57,7 +64,11 @@ export default {
       }
       return ''
     },
-    ClickNodes(id){
+    clickNode(id){
+      if(this.type==TYPE_NODE.STYLE){
+        this.$emit("clickNode",this.node)
+        return
+      }
       this.$emit("changeNode",this.node)
       let nodelist = []
       nodelist.push(this.node.index)

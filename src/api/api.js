@@ -55,6 +55,7 @@ const api = {
     selectWithOutHtmlDataByParentId:'/selectWithOutHtmlDataByParentId',
     search:'/search',
     selectParentsById:'/selectParentsById',
+    selectMarkdownById:'/selectMarkdownById'
 }
 
 export default api

@@ -2,7 +2,7 @@
   <div class="root">
     <div class="vroot">
 
-      <node :node="item" v-for="(item,index) in list" :key="index"></node>
+      <node :type="'style'" @clickNode="clickNode(item)" :node="item" v-for="(item,index) in list" :key="index"></node>
 
 <!--      <div @click="clickNode(item)" v-for="(item,index) in list" :key="index" class="mytitle textstyletitle">-->
 <!--      <div class="text">{{item.title}}</div>-->
@@ -33,6 +33,11 @@ export default {
         let str = this.getCurrentNodePath(res.data,"")
         bus.$emit("currentSearchNode",str)
 
+      },error=>{
+
+      })
+      api.postApi(api.selectMarkdownById,item,res=>{
+        this.$emit("getNodeData",res.data)
       },error=>{
 
       })

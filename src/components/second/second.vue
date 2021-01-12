@@ -2,7 +2,7 @@
   <div class="hroot root">
     <div class="menu vroot">
       <div class="dirs">
-        <searchnodes ref="searchnodes"   v-show="currentMenuIndex==1" class="dir myscroller"></searchnodes>
+        <searchnodes @getNodeData="getNodeData" ref="searchnodes"   v-show="currentMenuIndex==1" class="dir myscroller"></searchnodes>
         <nodes v-show="currentMenuIndex==0" ref="nodes" class="dir myscroller" @currentNode="currentNode"></nodes>
       </div>
       <nodesearch @onEnterSearch="onEnterSearch" @switchMenu="switchMenu"></nodesearch>
@@ -34,6 +34,9 @@ export default {
       let dirs =nodeview.getMidNode(nodeview.nodes,nodelist,"")
       this.$refs.markdown.marktext = node.markdown
       bus.$emit("currentInfo",dirs)
+    },
+    getNodeData(node){
+      this.$refs.markdown.marktext = node.markdown
     },
     switchMenu(index){
       this.currentMenuIndex = index
