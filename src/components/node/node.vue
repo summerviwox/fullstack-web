@@ -12,7 +12,7 @@
 
     </div>
     <div class="line"></div>
-    <div v-if="node.showNodes">
+    <div class="aaaa" v-if="ifShowChilds()">
       <node  v-for="(item,index) in node.node" :node="item" :key="index" @currentNode="currentNode" @changeNode="changeNode" @addNodes="addNodes"></node>
     </div>
   </div>
@@ -55,11 +55,14 @@ export default {
     }
   },
   methods:{
+    ifShowChilds(){
+      return this.node.showNodes&&(this.type===TYPE_NODE.NODE)
+    },
     getImageVisible(){
-      return (this.node!=undefined&&this.node.childCount&&this.node.childCount!=0)?'visible':'hidden'
+      return (this.type===TYPE_NODE.NODE)&&(this.node!=undefined&&this.node.childCount&&this.node.childCount!=0)?'visible':'hidden'
     },
     getchildcount(){
-      if(this.node.childCount){
+      if((this.type===TYPE_NODE.NODE)&&this.node.childCount){
         return this.node.childCount==0?"":"("+this.node.childCount+")"
       }
       return ''
@@ -69,10 +72,11 @@ export default {
         this.$emit("clickNode",this.node)
         return
       }
-      this.$emit("changeNode",this.node)
+
       let nodelist = []
       nodelist.push(this.node.index)
       this.$emit("currentNode",this.node,nodelist)
+      this.$emit("changeNode",this.node)
       if(!this.node.showNodes&&this.node.node!=undefined&&this.node.node.length!=0){
         //关闭状态
       }else{
