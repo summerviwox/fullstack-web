@@ -5,7 +5,7 @@
         <nodes v-show="currentMenuIndex==0" ref="nodes" class="dir myscroller" @currentNode="currentNode"></nodes>
         <nodes :type="'style'" v-show="currentMenuIndex==1" ref="nodes" class="dir myscroller" @currentNode="currentNode"></nodes>
 <!--        <searchnodes v-show="currentMenuIndex==1" @getNodeData="getNodeData" ref="searchnodes"  class="dir myscroller"></searchnodes>-->
-        <lastnodes v-show="currentMenuIndex==2" ref="lastnodes" class="dir myscroller"></lastnodes>
+<!--        <lastnodes v-show="currentMenuIndex==2" ref="lastnodes" class="dir myscroller"></lastnodes>-->
       </div>
       <nodesearch @onEnterSearch="onEnterSearch" @switchMenu="switchMenu"></nodesearch>
     </div>
@@ -38,7 +38,7 @@ export default {
       let dirs =nodeview.getMidNode(nodeview.nodes,nodelist,"")
       this.$refs.markdown.marktext = node.markdown
       bus.$emit("currentInfo",dirs)
-      this.$refs.lastnodes.pushList(node)
+      //this.$refs.lastnodes.pushList(node)
     },
     //搜索列表
     getNodeData(node){

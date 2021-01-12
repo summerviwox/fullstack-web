@@ -17,7 +17,7 @@ export default {
   },
   methods:{
     switchMenu(){
-      this.currentMenu = (this.currentMenu+1)%3
+      this.currentMenu = (this.currentMenu+1)%2
       switch (Number.parseInt(this.currentMenu)){
         case 0:
           console.log("目录")
