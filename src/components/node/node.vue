@@ -49,10 +49,13 @@ export default {
   },
   methods:{
     getImageVisible(){
-      return (this.node!=undefined&&this.node.childCount!=0)?'visible':'hidden'
+      return (this.node!=undefined&&this.node.childCount&&this.node.childCount!=0)?'visible':'hidden'
     },
     getchildcount(){
-      return this.node.childCount==0?"":"("+this.node.childCount+")"
+      if(this.node.childCount){
+        return this.node.childCount==0?"":"("+this.node.childCount+")"
+      }
+      return ''
     },
     ClickNodes(id){
       this.$emit("changeNode",this.node)

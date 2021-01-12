@@ -21,9 +21,8 @@ export default {
       this.$emit('switchMenu',this.currentMenu )
     },
     onEnterSearch(){
-      if(this.currentMenu==0){
-        this.switchMenu()
-      }
+      this.$emit('switchMenu',1)
+      this.$emit("onEnterSearch",this.text)
     }
   }
 }
