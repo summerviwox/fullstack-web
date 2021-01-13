@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <img @click="switchMenu"  class="switch" src="../../assets/switch.png"/>
+    <img @click="switchMenu"  class="switch" :src="switchimg"/>
     <input @keyup.enter="onEnterSearch()" class="text" v-model="text" maxlength="23" type="text"/>
     <img class="img" src="../../assets/search.png"/>
   </div>
@@ -12,29 +12,33 @@ export default {
   data:function (){
     return{
       text:'',
-      currentMenu:0
+      currentMenu:0,
+      switchimg:require("../../assets/dir.png")
     }
   },
   methods:{
-    switchMenu(){
-      this.currentMenu = (this.currentMenu+1)%2
-      switch (Number.parseInt(this.currentMenu)){
+    switchImgType(index){
+      switch (index){
         case 0:
-          console.log("目录")
-          break
+          return require("../../assets/dir.png")
         case 1:
-          console.log("搜索")
-          break
+          return require("../../assets/search.png")
         case 2:
-          console.log("最近")
-          break
+          return require("../../assets/last.png")
       }
+    },
+    switchMenu(){
+      this.currentMenu = (this.currentMenu+1)%3
+      this.switchimg = this.switchImgType(this.currentMenu)
       this.$emit('switchMenu',this.currentMenu )
     },
     onEnterSearch(){
       this.$emit('switchMenu',1)
       this.$emit("onEnterSearch",this.text)
-    }
+    },
+  },
+  mounted() {
+
   }
 }
 </script>

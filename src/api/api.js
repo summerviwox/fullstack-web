@@ -47,6 +47,9 @@ const api = {
             method:"post",
             data:data,
         }).then(res=>{
+            if(!res.data){
+                console.log(res)
+            }
             typeof go ==="function"&&go(res.data)
         }).catch(error=>{
             typeof down ==="function"&&down(error)
@@ -55,7 +58,8 @@ const api = {
     selectWithOutHtmlDataByParentId:'/selectWithOutHtmlDataByParentId',
     search:'/search',
     selectParentsById:'/selectParentsById',
-    selectMarkdownById:'/selectMarkdownById'
+    selectMarkdownById:'/selectMarkdownById',
+    updateByPrimaryKey:'/updateByPrimaryKey',
 }
 
 export default api

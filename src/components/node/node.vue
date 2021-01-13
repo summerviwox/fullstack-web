@@ -1,7 +1,7 @@
 <template>
-  <div class="roota">
+  <div class="node">
     <div class="h" v-bind:style="{'background':node.selected?'lightgray':'white'}"  @click="clickNode()">
-      <div class="h" v-bind:style="{'margin-left':10+node.level*20+'px','visibility':getImageVisible()}">
+      <div class="h" v-bind:style="{'margin-left':10+node.level*20+'px','visibility':imageVisible()}">
         <el-image  v-if="node.showNodes"  fit="contain" :src="require('../../assets/down.png')" class="wimage" />
         <el-image v-else fit="contain" :src="require('../../assets/right.png')" class="himage" />
       </div>
@@ -12,8 +12,8 @@
 
     </div>
     <div class="line"></div>
-    <div class="aaaa" v-if="ifShowChilds()">
-      <node @onclickNodeEvent="onclickNodeEvent" v-for="(item,index) in node.node" :node="item" :key="index" @currentNode="currentNode" @changeNode="changeNode" @addNodes="addNodes"></node>
+    <div class="aaaa" v-if="childsVisible()">
+      <node :type="type" @onclickNodeEvent="onclickNodeEvent" v-for="(item,index) in node.node" :node="item" :key="index"></node>
     </div>
   </div>
 </template>
@@ -46,8 +46,12 @@ export default {
       }
     },
     type:{
-      type:String,
-      default:TYPE_NODE.NODE
+      type:Object,
+      default:function () {
+        return{
+          type:TYPE_NODE.NODE
+        }
+      }
     }
   },
   data:function (){
@@ -55,63 +59,30 @@ export default {
     }
   },
   methods:{
-    ifShowChilds(){
-      return this.node.showNodes&&(this.type===TYPE_NODE.NODE)
+    //是否显示子节点
+    childsVisible(){
+      return this.node.showNodes
+          &&(this.type.type===TYPE_NODE.NODE)
     },
-    getImageVisible(){
-      return (this.type===TYPE_NODE.NODE)&&(this.node!=undefined&&this.node.childCount&&this.node.childCount!=0)?'visible':'hidden'
+    //是否显示展开收缩图标
+    imageVisible(){
+      return (this.node!=undefined&&this.node.childCount&&this.node.childCount!=0)
+      &&(this.type.type===TYPE_NODE.NODE)
+          ?'visible':'hidden'
     },
     getchildcount(){
-      if((this.type===TYPE_NODE.NODE)&&this.node.childCount){
+      if((this.type.type===TYPE_NODE.NODE)&&this.node.childCount){
         return this.node.childCount==0?"":"("+this.node.childCount+")"
       }
       return ''
     },
     clickNode(){
-
       this.$emit("onclickNodeEvent",this.node)
-      if(this.type==TYPE_NODE.STYLE){
-        this.$emit("clickNode",this.node)
-        return
-      }
-      // this.$emit("changeNode",this.node)
-      // let nodelist = []
-      // nodelist.push(this.node.index)
-      // this.$emit("currentNode",this.node,nodelist)
-
-      if(!this.node.showNodes&&this.node.node!=undefined&&this.node.node.length!=0){
-        //关闭状态
-      }else{
-        api.getApi(api.selectWithOutHtmlDataByParentId,{
-          id:this.node.id
-        },res=> {
-          for(let i=0;i<res.length;i++){
-            res[i].index = i
-            res[i].level = this.node.level + 1
-            res[i].showNodes = false
-          }
-          this.$emit("addNodes",{index:this.node.index,res:res})
-        })
-      }
     },
     //点击事件回调
     onclickNodeEvent(node){
       this.$emit("onclickNodeEvent",node)
     },
-    addNodes(data){
-      for(let i=0;i<data.res.length;i++){
-        data.res[i].parentNode = this.node.node[data.index]
-      }
-      this.$set(this.node.node[data.index],'node', data.res)
-    },
-    changeNode(node){
-      this.node.node[node.index].showNodes = !this.node.node[node.index].showNodes
-    },
-    //当前选中节点回调
-    currentNode(node,nodelist){
-      nodelist.unshift(this.node.index)
-      this.$emit("currentNode",node,nodelist)
-    }
   },
   mounted() {
 

@@ -1,13 +1,6 @@
 <template>
-  <div class="root">
-    <div class="vroot">
-
-      <node :type="'style'" @clickNode="clickNode(item)" :node="item" v-for="(item,index) in list" :key="index"></node>
-
-<!--      <div @click="clickNode(item)" v-for="(item,index) in list" :key="index" class="mytitle textstyletitle">-->
-<!--      <div class="text">{{item.title}}</div>-->
-<!--    </div>-->
-    </div>
+  <div class="root myscroller">
+    <nodes ref="nodes"  :type="{type:'style'}" @currentNodeInfo="currentNodeInfo" class="myscroller"></nodes>
   </div>
 </template>
 
@@ -15,9 +8,11 @@
 import api from "../../api/api";
 import bus from "../../util/bus";
 import Node from "../node/node";
+import Nodes from "../nodes/nodes";
+import Vue from 'vue'
 export default {
   name: "searchnodes",
-  components: {Node},
+  components: {Nodes},
   props:{
 
   },
@@ -28,16 +23,27 @@ export default {
 
   },
   methods:{
-    clickNode(item){
-      api.postApi(api.selectParentsById,item,res=>{
+    currentNodeInfo(node){
+      api.postApi(api.selectParentsById,node,res=>{
         let str = this.getCurrentNodePath(res.data,"")
-        bus.$emit("currentSearchNode",str)
+        node.path = str
+        this.$emit("currentNodeInfo",node,"search")
 
       },error=>{
 
       })
-      api.postApi(api.selectMarkdownById,item,res=>{
-        this.$emit("getNodeData",res.data)
+    },
+    search(text){
+      if(text===""){
+        this.$message.warning("至少输入一些内容")
+        return
+      }
+      api.postApi(api.search,{
+        markdown:text
+      },res=> {
+        this.$refs.nodes.nodes = res.data
+       // this.$set(this,'list',res.data)
+        //this.list = res.data
       },error=>{
 
       })

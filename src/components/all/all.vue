@@ -13,7 +13,7 @@
       </keep-alive>
     </div>
     <div class="footer">
-      <myfooter ref="footer"></myfooter>
+      <myfooter :info="footerinfo" ref="footer"></myfooter>
     </div>
   </div>
 </template>
@@ -27,6 +27,7 @@ export default {
   data:function (){
     return{
       currentIndex:0,
+      footerinfo:"",
       pageUrl:[
         "/home",
         "/second",
@@ -39,16 +40,16 @@ export default {
       this.currentIndex = index
         this.$router.push({path:this.pageUrl[index]})
     },
-    currentInfo(str){
-      this.$refs.footer.info = str
+    currentNodeInfo(node){
+      this.footerinfo = node.path
     },
     currentSearchNode(str){
-      this.$refs.footer.info = str
+      this.footerinfo = str
     }
   },
   mounted() {
     this.switchPage(1)
-    bus.$on("currentInfo",this.currentInfo)
+    bus.$on("currentNodeInfo",this.currentNodeInfo)
     bus.$on("currentSearchNode",this.currentSearchNode)
   }
 }

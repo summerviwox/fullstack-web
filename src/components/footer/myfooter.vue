@@ -8,9 +8,11 @@
 <script>
 export default {
   name: "myfooter",
+  props:{
+    info:String
+  },
   data:function (){
     return{
-      info:''
     }
   },
 }
