@@ -13,5 +13,12 @@ const nodeutil = {
         node.showNodes =false
         node.parentNode=parentNode
     },
+    getchildcount(node,type){
+        console.log(node,type)
+        if((type.type==="node")&&node.node){
+            return node.node.length==0?"":"("+node.node.length+")"
+        }
+       return ''
+    },
 }
 export default nodeutil

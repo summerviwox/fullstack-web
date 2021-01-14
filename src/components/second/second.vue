@@ -129,9 +129,13 @@ export default {
             res.data.showNodes = true
             //this.$set(res.data,'showNodes',true)
             node.node.push(res.data)
-            node.that.getchildcount()
-             this.$set(node,'node',node.node)
-            this.$message.info(res.data.id!=0?"新增成功":"新增失败")
+            //    this.$set(node,'childCountStr',count)
+                this.$set(node,'node',node.node)
+
+                let count =  nodeutil.getchildcount(node,node.that.type)
+                console.log(count)
+                node.that.childCountStr = count
+                this.$message.info(res.data.id!=0?"新增成功":"新增失败")
           },
           error=>{
 
