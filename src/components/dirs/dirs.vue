@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <nodes ref="nodes" :type="{type:'node'}" @currentNodeInfo="currentNodeInfo" class="myscroller"></nodes>
+    <nodes ref="nodes" :type="{type:'node'}" @onContextClicked="onContextClicked" @currentNodeInfo="currentNodeInfo" class="myscroller"></nodes>
   </div>
 </template>
 
@@ -23,6 +23,9 @@ export default {
         this.$set(node,'node',res)
       })
       this.$emit("currentNodeInfo",node,"dir")
+    },
+    onContextClicked(data){
+      this.$emit("onContextClicked",data)
     },
     getApiNodes(parentNode,go) {
       api.getApi(api.selectWithOutHtmlDataByParentId,{

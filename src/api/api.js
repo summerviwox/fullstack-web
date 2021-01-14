@@ -60,6 +60,7 @@ const api = {
     selectParentsById:'/selectParentsById',
     selectMarkdownById:'/selectMarkdownById',
     updateByPrimaryKey:'/updateByPrimaryKey',
+    insert:'/insert',
 }
 
 export default api

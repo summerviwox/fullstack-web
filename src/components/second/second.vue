@@ -2,9 +2,9 @@
   <div class="hroot root">
     <div class="menu vroot">
       <div class="dirs">
-        <dirs @currentNodeInfo="currentNodeInfo"  v-show="currentMenuIndex==0" ref="dir" class="dir"></dirs>
-        <searchnodes @currentNodeInfo="currentNodeInfo"  v-show="currentMenuIndex==1" ref="search" class="dir"></searchnodes>
-        <lastnodes @currentNodeInfo="currentNodeInfo" v-show="currentMenuIndex==2" ref="last" class="dir"></lastnodes>
+        <dirs @onContextClicked="onContextClicked" @currentNodeInfo="currentNodeInfo"  v-show="currentMenuIndex==0" ref="dir" class="dir"></dirs>
+        <searchnodes @onContextClicked="onContextClicked" @currentNodeInfo="currentNodeInfo"  v-show="currentMenuIndex==1" ref="search" class="dir"></searchnodes>
+        <lastnodes @onContextClicked="onContextClicked" @currentNodeInfo="currentNodeInfo" v-show="currentMenuIndex==2" ref="last" class="dir"></lastnodes>
       </div>
       <nodesearch ref="nodesearch" @onEnterSearch="onEnterSearch" @switchMenu="switchMenu"></nodesearch>
     </div>
@@ -30,58 +30,119 @@ export default {
     return{
       currentMenuIndex:0,
       searchNodes:[],
-      currentNode:{}
+      currentNode:{},
+      operateNode:{}
     }
   },
   methods:{
     currentNodeInfo(node,type){
-      this.autoSave(node)
+      this.autoSave()
+      this.operateNode = {}
       this.$refs.markdown.marktext = node.markdown
       bus.$emit('currentNodeInfo',node)
       if(type==="dir"||type==="search"){
         this.$refs.last.pushList(node)
       }
       this.currentNode = node
-
-
     },
-    autoSave(node){
-      if(this.currentNode.id){//准备加载新的node&&将要加载的node将会覆盖原来的node
-        //上一次加载的node编辑过
-        if(this.currentNode.markdown !== this.$refs.markdown.marktext){
-          this.$message.warning("编辑区域已更改 将自动保存新的变化")
+    onContextClicked(data){
+      switch (data.label){
+        case "新增根目录":
 
-          this.currentNode.markdown = this.$refs.markdown.marktext
-          this.currentNode.html = this.$refs.markdown.htmltext
-          this.currentNode.title = nodeutil.getFirstLineStr(this.$refs.markdown.marktext)
-          let data = this.currentNode
-          api.postApi(api.updateByPrimaryKey,{
-            id:data.id,
-            parentid:data.parentid,
-            markdown:data.markdown,
-            html:data.html,
-            title:data.title,
+          break
+        case "新建":
+          this.currentNode = {}
+          this.$refs.markdown.marktext = ''
+          break
+        case "删除":
+
+          break
+      }
+      this.operateNode = data.currentNode
+    },
+    autoSave(){
+      if(this.currentNode.id){//当前已有加载文档   准备加载新的node&&将要加载的node将会覆盖原来的node
+        //上一次加载的node编辑过 文档有改动
+        if(this.currentNode.markdown !== this.$refs.markdown.marktext){
+          // this.$message.warning("编辑区域已更改 将自动保存新的变化")
+          this.save();
+        }else{
+          // this.$message.warning("编辑区域没有更改变化")
+        }
+      }else{
+        //当前为刚进入界面空文档||新建的空文档
+        //处于右键操作状态
+        console.log(this.operateNode)
+        if(this.operateNode.id){
+          //this.$message.success("当前为刚进入界面空文档||新建的空文档")
+          this.insert(this.operateNode)
+        }else{
+          this.$message.info("开始使用")
+        }
+      }
+    },
+    save(){
+      if(!this.currentNode.id){
+        return
+      }
+      this.currentNode.markdown = this.$refs.markdown.marktext
+      this.currentNode.html = this.$refs.markdown.htmltext
+      this.currentNode.title = nodeutil.getFirstLineStr(this.$refs.markdown.marktext)
+      let data = this.currentNode
+      api.postApi(api.updateByPrimaryKey,{
+        id:data.id,
+        parentid:data.parentid,
+        markdown:data.markdown,
+        html:data.html,
+        title:data.title,
+        ctime:new Date().getTime(),
+        utime:new Date().getTime(),
+        type:0
+      },res=> {
+        this.keepNodeSame(data)
+        this.$message.success(data.title + ":更新成功")
+
+      },error=>{
+
+      })
+    },
+    //新增文档
+    insert(node){
+      if(this.$refs.markdown.marktext.length==0){
+        this.$message.warning("新文档至少需要一些内容")
+        return
+      }
+      api.postApi(api.insert,{
+            parentid:node.id,
+            title:nodeutil.getFirstLineStr(this.$refs.markdown.marktext),
+            markdown:this.$refs.markdown.marktext,
+            html:this.$refs.markdown.htmltext,
             ctime:new Date().getTime(),
             utime:new Date().getTime(),
             type:0
-          },res=> {
-            this.keepNodeSame(data)
-            this.$message.success(data.title + ":更新成功")
-
-          },error=>{
+          },res=>{
+            this.currentNode = res.data
+            if(!node.node){
+              node.node = []
+            }
+            nodeutil.operateNode(node,res.data,node.node.length)
+            res.data.showNodes = true
+            //this.$set(res.data,'showNodes',true)
+            node.node.push(res.data)
+            node.that.getchildcount()
+             this.$set(node,'node',node.node)
+            this.$message.info(res.data.id!=0?"新增成功":"新增失败")
+          },
+          error=>{
 
           })
-        }else{
-         // this.$message.warning("编辑区域没有更改变化")
-        }
-      }
     },
     keepNodeSame(node){
       console.log(this.$refs.dir.$refs.nodes.nodes,this.$refs.search.$refs.nodes.nodes,this.$refs.last.$refs.nodes.nodes)
       let list = this.$refs.dir.$refs.nodes.nodes.concat(this.$refs.search.$refs.nodes.nodes,this.$refs.last.$refs.nodes.nodes)
       console.log(list)
       this.findNodes(list,node,res=>{
-        console.log(444,node,res)
+        //console.log("keepNodeSame",node,res)
         this.$set(res,'title',node.title)
         this.$set(res,'markdown',node.markdown)
       })
@@ -90,7 +151,6 @@ export default {
       let myid = node.id
       for(let i=0;i<nodes.length;i++){
         if(myid == nodes[i].id){
-          console.log(111,nodes[i].id)
           go(nodes[i])
           continue
         }else{
@@ -118,6 +178,10 @@ export default {
       if (key== 18) {
         window.event.preventDefault() //关闭浏览器快捷键
         this.onkeyEvent()
+      }
+      if(e.ctrlKey&&key==83){
+        window.event.preventDefault() //关闭浏览器快捷键
+        this.autoSave()
       }
     };
   }

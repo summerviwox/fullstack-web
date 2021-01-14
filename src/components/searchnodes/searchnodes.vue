@@ -1,6 +1,6 @@
 <template>
   <div class="root myscroller">
-    <nodes ref="nodes"  :type="{type:'style'}" @currentNodeInfo="currentNodeInfo" class="myscroller"></nodes>
+    <nodes ref="nodes"  :type="{type:'style'}" @onContextClicked="onContextClicked" @currentNodeInfo="currentNodeInfo" class="myscroller"></nodes>
   </div>
 </template>
 
@@ -32,6 +32,9 @@ export default {
       },error=>{
 
       })
+    },
+    onContextClicked(data){
+      this.$emit("onContextClicked",data)
     },
     search(text){
       if(text===""){

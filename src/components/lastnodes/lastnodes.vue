@@ -1,6 +1,6 @@
 <template>
   <div class="root myscroller">
-    <nodes ref="nodes"  :type="{type:'style'}" @currentNodeInfo="currentNodeInfo" class="myscroller"></nodes>
+    <nodes ref="nodes"  :type="{type:'style'}" @onContextClicked="onContextClicked" @currentNodeInfo="currentNodeInfo" class="myscroller"></nodes>
   </div>
 </template>
 
@@ -17,6 +17,9 @@ export default {
   methods:{
     currentNodeInfo(node){
       this.$emit("currentNodeInfo",node,"last")
+    },
+    onContextClicked(data){
+      this.$emit("onContextClicked",data)
     },
     pushList(node){
       this.list.forEach((item,index) => {

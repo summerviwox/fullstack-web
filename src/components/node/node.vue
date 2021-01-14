@@ -1,19 +1,19 @@
 <template>
   <div class="node">
-    <div class="h" v-bind:style="{'background':node.selected?'lightgray':'white'}"  @click="clickNode()">
+    <div class="h" v-bind:style="{'background':node.selected?'lightgray':'white'}" @contextmenu.prevent="rightClickNode"  @click="clickNode()">
       <div class="h" v-bind:style="{'margin-left':10+node.level*20+'px','visibility':imageVisible()}">
         <el-image  v-if="node.showNodes"  fit="contain" :src="require('../../assets/down.png')" class="wimage" />
         <el-image v-else fit="contain" :src="require('../../assets/right.png')" class="himage" />
       </div>
       <div class="title textstyletitle" :title="node.title">
         <div class="text" :style="{'color':node.selected?'#0099FF':'#143e05'}">{{node.title}}</div>
-        <div class="childcount">{{getchildcount()}}</div>
+        <div class="childcount">{{childCountStr}}</div>
       </div>
 
     </div>
     <div class="line"></div>
     <div class="aaaa" v-if="childsVisible()">
-      <node :type="type" @onclickNodeEvent="onclickNodeEvent" v-for="(item,index) in node.node" :node="item" :key="index"></node>
+      <node :type="type" @onRightClickNodeEvent="onRightClickNodeEvent" @onclickNodeEvent="onclickNodeEvent" v-for="(item,index) in node.node" :node="item" :key="index"></node>
     </div>
   </div>
 </template>
@@ -41,7 +41,7 @@ export default {
           "type":0,
           showNodes:false,
           node:[],
-          selected:false
+          selected:false,
         }
       }
     },
@@ -56,6 +56,7 @@ export default {
   },
   data:function (){
     return{
+      childCountStr:''
     }
   },
   methods:{
@@ -72,20 +73,29 @@ export default {
     },
     getchildcount(){
       if((this.type.type===TYPE_NODE.NODE)&&this.node.childCount){
-        return this.node.childCount==0?"":"("+this.node.childCount+")"
+        this.$set(this,'childCountStr',this.node.childCount==0?"":"("+this.node.childCount+")")
+        return
       }
-      return ''
+      this.$set(this,'childCountStr','')
     },
     clickNode(){
       this.$emit("onclickNodeEvent",this.node)
+    },
+    rightClickNode(e){
+      this.$emit("onRightClickNodeEvent",this.node,e)
     },
     //点击事件回调
     onclickNodeEvent(node){
       this.$emit("onclickNodeEvent",node)
     },
+    //右键事件回调
+    onRightClickNodeEvent(node,e){
+      this.$emit("onRightClickNodeEvent",node,e)
+    },
   },
   mounted() {
-
+    this.getchildcount()
+    this.node.that = this
   }
 }
 </script>

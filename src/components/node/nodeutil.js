@@ -6,5 +6,12 @@ const nodeutil = {
         }
         return title.trim()
     },
+    //接口获取的node处理一下数据防止报错
+    operateNode(parentNode,node,i){
+        node.index = i
+        node.level = parentNode?parentNode.level+1:0
+        node.showNodes =false
+        node.parentNode=parentNode
+    },
 }
 export default nodeutil
