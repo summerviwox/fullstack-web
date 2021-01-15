@@ -33,11 +33,11 @@ export default {
       currentNode:{},
       operateNode:{},
       lastApiNode:{},//防止点击node速度快于接口回调速度 重复调接口
+      cuteApiNode:{}//剪切的node
     }
   },
   methods:{
     currentNodeInfo(node,type){
-      console.log(node.title,node.id)
       this.autoSave(()=>{
         this.operateNode = {}
         this.$refs.markdown.marktext = node.markdown
@@ -59,6 +59,12 @@ export default {
           break
         case "删除":
           this.deleteNode(data.currentNode)
+          break
+        case "剪切":
+          this.cutNode()
+          break
+        case "粘贴":
+          this.pasteNode(data)
           break
       }
       this.operateNode = data.currentNode
@@ -197,6 +203,44 @@ export default {
       },error=>{
 
       })
+    },
+    //剪切
+    cutNode(){
+      this.cuteApiNode = this.currentNode
+      this.$refs.dir.switchContextList(1)
+    },
+    pasteNode(parentNode){
+      console.log(this.cuteApiNode,parentNode)
+        api.postApi(api.updateParentIdByPrimaryKey,{
+          parentid:parentNode.currentNode.id,
+          id:this.cuteApiNode.id,
+        },res=>{
+          this.$message((res===1)?"成功":"失败")
+          this.$refs.dir.switchContextList(0)
+
+          let dirnodes = this.$refs.dir.$refs.nodes.nodes
+          let searchnodes = this.$refs.search.$refs.nodes.nodes
+          let lastnodes = this.$refs.last.$refs.nodes.nodes
+
+
+          this.findNodes(dirnodes,this.cuteApiNode,res=>{
+            res.parentNode.node.splice(res.parentNode.node.indexOf(this.cuteApiNode),1)
+            res.parentNode.childCount = res.parentNode.node.length
+          })
+
+          this.cuteApiNode.parentid = parentNode.currentNode.id
+          parentNode.currentNode.node.push(this.cuteApiNode)
+
+          this.findNodes(searchnodes,this.cuteApiNode,res=>{
+            res.parentid = parentNode.currentNode.id
+          })
+          this.findNodes(lastnodes,this.cuteApiNode,res=>{
+            res.parentid = parentNode.currentNode.id
+          })
+
+        },error=>{
+
+        })
     },
     keepNodeSame(node){
       //console.log(this.$refs.dir.$refs.nodes.nodes,this.$refs.search.$refs.nodes.nodes,this.$refs.last.$refs.nodes.nodes)

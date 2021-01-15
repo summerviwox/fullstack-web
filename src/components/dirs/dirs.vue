@@ -14,20 +14,47 @@ export default {
   components: {Nodes},
   data:function () {
     return{
-        contextList:[
+        contextListA:[
           {
             label:"新增根目录",
             value:1
           },
           {
             label:"新建",
-            value:1
+            value:2
           },
           {
             label:"删除",
-            value:1
+            value:3
           },
-        ]
+          {
+            label:"剪切",
+            value:4
+          }
+        ],
+      contextListB:[
+        {
+          label:"新增根目录",
+          value:1
+        },
+        {
+          label:"新建",
+          value:2
+        },
+        {
+          label:"删除",
+          value:3
+        },
+        {
+          label:"剪切",
+          value:4
+        },
+        {
+          label:"粘贴",
+          value:5
+        },
+      ],
+      contextList:[],
     }
 
   },
@@ -37,6 +64,16 @@ export default {
         this.$set(node,'node',res)
       })
       this.$emit("currentNodeInfo",node,"dir")
+    },
+    switchContextList(index){
+      switch (index){
+        case 1:
+          this.contextList = this.contextListB
+          break
+        default:
+          this.contextList = this.contextListA
+          break
+      }
     },
     onContextClicked(data){
       this.$emit("onContextClicked",data)
@@ -53,6 +90,7 @@ export default {
     },
   },
   mounted() {
+    this.contextList = this.contextListA
     this.getApiNodes(undefined,res=> {
       this.$refs.nodes.nodes = res
     })

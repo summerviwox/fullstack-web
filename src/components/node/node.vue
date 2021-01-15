@@ -6,7 +6,7 @@
         <el-image v-else fit="contain" :src="require('../../assets/right.png')" class="himage" />
       </div>
       <div class="title textstyletitle" :title="node.title">
-        <div class="text" :style="{'color':node.selected?'#0099FF':'#143e05'}">{{node.title +":"+ node.id}}</div>
+        <div class="text" :style="{'color':node.selected?'#0099FF':'#143e05'}">{{node.title}}</div>
         <div v-if="!(node.childCount)||node.childCount==0" class="childcount"></div>
         <div v-else class="childcount">{{'('+node.childCount+')'}}</div>
       </div>
