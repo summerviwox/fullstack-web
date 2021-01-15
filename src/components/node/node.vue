@@ -1,6 +1,6 @@
 <template>
   <div class="node">
-    <div class="h" v-bind:style="{'background':node.selected?'lightgray':'white'}" @contextmenu.prevent="rightClickNode"  @click="clickNode()">
+    <div class="h" v-bind:style="{'background':myBackground()}" @contextmenu.prevent="rightClickNode"  @click="clickNode()">
       <div class="h" v-bind:style="{'margin-left':10+node.level*20+'px','visibility':imageVisible()}">
         <el-image  v-if="node.showNodes"  fit="contain" :src="require('../../assets/down.png')" class="wimage" />
         <el-image v-else fit="contain" :src="require('../../assets/right.png')" class="himage" />
@@ -96,6 +96,11 @@ export default {
     onRightClickNodeEvent(node,e){
       this.$emit("onRightClickNodeEvent",node,e)
     },
+    myBackground(){
+      return this.node.selected?
+          document.body.style.getPropertyValue('--selectedthemeColor'):
+          document.body.style.getPropertyValue('--unselectedthemeColor')
+    }
   },
   mounted() {
     this.node.nodeType = this.type.type

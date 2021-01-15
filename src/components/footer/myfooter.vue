@@ -1,5 +1,5 @@
 <template>
-  <div class="hroot">
+  <div class="hroot mySecondtheme">
     <div style="flex: 1;width: 0"></div>
     <div class="info" v-html="info"></div>
   </div>

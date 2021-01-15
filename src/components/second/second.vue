@@ -271,26 +271,44 @@ export default {
     onEnterSearch(text){
       this.$refs.search.search(text)
     },
-    onkeyEvent(e){
+    keySwitchMenu(e){
       this.$refs.nodesearch.switchMenu()
     }
   },
   mounted() {
-    document.onkeyup = e=> {
-      let key = window.event.keyCode;
-      if (key== 18) {
-        window.event.preventDefault() //关闭浏览器快捷键
-        this.onkeyEvent()
+    document.onkeydown=e=>{
+      let key = e.keyCode;
+      console.log(key)
+      if(e.ctrlKey){//ctrl s 保存
+        switch (key){
+          case 83:
+            window.event.preventDefault()
+            this.autoSave()
+            break
+          case 192:
+            bus.$emit("switchpage",{})
+            window.event.preventDefault()
+            break
+        }
       }
-      if(e.ctrlKey){
-        bus.$emit("switchpage",{})
-        window.event.preventDefault() //关闭浏览器快捷键
+      if(e.altKey){
+        switch (key){
+          case 192://切换目录
+            this.keySwitchMenu(e)
+            break
+          case 49://alt 1 主题1
+              bus.$emit("changeTheme",1)
+            break
+          case 50://alt 1 主题1
+            bus.$emit("changeTheme",2)
+            break
+          case 51://alt 1 主题1
+            bus.$emit("changeTheme",3)
+            break
+        }
       }
-      if(e.ctrlKey&&key==83){
-        window.event.preventDefault() //关闭浏览器快捷键
-        this.autoSave()
-      }
-    };
+    }
+
   }
 }
 </script>

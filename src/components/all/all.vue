@@ -7,7 +7,7 @@
         <div  class="title" @click="switchPage(2)" v-bind:style="{'color':currentIndex==2?'#0099FF':'#ffffff'}">个人中心</div>
       </div>
     </div>
-    <div class="container">
+    <div class="container myMaintheme">
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
