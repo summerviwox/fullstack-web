@@ -1,7 +1,7 @@
 <template>
   <div ref="nodes" class="root" @click="rootclick">
     <node @onRightClickNodeEvent="onRightClickNodeEvent" @onclickNodeEvent="onclickNodeEvent"  :type="type" v-for="(item,index) in nodes" :key="index" :node="item" ></node>
-    <div v-if="contextshow" :style="{'top':contextStyle.top,'left':contextStyle.left}" class="comtextdialog" ref="comtextdialog">
+    <div v-if="contextshow" :style="{'top':contextStyle.top,'left':contextStyle.left,'bottom':contextStyle.bottom}" class="comtextdialog" ref="comtextdialog">
       <span class="item" @click="onContextClick(item)" v-for="(item,index) in contextList" :key="index">{{item.label}}</span>
     </div>
   </div>
@@ -47,6 +47,7 @@ export default {
       contextStyle:{
         top:0,
         left:0,
+        bottom:0,
       }
     }
   },
@@ -60,9 +61,17 @@ export default {
     //右键事件回调
     onRightClickNodeEvent(node,e){
       this.myNodeSelected(node)
-      let root =this.$refs.nodes.getBoundingClientRect()
-      this.contextStyle.left = (e.clientX - root.y) + 'px'
-      this.contextStyle.top =(e.clientY - root.y) + 'px'
+      let noderect =this.$refs.nodes.getBoundingClientRect()
+      let contextdialogrect =this.$refs.comtextdialog
+      console.log(noderect,e)
+      this.contextStyle.left = (e.clientX - noderect.y) + 'px'
+      if(e.clientY>noderect.bottom/2){
+        this.contextStyle.top='none'
+        this.contextStyle.bottom =(noderect.height - e.clientY + noderect.y) + 'px'
+      }else{
+        this.contextStyle.bottom='none'
+        this.contextStyle.top =(e.clientY - noderect.y) + 'px'
+      }
       this.contextshow = true
       this.$emit("onRightClickNodeEvent",node,e)
     },

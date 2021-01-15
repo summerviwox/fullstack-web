@@ -38,7 +38,7 @@ export default {
   methods:{
     currentNodeInfo(node,type){
       console.log(node.title,node.id)
-      this.autoSave(function () {
+      this.autoSave(()=>{
         this.operateNode = {}
         this.$refs.markdown.marktext = node.markdown
         bus.$emit('currentNodeInfo',node)
