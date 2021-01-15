@@ -32,7 +32,7 @@ export default {
   methods:{
     currentNodeInfo(node){
       api.postApi(api.selectParentsById,node,res=>{
-        let str = this.getCurrentNodePath(res.data,"")
+        let str = nodeutil.getCurrentNodePath(res.data,"")
         node.path = str
         this.$emit("currentNodeInfo",node,"search")
 
@@ -58,15 +58,6 @@ export default {
 
       })
     },
-    getCurrentNodePath(data,str){
-      if(data.childBlog.length==0){
-        str = str + data.title
-        return str
-      }else{
-        str = str + data.title + '&nbsp;<span>></span>&nbsp;'
-        return this.getCurrentNodePath(data.childBlog[0],str)
-      }
-    }
   }
 }
 </script>

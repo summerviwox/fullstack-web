@@ -20,6 +20,15 @@ const nodeutil = {
         }
        return ''
     },
+    getCurrentNodePath(data,str){
+        if(data.childBlog.length==0){
+            str = str + data.title
+            return str
+        }else{
+            str = str + data.title + '&nbsp;<span>></span>&nbsp;'
+            return this.getCurrentNodePath(data.childBlog[0],str)
+        }
+    },
     NODE:"node",
     STYLE:"style"
 }

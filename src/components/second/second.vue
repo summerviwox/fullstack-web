@@ -96,9 +96,9 @@ export default {
         }
       }
     },
-    save(go){
+    save(goto){
       if(!this.currentNode.id){
-        go()
+        goto()
         return
       }
       this.currentNode.markdown = this.$refs.markdown.marktext
@@ -117,16 +117,16 @@ export default {
       },res=> {
         this.keepNodeSame(data)
         this.$message.success(data.title + ":更新成功")
-        go()
+        typeof goto === "function" && goto()
       },error=>{
-        go()
+        typeof goto === "function" && goto()
       })
     },
     //新增文档
-    insert(node,go){
+    insert(node,goto){
       if(this.$refs.markdown.marktext.length==0){
         this.$message.warning("新文档至少需要一些内容")
-        go()
+        typeof goto === "function" && goto()
         return
       }
       let params = {
@@ -143,7 +143,7 @@ export default {
       &&params.title===this.lastApiNode.title
           &&params.markdown===this.lastApiNode.markdown){
         this.$message.info("点击过快 或者 上次改动未保存")
-        go()
+        typeof goto === "function" && goto()
         return
       }
 
@@ -159,12 +159,12 @@ export default {
             node.node.push(res.data)
             node.childCount = node.node.length
             this.$message.info(res.data.id!=0?"新增成功":"新增失败")
-            go()
+            typeof goto === "function" && goto()
           },
           error=>{
             this.lastApiNode={}
             console.log(error)
-            go()
+            typeof goto === "function" && goto()
           })
 
 

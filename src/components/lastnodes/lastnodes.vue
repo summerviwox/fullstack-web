@@ -7,6 +7,8 @@
 <script>
 import Nodes from "../nodes/nodes";
 import util from "../node/nodeutil";
+import api from "../../api/api";
+import nodeutil from "../node/nodeutil";
 export default {
   name: "lastnodes",
   components: {Nodes},
@@ -23,7 +25,14 @@ export default {
   },
   methods:{
     currentNodeInfo(node){
-      this.$emit("currentNodeInfo",node,"last")
+      api.postApi(api.selectParentsById,node,res=>{
+        let str = nodeutil.getCurrentNodePath(res.data,"")
+        node.path = str
+        this.$emit("currentNodeInfo",node,"last")
+
+      },error=>{
+
+      })
     },
     onContextClicked(data){
       this.$emit("onContextClicked",data)
