@@ -40,6 +40,11 @@ export default {
       this.currentIndex = index
         this.$router.push({path:this.pageUrl[index]})
     },
+    autoSwitchPage(){
+      this.currentIndex = (this.currentIndex+1)%3
+      console.log(this.currentIndex)
+      this.switchPage(this.currentIndex)
+    },
     currentNodeInfo(node){
       this.footerinfo = node.path
     },
@@ -54,6 +59,7 @@ export default {
     this.switchPage(1)
     bus.$on("currentNodeInfo",this.currentNodeInfo)
     bus.$on("currentSearchNode",this.currentSearchNode)
+    bus.$on("switchpage",this.autoSwitchPage)
   }
 }
 </script>

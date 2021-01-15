@@ -276,11 +276,15 @@ export default {
     }
   },
   mounted() {
-    document.onkeydown = e=> {
+    document.onkeyup = e=> {
       let key = window.event.keyCode;
       if (key== 18) {
         window.event.preventDefault() //关闭浏览器快捷键
         this.onkeyEvent()
+      }
+      if(e.ctrlKey){
+        bus.$emit("switchpage",{})
+        window.event.preventDefault() //关闭浏览器快捷键
       }
       if(e.ctrlKey&&key==83){
         window.event.preventDefault() //关闭浏览器快捷键
