@@ -148,7 +148,7 @@ export default {
             if(!node.node){
               node.node = []
             }
-            nodeutil.operateNode(node,res.data,node.node.length)
+            nodeutil.operateNode(node,res.data,node.node.length,nodeutil.NODE)
             res.data.showNodes = true
             node.node.push(res.data)
             node.childCount = node.node.length
@@ -174,8 +174,21 @@ export default {
         id:node.id
       },res=>{
         if(res.data==1){
-          node.parentNode.node.splice(node.parentNode.node.indexOf(node),1)
-          node.parentNode.childCount = node.parentNode.node.length
+          let searchnodes = this.$refs.search.$refs.nodes.nodes
+          let lastnodes = this.$refs.last.$refs.nodes.nodes
+
+
+          this.findNodes(this.$refs.dir.$refs.nodes.nodes,node,res=>{
+            res.parentNode.node.splice(res.parentNode.node.indexOf(node),1)
+            res.parentNode.childCount = res.parentNode.node.length
+          })
+          this.findNodes(searchnodes,node,res=>{
+            searchnodes.splice(searchnodes.indexOf(node),1)
+          })
+          this.findNodes(lastnodes,node,res=>{
+            lastnodes.splice(lastnodes.indexOf(node),1)
+          })
+
           //当前无文档 也没有要操作的文档
           this.currentNode = {}
           this.operateNode = {}
@@ -186,7 +199,7 @@ export default {
       })
     },
     keepNodeSame(node){
-      console.log(this.$refs.dir.$refs.nodes.nodes,this.$refs.search.$refs.nodes.nodes,this.$refs.last.$refs.nodes.nodes)
+      //console.log(this.$refs.dir.$refs.nodes.nodes,this.$refs.search.$refs.nodes.nodes,this.$refs.last.$refs.nodes.nodes)
       let list = this.$refs.dir.$refs.nodes.nodes.concat(this.$refs.search.$refs.nodes.nodes,this.$refs.last.$refs.nodes.nodes)
       this.findNodes(list,node,res=>{
         this.$set(res,'title',node.title)

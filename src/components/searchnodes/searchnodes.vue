@@ -1,6 +1,6 @@
 <template>
   <div class="root myscroller">
-    <nodes ref="nodes"  :type="{type:'style'}" @onContextClicked="onContextClicked" @currentNodeInfo="currentNodeInfo" class="myscroller"></nodes>
+    <nodes ref="nodes" :context-list="contextList"  :type="{type:'style'}" @onContextClicked="onContextClicked" @currentNodeInfo="currentNodeInfo" class="myscroller"></nodes>
   </div>
 </template>
 
@@ -19,7 +19,13 @@ export default {
   },
   data:function () {
     return{
-      list:[]
+      list:[],
+      contextList:[
+        {
+          label:"删除",
+          value:1
+        },
+      ]
     }
 
   },

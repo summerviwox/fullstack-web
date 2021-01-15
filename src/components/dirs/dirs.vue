@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <nodes ref="nodes" :type="{type:'node'}" @onContextClicked="onContextClicked" @currentNodeInfo="currentNodeInfo" class="myscroller"></nodes>
+    <nodes ref="nodes" :context-list="contextList" :type="{type:'node'}" @onContextClicked="onContextClicked" @currentNodeInfo="currentNodeInfo" class="myscroller"></nodes>
   </div>
 </template>
 
@@ -14,7 +14,20 @@ export default {
   components: {Nodes},
   data:function () {
     return{
-
+        contextList:[
+          {
+            label:"新增根目录",
+            value:1
+          },
+          {
+            label:"新建",
+            value:1
+          },
+          {
+            label:"删除",
+            value:1
+          },
+        ]
     }
 
   },

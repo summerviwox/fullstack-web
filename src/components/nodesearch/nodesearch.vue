@@ -29,11 +29,15 @@ export default {
     },
     switchMenu(){
       this.currentMenu = (this.currentMenu+1)%3
+      this.switchMenuIndex(this.currentMenu)
+    },
+    switchMenuIndex(index){
+      this.currentMenu = index
       this.switchimg = this.switchImgType(this.currentMenu)
       this.$emit('switchMenu',this.currentMenu )
     },
     onEnterSearch(){
-      this.$emit('switchMenu',1)
+      this.switchMenuIndex(1)
       this.$emit("onEnterSearch",this.text)
     },
   },

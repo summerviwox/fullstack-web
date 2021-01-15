@@ -24,25 +24,30 @@ export default {
         }
       }
     },
+    contextList:{
+      type:Array,
+      default:function () {
+        return[
+          {
+            label:"新增根目录",
+            value:1
+          },
+          {
+            label:"新建",
+            value:1
+          },
+          {
+            label:"删除",
+            value:1
+          },
+        ]
+      }
+    },
   },
   data:function (){
     return{
       nodes:[],
       currentNode:{},
-      contextList:[
-        {
-          label:"新增根目录",
-          value:1
-        },
-        {
-          label:"新建",
-          value:1
-        },
-        {
-          label:"删除",
-          value:1
-        },
-      ],
       contextshow:false,
       contextStyle:{
         top:0,
@@ -66,10 +71,10 @@ export default {
       console.log(noderect,e)
       this.contextStyle.left = (e.clientX - noderect.y) + 'px'
       if(e.clientY>noderect.bottom/2){
-        this.contextStyle.top='none'
+        this.contextStyle.top=''
         this.contextStyle.bottom =(noderect.height - e.clientY + noderect.y) + 'px'
       }else{
-        this.contextStyle.bottom='none'
+        this.contextStyle.bottom=''
         this.contextStyle.top =(e.clientY - noderect.y) + 'px'
       }
       this.contextshow = true
@@ -111,6 +116,7 @@ export default {
     },
   },
   mounted() {
+    bus.$on("onAllClickEvent",this.rootclick)
     switch (this.type.type){
       case nodeutil.NODE:
         break

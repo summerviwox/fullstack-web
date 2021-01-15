@@ -1,5 +1,5 @@
 <template>
-  <div class="vroot root">
+  <div class="vroot root" @click="onAllClick">
     <div class="top">
       <div class="titles">
         <div class="title" @click="switchPage(0)" v-bind:style="{'color':currentIndex==0?'#0099FF':'#ffffff'}">主页</div>
@@ -45,6 +45,9 @@ export default {
     },
     currentSearchNode(str){
       this.footerinfo = str
+    },
+    onAllClick(){
+      bus.$emit("onAllClickEvent",{})
     }
   },
   mounted() {
