@@ -7,6 +7,7 @@
 <script>
 import Nodes from "../nodes/nodes";
 import api from "../../api/api";
+import nodeutil from "../node/nodeutil";
 
 export default {
   name: "dirs",
@@ -32,7 +33,7 @@ export default {
         id:parentNode?parentNode.id:0
       },res=> {
         for(let i=0;i<res.length;i++){
-          this.$refs.nodes.operateNode(parentNode,res[i],i)
+          nodeutil.operateNode(parentNode,res[i],i,nodeutil.NODE)
         }
         go(res)
       })

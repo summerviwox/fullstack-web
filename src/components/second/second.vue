@@ -31,19 +31,22 @@ export default {
       currentMenuIndex:0,
       searchNodes:[],
       currentNode:{},
-      operateNode:{}
+      operateNode:{},
+      lastApiNode:{},//防止点击node速度快于接口回调速度 重复调接口
     }
   },
   methods:{
     currentNodeInfo(node,type){
-      this.autoSave()
-      this.operateNode = {}
-      this.$refs.markdown.marktext = node.markdown
-      bus.$emit('currentNodeInfo',node)
-      if(type==="dir"||type==="search"){
-        this.$refs.last.pushList(node)
-      }
-      this.currentNode = node
+      console.log(node.title,node.id)
+      this.autoSave(function () {
+        this.operateNode = {}
+        this.$refs.markdown.marktext = node.markdown
+        bus.$emit('currentNodeInfo',node)
+        if(type==="dir"||type==="search"){
+          this.$refs.last.pushList(node)
+        }
+        this.currentNode = node
+      })
     },
     onContextClicked(data){
       switch (data.label){
@@ -55,34 +58,41 @@ export default {
           this.$refs.markdown.marktext = ''
           break
         case "删除":
-
+          this.deleteNode(data.currentNode)
           break
       }
       this.operateNode = data.currentNode
     },
-    autoSave(){
+    autoSave(go){
+      //先判断当前是否有文档
+      //1 有文档
+      //1.1 文档是否改动
+      //2 无文档
+      //2.1是否要操作文档
       if(this.currentNode.id){//当前已有加载文档   准备加载新的node&&将要加载的node将会覆盖原来的node
         //上一次加载的node编辑过 文档有改动
         if(this.currentNode.markdown !== this.$refs.markdown.marktext){
           // this.$message.warning("编辑区域已更改 将自动保存新的变化")
-          this.save();
+          this.save(go);
         }else{
+          go()
           // this.$message.warning("编辑区域没有更改变化")
         }
       }else{
         //当前为刚进入界面空文档||新建的空文档
         //处于右键操作状态
-        console.log(this.operateNode)
         if(this.operateNode.id){
           //this.$message.success("当前为刚进入界面空文档||新建的空文档")
-          this.insert(this.operateNode)
+          this.insert(this.operateNode,go)
         }else{
           this.$message.info("开始使用")
+          go()
         }
       }
     },
-    save(){
+    save(go){
       if(!this.currentNode.id){
+        go()
         return
       }
       this.currentNode.markdown = this.$refs.markdown.marktext
@@ -101,52 +111,84 @@ export default {
       },res=> {
         this.keepNodeSame(data)
         this.$message.success(data.title + ":更新成功")
-
+        go()
       },error=>{
-
+        go()
       })
     },
     //新增文档
-    insert(node){
+    insert(node,go){
       if(this.$refs.markdown.marktext.length==0){
         this.$message.warning("新文档至少需要一些内容")
+        go()
         return
       }
-      api.postApi(api.insert,{
-            parentid:node.id,
-            title:nodeutil.getFirstLineStr(this.$refs.markdown.marktext),
-            markdown:this.$refs.markdown.marktext,
-            html:this.$refs.markdown.htmltext,
-            ctime:new Date().getTime(),
-            utime:new Date().getTime(),
-            type:0
-          },res=>{
+      let params = {
+        parentid:node.id,
+        title:nodeutil.getFirstLineStr(this.$refs.markdown.marktext),
+        markdown:this.$refs.markdown.marktext,
+        html:this.$refs.markdown.htmltext,
+        ctime:new Date().getTime(),
+        utime:new Date().getTime(),
+        type:0
+      }
+      if(this.lastApiNode.parentid
+          &&params.parentid==this.lastApiNode.parentid
+      &&params.title===this.lastApiNode.title
+          &&params.markdown===this.lastApiNode.markdown){
+        this.$message.info("点击过快 或者 上次改动未保存")
+        go()
+        return
+      }
+
+      api.postApi(api.insert,params,res=>{
             this.currentNode = res.data
+            this.operateNode = {}
+            this.lastApiNode={}
             if(!node.node){
               node.node = []
             }
             nodeutil.operateNode(node,res.data,node.node.length)
             res.data.showNodes = true
-            //this.$set(res.data,'showNodes',true)
             node.node.push(res.data)
-            //    this.$set(node,'childCountStr',count)
-                this.$set(node,'node',node.node)
-
-                let count =  nodeutil.getchildcount(node,node.that.type)
-                console.log(count)
-                node.that.childCountStr = count
-                this.$message.info(res.data.id!=0?"新增成功":"新增失败")
+            node.childCount = node.node.length
+            this.$message.info(res.data.id!=0?"新增成功":"新增失败")
+            go()
           },
           error=>{
-
+            this.lastApiNode={}
+            console.log(error)
+            go()
           })
+
+
+
+      this.lastApiNode =  {
+        parentid:node.id,
+        title:nodeutil.getFirstLineStr(this.$refs.markdown.marktext),
+        markdown:this.$refs.markdown.marktext,
+      }
+    },
+    deleteNode(node){
+      api.postApi(api.deleteByPrimaryKey,{
+        id:node.id
+      },res=>{
+        if(res.data==1){
+          node.parentNode.node.splice(node.parentNode.node.indexOf(node),1)
+          node.parentNode.childCount = node.parentNode.node.length
+          //当前无文档 也没有要操作的文档
+          this.currentNode = {}
+          this.operateNode = {}
+        }
+        this.$message.info(res.data==1?"删除成功":res.errorMessage)
+      },error=>{
+
+      })
     },
     keepNodeSame(node){
       console.log(this.$refs.dir.$refs.nodes.nodes,this.$refs.search.$refs.nodes.nodes,this.$refs.last.$refs.nodes.nodes)
       let list = this.$refs.dir.$refs.nodes.nodes.concat(this.$refs.search.$refs.nodes.nodes,this.$refs.last.$refs.nodes.nodes)
-      console.log(list)
       this.findNodes(list,node,res=>{
-        //console.log("keepNodeSame",node,res)
         this.$set(res,'title',node.title)
         this.$set(res,'markdown',node.markdown)
       })

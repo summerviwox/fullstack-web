@@ -6,6 +6,7 @@
 
 <script>
 import Nodes from "../nodes/nodes";
+import util from "../node/nodeutil";
 export default {
   name: "lastnodes",
   components: {Nodes},

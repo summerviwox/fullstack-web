@@ -38,6 +38,7 @@ const api = {
         }).then(res=>{
             typeof go ==="function"&&go(res.data)
         }).catch(error=>{
+            console.log(error)
             typeof down ==="function"&&down(error)
         })
     },
@@ -52,6 +53,7 @@ const api = {
             }
             typeof go ==="function"&&go(res.data)
         }).catch(error=>{
+            console.log(error)
             typeof down ==="function"&&down(error)
         })
     },
@@ -61,6 +63,7 @@ const api = {
     selectMarkdownById:'/selectMarkdownById',
     updateByPrimaryKey:'/updateByPrimaryKey',
     insert:'/insert',
+    deleteByPrimaryKey:'/deleteByPrimaryKey',
 }
 
 export default api

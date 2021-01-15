@@ -11,10 +11,7 @@
 import Node from "../node/node";
 import api from "../../api/api";
 import bus from "../../util/bus"
-const TYPE_NODE = {
-  NODE:"node",
-  STYLE:"style"
-}
+import nodeutil from "../node/nodeutil";
 export default {
   name: "nodes",
   components: {Node},
@@ -23,7 +20,7 @@ export default {
       type:Object,
       default:function () {
         return{
-          type:TYPE_NODE.NODE
+          type:nodeutil.NODE
         }
       }
     },
@@ -103,19 +100,12 @@ export default {
       }
       this.findNodeInNodes(node.parentNode,str)
     },
-    //接口获取的node处理一下数据防止报错
-    operateNode(parentNode,node,i){
-      node.index = i
-      node.level = parentNode?parentNode.level+1:0
-      node.showNodes =false
-      node.parentNode=parentNode
-    }
   },
   mounted() {
     switch (this.type.type){
-      case TYPE_NODE.NODE:
+      case nodeutil.NODE:
         break
-      case TYPE_NODE.STYLE:
+      case nodeutil.STYLE:
         break
     }
   }

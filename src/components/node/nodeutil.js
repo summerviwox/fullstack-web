@@ -7,18 +7,20 @@ const nodeutil = {
         return title.trim()
     },
     //接口获取的node处理一下数据防止报错
-    operateNode(parentNode,node,i){
+    operateNode(parentNode,node,i,type){
         node.index = i
         node.level = parentNode?parentNode.level+1:0
         node.showNodes =false
         node.parentNode=parentNode
+        node.nodeType=type
     },
     getchildcount(node,type){
-        console.log(node,type)
-        if((type.type==="node")&&node.node){
+        if((type==="node")&&node.node){
             return node.node.length==0?"":"("+node.node.length+")"
         }
        return ''
     },
+    NODE:"node",
+    STYLE:"style"
 }
 export default nodeutil

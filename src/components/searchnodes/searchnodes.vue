@@ -9,6 +9,7 @@ import api from "../../api/api";
 import bus from "../../util/bus";
 import Node from "../node/node";
 import Nodes from "../nodes/nodes";
+import nodeutil from "../node/nodeutil";
 import Vue from 'vue'
 export default {
   name: "searchnodes",

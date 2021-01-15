@@ -6,8 +6,9 @@
         <el-image v-else fit="contain" :src="require('../../assets/right.png')" class="himage" />
       </div>
       <div class="title textstyletitle" :title="node.title">
-        <div class="text" :style="{'color':node.selected?'#0099FF':'#143e05'}">{{node.title}}</div>
-        <div class="childcount">{{childCountStr}}</div>
+        <div class="text" :style="{'color':node.selected?'#0099FF':'#143e05'}">{{node.title +":"+ node.id}}</div>
+        <div v-if="!(node.childCount)||node.childCount==0" class="childcount"></div>
+        <div v-else class="childcount">{{'('+node.childCount+')'}}</div>
       </div>
 
     </div>
@@ -20,10 +21,8 @@
 
 <script>
 import api from "../../api/api";
-const TYPE_NODE = {
-  NODE:"node",
-  STYLE:"style"
-}
+import nodeutil from "./nodeutil";
+
 export default {
   name: "node",
   props:{
@@ -32,6 +31,7 @@ export default {
       default:function (){
         return {
           id:8,
+          childCount:0,
           parentid:0,
           title:"工作",
           html:null,
@@ -42,6 +42,8 @@ export default {
           showNodes:false,
           node:[],
           selected:false,
+          nodeType:nodeutil.NODE,
+          childCountStr:'',
         }
       }
     },
@@ -49,30 +51,32 @@ export default {
       type:Object,
       default:function () {
         return{
-          type:TYPE_NODE.NODE
+          type:nodeutil.NODE
         }
       }
     }
   },
   data:function (){
     return{
-      childCountStr:''
+      //childCountStr:''
     }
   },
   methods:{
     //是否显示子节点
     childsVisible(){
       return this.node.showNodes
-          &&(this.type.type===TYPE_NODE.NODE)
+          &&(this.node.nodeType===nodeutil.NODE)
     },
     //是否显示展开收缩图标
     imageVisible(){
-      return (this.node!=undefined&&this.node.childCount&&this.node.childCount!=0)
-      &&(this.type.type===TYPE_NODE.NODE)
+      return (this.node!=undefined)
+      &&((this.node.childCount&&this.node.childCount!=0)
+          ||(this.node.node&&this.node.node.length!=0))
+      &&(this.node.nodeType===nodeutil.NODE)
           ?'visible':'hidden'
     },
     getchildcount(){
-      if((this.type.type===TYPE_NODE.NODE)&&this.node.childCount){
+      if((this.node.nodeType===nodeutil.NODE)&&this.node.childCount){
         this.$set(this,'childCountStr',this.node.childCount==0?"":"("+this.node.childCount+")")
         return
       }
@@ -94,8 +98,7 @@ export default {
     },
   },
   mounted() {
-    this.getchildcount()
-    this.node.that = this
+    this.node.nodeType = this.type.type
   }
 }
 </script>
