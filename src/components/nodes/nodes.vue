@@ -1,7 +1,7 @@
 <template>
   <div ref="nodes" class="root" @click="rootclick">
     <node @onRightClickNodeEvent="onRightClickNodeEvent" @onclickNodeEvent="onclickNodeEvent"  :type="type" v-for="(item,index) in nodes" :key="index" :node="item" ></node>
-    <div v-if="contextshow" :style="{'top':contextStyle.top,'left':contextStyle.left,'bottom':contextStyle.bottom}" class="comtextdialog" ref="comtextdialog">
+    <div v-if="contextshow" :style="{'top':contextStyle.top,'left':contextStyle.left,'bottom':contextStyle.bottom}" class="comtextdialog mymaintheme" ref="comtextdialog">
       <span class="item" @click="onContextClick(item)" v-for="(item,index) in contextList" :key="index">{{item.label}}</span>
     </div>
   </div>

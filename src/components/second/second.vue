@@ -22,6 +22,7 @@ import api from "../../api/api";
 import Lastnodes from "../lastnodes/lastnodes";
 import Dirs from "../dirs/dirs";
 import nodeutil from "../node/nodeutil";
+import util from "../../util/util";
 export default {
   name: "second",
   // eslint-disable-next-line vue/no-unused-components
@@ -49,10 +50,16 @@ export default {
       })
     },
     onContextClicked(data){
+        this.operateNode = data.currentNode
       switch (data.label){
         case "新增根目录":
-
-          break
+          this.currentNode = {}
+          this.$refs.markdown.marktext = ''
+            this.operateNode = {
+                id:0,
+                level:-1
+            }
+            break
         case "新建":
           this.currentNode = {}
           this.$refs.markdown.marktext = ''
@@ -67,38 +74,37 @@ export default {
           this.pasteNode(data)
           break
       }
-      this.operateNode = data.currentNode
     },
-    autoSave(go){
+    autoSave(goto){
       //先判断当前是否有文档
       //1 有文档
       //1.1 文档是否改动
       //2 无文档
       //2.1是否要操作文档
-      if(this.currentNode.id){//当前已有加载文档   准备加载新的node&&将要加载的node将会覆盖原来的node
+      if(util.isNotEmpty(this.currentNode.id)){//当前已有加载文档   准备加载新的node&&将要加载的node将会覆盖原来的node
         //上一次加载的node编辑过 文档有改动
         if(this.currentNode.markdown !== this.$refs.markdown.marktext){
           // this.$message.warning("编辑区域已更改 将自动保存新的变化")
-          this.save(go);
+          this.save(goto);
         }else{
-          go()
+          typeof goto === "function" && goto()
           // this.$message.warning("编辑区域没有更改变化")
         }
       }else{
         //当前为刚进入界面空文档||新建的空文档
         //处于右键操作状态
-        if(this.operateNode.id){
+        if(util.isNotEmpty(this.operateNode.id)){
           //this.$message.success("当前为刚进入界面空文档||新建的空文档")
-          this.insert(this.operateNode,go)
+          this.insert(this.operateNode,goto)
         }else{
           this.$message.info("开始使用")
-          go()
+          typeof goto === "function" && goto()
         }
       }
     },
     save(goto){
-      if(!this.currentNode.id){
-        goto()
+      if(util.isEmpty(this.currentNode.id)){
+        typeof goto === "function" && goto()
         return
       }
       this.currentNode.markdown = this.$refs.markdown.marktext
@@ -138,7 +144,7 @@ export default {
         utime:new Date().getTime(),
         type:0
       }
-      if(this.lastApiNode.parentid
+      if(util.isNotEmpty(this.lastApiNode.parentid)
           &&params.parentid==this.lastApiNode.parentid
       &&params.title===this.lastApiNode.title
           &&params.markdown===this.lastApiNode.markdown){
@@ -292,6 +298,7 @@ export default {
         }
       }
       if(e.altKey){
+        console.log('alt',key)
         switch (key){
           case 192://切换目录
             this.keySwitchMenu(e)

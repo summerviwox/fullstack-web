@@ -8,19 +8,23 @@
   justify-content: flex-end;
   align-self: center;
   margin:0px  4px;
-  color: black;
   font-size: 12px;
   display: flex;
   white-space: nowrap;
-  /deep/*{
+  *{
     text-align: center;
     white-space: nowrap;
     height:auto;
     line-height: 25px;
   }
-  /deep/span{
+  span{
     width: 10px;
     font-weight: bold;
     color: #0099FF;
+  }
+  div:first-child{
+    span{
+      display: none;
+    }
   }
 }

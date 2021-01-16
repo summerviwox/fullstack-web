@@ -1,7 +1,7 @@
 <template>
   <div class="root">
     <img @click="switchMenu"  class="switch" :src="switchimg"/>
-    <input @keyup.enter="onEnterSearch()" class="text mySecondtheme" v-model="text" maxlength="23" type="text"/>
+    <input @keyup.enter="onEnterSearch()" class="text myinputtheme" v-model="text" maxlength="23" type="text"/>
     <img class="img" src="../../assets/search.png"/>
   </div>
 </template>

@@ -1,7 +1,11 @@
 <template>
-  <div class="hroot mySecondtheme">
+  <div class="hroot mymaintheme">
     <div style="flex: 1;width: 0"></div>
-    <div class="info" v-html="info"></div>
+    <div class="info">
+      <div v-for="(item,index) in infos" :key="index">
+          <span>></span>{{item}}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -9,7 +13,12 @@
 export default {
   name: "myfooter",
   props:{
-    info:String
+    infos:{
+      type:Array,
+      default:function () {
+        return[]
+      }
+    }
   },
   data:function (){
     return{

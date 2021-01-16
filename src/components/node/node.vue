@@ -1,12 +1,12 @@
 <template>
   <div class="node">
-    <div class="h" v-bind:style="{'background':myBackground()}" @contextmenu.prevent="rightClickNode"  @click="clickNode()">
+    <div class="h" v-bind:class="{selectedtheme:this.node.selected,unselectedtheme:!this.node.selected}"  @contextmenu.prevent="rightClickNode"  @click="clickNode()">
       <div class="h" v-bind:style="{'margin-left':10+node.level*20+'px','visibility':imageVisible()}">
         <el-image  v-if="node.showNodes"  fit="contain" :src="require('../../assets/down.png')" class="wimage" />
         <el-image v-else fit="contain" :src="require('../../assets/right.png')" class="himage" />
       </div>
       <div class="title textstyletitle" :title="node.title">
-        <div class="text" :style="{'color':node.selected?'#0099FF':'#143e05'}">{{node.title}}</div>
+        <div class="text">{{node.title}}</div>
         <div v-if="!(node.childCount)||node.childCount==0" class="childcount"></div>
         <div v-else class="childcount">{{'('+node.childCount+')'}}</div>
       </div>
@@ -96,11 +96,6 @@ export default {
     onRightClickNodeEvent(node,e){
       this.$emit("onRightClickNodeEvent",node,e)
     },
-    myBackground(){
-      return this.node.selected?
-          document.body.style.getPropertyValue('--selectedthemeColor'):
-          document.body.style.getPropertyValue('--unselectedthemeColor')
-    }
   },
   mounted() {
     this.node.nodeType = this.type.type

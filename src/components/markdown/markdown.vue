@@ -1,7 +1,7 @@
 <template>
   <div class="hroot">
     <div class="markdownroot">
-      <textarea ref="markdown" class="markdown myscroller" @scroll="scroll()" v-model="marktext" v-bind:oninput="input()" type="textarea"></textarea>
+      <textarea ref="markdown" class="markdown myscroller mymaintheme" @scroll="scroll()" v-model="marktext" v-bind:oninput="input()" type="textarea"></textarea>
     </div>
     <div ref="htmlroot" class="htmlroot myscroller">
       <div  class="html" v-html="htmltext"></div>

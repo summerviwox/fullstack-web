@@ -92,6 +92,12 @@ export default {
   mounted() {
     this.contextList = this.contextListA
     this.getApiNodes(undefined,res=> {
+      for(let i=0;i<res.length;i++){
+        res[i].parentNode = {
+          id:0,
+          level:-1,
+        }
+      }
       this.$refs.nodes.nodes = res
     })
   }
