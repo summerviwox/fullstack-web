@@ -51,7 +51,7 @@ export default {
       api.postApi(api.search,{
         markdown:text
       },res=> {
-        this.$refs.nodes.nodes = res.data
+        this.$refs.nodes.node.node = res.data
        // this.$set(this,'list',res.data)
         //this.list = res.data
       },error=>{

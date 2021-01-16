@@ -54,7 +54,7 @@ export default {
       if(this.list.length>20){
         this.list.shift()
       }
-      this.$refs.nodes.nodes = this.list
+      this.$refs.nodes.node.node = this.list
     }
   }
 }

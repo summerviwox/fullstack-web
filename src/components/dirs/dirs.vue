@@ -98,7 +98,7 @@ export default {
           level:-1,
         }
       }
-      this.$refs.nodes.nodes = res
+      this.$refs.nodes.node.node = res
     })
   }
 }

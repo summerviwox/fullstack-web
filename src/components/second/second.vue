@@ -55,10 +55,7 @@ export default {
         case "新增根目录":
           this.currentNode = {}
           this.$refs.markdown.marktext = ''
-            this.operateNode = {
-                id:0,
-                level:-1
-            }
+            this.operateNode = this.$refs.dir.$refs.nodes.node
             break
         case "新建":
           this.currentNode = {}
@@ -186,11 +183,11 @@ export default {
         id:node.id
       },res=>{
         if(res.data==1){
-          let searchnodes = this.$refs.search.$refs.nodes.nodes
-          let lastnodes = this.$refs.last.$refs.nodes.nodes
+          let searchnodes = this.$refs.search.$refs.nodes.node.node
+          let lastnodes = this.$refs.last.$refs.nodes.node.node
 
 
-          this.findNodes(this.$refs.dir.$refs.nodes.nodes,node,res=>{
+          this.findNodes(this.$refs.dir.$refs.nodes.node.node,node,res=>{
             res.parentNode.node.splice(res.parentNode.node.indexOf(node),1)
             res.parentNode.childCount = res.parentNode.node.length
           })
@@ -224,9 +221,9 @@ export default {
           this.$message((res===1)?"成功":"失败")
           this.$refs.dir.switchContextList(0)
 
-          let dirnodes = this.$refs.dir.$refs.nodes.nodes
-          let searchnodes = this.$refs.search.$refs.nodes.nodes
-          let lastnodes = this.$refs.last.$refs.nodes.nodes
+          let dirnodes = this.$refs.dir.$refs.nodes.node.node
+          let searchnodes = this.$refs.search.$refs.nodes.node.node
+          let lastnodes = this.$refs.last.$refs.nodes.node.node
 
 
           this.findNodes(dirnodes,this.cuteApiNode,res=>{
@@ -249,8 +246,8 @@ export default {
         })
     },
     keepNodeSame(node){
-      //console.log(this.$refs.dir.$refs.nodes.nodes,this.$refs.search.$refs.nodes.nodes,this.$refs.last.$refs.nodes.nodes)
-      let list = this.$refs.dir.$refs.nodes.nodes.concat(this.$refs.search.$refs.nodes.nodes,this.$refs.last.$refs.nodes.nodes)
+      //console.log(this.$refs.dir.$refs.nodes.node,this.$refs.search.$refs.nodes.node,this.$refs.last.$refs.nodes.node)
+      let list = this.$refs.dir.$refs.nodes.node.node.concat(this.$refs.search.$refs.nodes.node.node,this.$refs.last.$refs.nodes.node.node)
       this.findNodes(list,node,res=>{
         this.$set(res,'title',node.title)
         this.$set(res,'markdown',node.markdown)
