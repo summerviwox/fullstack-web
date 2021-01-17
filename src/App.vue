@@ -21,16 +21,22 @@
                         inputbackgound:'white',
                         color:'black',
                         selectedcolor:'#0099FF',
-                        unselectcolor:'gray',
+                        unselectcolor:'#143e05',
+                      linecolor:'#eeeeee',
+                      toptitlebackground:'#333333',
+                      bordercolor:'#CCCCCC',
                     },
                     {
                         background:'#2b2b2b',
                         selectbackground:'#4B6EAF',
-                        unselectedbackground:'lightgray',
+                        unselectedbackground:'#1A1A1A',
                         inputBackgound:'#3C3F41',
                         color:'white',
                         selectedcolor:'white',
-                        unselectcolor:'#2b2b2b',
+                        unselectcolor:'white',
+                      linecolor:'#2b2b2b',
+                      toptitlebackground:'black',
+                      bordercolor:'#555555',
                     }
                 ]
             }
@@ -45,6 +51,9 @@
                 document.body.style.setProperty('--color',this.theme[index].color)
                 document.body.style.setProperty('--selectedcolor',this.theme[index].selectedcolor)
                 document.body.style.setProperty('--unselectcolor',this.theme[index].unselectcolor)
+              document.body.style.setProperty('--linecolor',this.theme[index].linecolor)
+              document.body.style.setProperty('--toptitlebackground',this.theme[index].toptitlebackground)
+              document.body.style.setProperty('--bordercolor',this.theme[index].bordercolor)
             }
         },
         mounted() {

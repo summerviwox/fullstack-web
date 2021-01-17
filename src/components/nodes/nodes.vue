@@ -49,7 +49,8 @@ export default {
       node:{
         id:0,
         level:-1,
-        node:[]
+        node:[],
+        title:'',
       },
       //nodes:[],
       currentNode:{},
@@ -110,10 +111,13 @@ export default {
     },
     //递归获取标题
     findNodeInNodes(node,str){
+      console.log(node.title,node.id,node.parentNode)
       str.str = node.parentNode ?
-          '&nbsp;<span>></span>&nbsp;'+node.title+ str.str
+              '&nbsp;<span>></span>&nbsp;'+node.title+ str.str
           :
-          ''+node.title + str.str
+          node.id==0?
+              str.str:
+              ''+node.title + str.str
       if(!node.parentNode){
         return
       }

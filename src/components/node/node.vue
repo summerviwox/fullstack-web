@@ -2,8 +2,8 @@
   <div class="node">
     <div class="h" v-bind:class="{selectedtheme:this.node.selected,unselectedtheme:!this.node.selected}"  @contextmenu.prevent="rightClickNode"  @click="clickNode()">
       <div class="h" v-bind:style="{'margin-left':10+node.level*20+'px','visibility':imageVisible()}">
-        <el-image  v-if="node.showNodes"  fit="contain" :src="require('../../assets/down.png')" class="wimage" />
-        <el-image v-else fit="contain" :src="require('../../assets/right.png')" class="himage" />
+        <img  v-if="node.showNodes"  fit="contain" :src="require('../../assets/down.svg')" class="wimage" />
+        <img v-else fit="contain" :src="require('../../assets/right.svg')" class="himage" />
       </div>
       <div class="title textstyletitle" :title="node.title">
         <div class="text">{{node.title}}</div>
@@ -12,7 +12,7 @@
       </div>
 
     </div>
-    <div class="line"></div>
+    <div class="line mylinetheme"></div>
     <div class="aaaa" v-if="childsVisible()">
       <node :type="type" @onRightClickNodeEvent="onRightClickNodeEvent" @onclickNodeEvent="onclickNodeEvent" v-for="(item,index) in node.node" :node="item" :key="index"></node>
     </div>

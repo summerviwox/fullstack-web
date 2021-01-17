@@ -96,6 +96,7 @@ export default {
         res[i].parentNode = {
           id:0,
           level:-1,
+          title:'',
         }
       }
       this.$refs.nodes.node.node = res
