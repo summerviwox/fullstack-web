@@ -59,23 +59,11 @@
         mounted() {
             this.changeTheme(1)
             bus.$on("changeTheme",this.changeTheme)
-            this.$router.push({path:'/all'})
+           // this.$router.push({path:'/all'})
         }
     }
 </script>
 
 
 <style>
-    html,body{
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        --themeColor:#2b2b2b;
-        --secondColor:#3C3F41;
-    }
-    #app {
-        width: 100%;
-        height: 100%;
-    }
 </style>

@@ -42,6 +42,7 @@ export default {
       this.autoSave(()=>{
         this.operateNode = {}
         this.$refs.markdown.marktext = node.markdown
+        this.$refs.markdown.nodeId = node.id
         bus.$emit('currentNodeInfo',node)
         if(type==="dir"||type==="search"){
           this.$refs.last.pushList(node)

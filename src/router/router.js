@@ -5,6 +5,10 @@ vue.use(VueRouter)
 const router = new VueRouter({
     routes:[
         {
+            path:'/',
+            component:()=>import("@/components/all/all"),
+        },
+        {
             path:'/all',
             component:()=>import("@/components/all/all"),
             children:[
@@ -20,7 +24,12 @@ const router = new VueRouter({
                     path:'/mine',
                     component:()=>import("@/components/mine/mine")
                 },
+
             ]
+        },
+        {
+            path:'/html',
+            component:()=>import("@/components/html/html")
         },
     ]
 })

@@ -18,7 +18,7 @@
       <div class="form">
         <span class="label">链接</span>
         <el-input class="input"  v-model="insertValue.secondValue" type="text"/>
-        <el-button class="button" type="text" @click="insertGo">确认</el-button>
+        <el-button class="button" type="text" @click="insertDialogGo">确认</el-button>
       </div>
     </div>
     <div></div>
@@ -31,11 +31,12 @@ import bus from "../../util/bus";
 export default {
   name: "markdown",
   props:{
-    outmarkdown:String
+    outmarkdown:String,
   },
   data:function (){
     return{
       marktext:'',
+      nodeId:'',
       htmltext:'',
       contextshow:false,
       insertLinkDialogShow:false,
@@ -50,6 +51,7 @@ export default {
         bottom:'',
       },
       insertValue:{
+        type:'',
         firstValue:'',
         secondValue:'',
       },
@@ -61,19 +63,27 @@ export default {
         },
         {
           label:'插入图片链接',
-          value:0,
-        },
-        {
-          label:'上传图片',
-          value:1,
-        },
-        {
-          label:'截图',
           value:2,
         },
         {
+          label:'上传图片',
+          value:3,
+        },
+        {
+          label:'截图',
+          value:4,
+        },
+        {
           label:'插入表格',
-          value:1,
+          value:5,
+        },
+        {
+          label:'插入代码块',
+          value:6,
+        },
+        {
+          label:'分享',
+          value:7,
         },
       ],
     }
@@ -89,18 +99,43 @@ export default {
       htmlroot.scrollTo(0,percent*(htmlroot.scrollHeight-htmlroot.clientHeight))
     },
     onRightClick(e){
+      this.insertLinkDialogShow = false
       this.toLocalPostion(e,this.contextStyle)
       this.contextshow = true
     },
     onContextClick(e,item){
       console.log(item.label)
-      switch (item.label){
+      this.insertValue.type = item.label
+      this.contextshow = false
+      switch (this.insertValue.type){
         case "插入链接":
-          this.toLocalPostion(e,this.insertLinkDialogStyle)
-          this.insertLinkDialogShow = true
+         this.showInsertDialog(e)
+          break
+        case "插入图片链接":
+          this.showInsertDialog(e)
+          break
+        case "插入表格":
+           this.insertAction()
+          break
+        case "插入代码块":
+          this.insertAction()
+          break
+        case "分享":
+          // this.$router.push({path:'/html',query:{id:268
+          //   }})
+          var path = this.$router.resolve({
+            path:'/html',
+            query:{
+              id:this.nodeId
+            }
+          })
+            window.open(path.href,'_blank')
           break
       }
-      this.contextshow = false
+    },
+    showInsertDialog(e){
+      this.toLocalPostion(e,this.insertLinkDialogStyle)
+      this.insertLinkDialogShow = true
     },
     toLocalPostion(e,style){
       let markdownrect = this.$refs.markdown.getBoundingClientRect();
@@ -117,13 +152,31 @@ export default {
     insertDialogClick(e){
 
     },
-    insertGo(){
-
-      console.log(this.$refs.markdown.selectionStart,this.$refs.markdown)
-
-      // this.marktext = this.marktext  + this.marktext.slice(-1,'['+this.insertValue.firstValue+']('+this.insertValue.secondValue+')')
-      // this.marktext =
+    insertDialogGo(){
+      console.log(this.$refs.markdown)
+      this.insertAction()
       this.insertLinkDialogShow = false
+      this.insertValue.firstValue = ''
+      this.insertValue.secondValue = ''
+    },
+    insertAction(){
+      let start = this.$refs.markdown.selectionStart
+      let value = ''
+      switch (this.insertValue.type){
+        case "插入链接":
+          value = '['+this.insertValue.firstValue+']('+this.insertValue.secondValue+')'
+          break
+        case "插入图片链接":
+          value = '!['+this.insertValue.firstValue+']('+this.insertValue.secondValue+')'
+          break
+        case "插入表格":
+          value = '|A|B|C|\n|-|-|-|\n|*|*|*|'
+          break
+        case "插入代码块":
+          value = '```java\n\n```'
+          break
+      }
+      this.marktext = this.marktext.slice(0,start) + value + this.marktext.slice(start, this.marktext.length)
     },
     rootclick(){
       console.log(123)

@@ -65,6 +65,7 @@ const api = {
     insert:'/insert',
     deleteByPrimaryKey:'/deleteByPrimaryKey',
     updateParentIdByPrimaryKey:'/updateParentIdByPrimaryKey',
+    selectHtmlById:'/selectHtmlById',
 }
 
 export default api
