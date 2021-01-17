@@ -75,7 +75,7 @@ export default {
       let noderect =this.$refs.nodes.getBoundingClientRect()
       let contextdialogrect =this.$refs.comtextdialog
       console.log(noderect,e)
-      this.contextStyle.left = (e.clientX - noderect.y) + 'px'
+      this.contextStyle.left = (e.clientX - noderect.left) + 'px'
       if(e.clientY>noderect.bottom/2){
         this.contextStyle.top=''
         this.contextStyle.bottom =(noderect.height - e.clientY + noderect.y) + 'px'
