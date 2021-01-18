@@ -39,15 +39,17 @@ export default {
   },
   methods:{
     currentNodeInfo(node,type){
+      this.operateNode = {}
+      this.$refs.markdown.marktext = node.markdown
+      this.$refs.markdown.nodeId = node.id
+      bus.$emit('currentNodeInfo',node)
+      if(type==="dir"||type==="search"){
+        this.$refs.last.pushList(node)
+      }
+      this.currentNode = node
+
       this.autoSave(()=>{
-        this.operateNode = {}
-        this.$refs.markdown.marktext = node.markdown
-        this.$refs.markdown.nodeId = node.id
-        bus.$emit('currentNodeInfo',node)
-        if(type==="dir"||type==="search"){
-          this.$refs.last.pushList(node)
-        }
-        this.currentNode = node
+
       })
     },
     onContextClicked(data){
@@ -75,10 +77,10 @@ export default {
     },
     autoSave(goto){
       // eslint-disable-next-line no-constant-condition
-      if(1==1){//自动保存不要了
-        typeof goto === "function" && goto()
-        return
-      }
+      // if(1==1){//自动保存不要了
+      //   typeof goto === "function" && goto()
+      //   return
+      // }
       //先判断当前是否有文档
       //1 有文档
       //1.1 文档是否改动
@@ -291,7 +293,7 @@ export default {
       if(e.ctrlKey){//ctrl s 保存
         switch (key){
           case 83:
-            this.save()
+            this.autoSave()
             window.event.preventDefault()
             break
           case 192:
