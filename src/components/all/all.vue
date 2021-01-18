@@ -48,7 +48,6 @@
             currentNodeInfo(node){
                 this.infos = node.path.split('&nbsp;<span>></span>&nbsp;')
                 this.infos.shift()
-              console.log(this.infos)
             },
             currentSearchNode(str){
                 this.footerinfo = str

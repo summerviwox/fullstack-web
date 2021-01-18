@@ -51,13 +51,13 @@ export default {
       })
     },
     onContextClicked(data){
-        this.operateNode = data.currentNode
+      this.operateNode = data.currentNode
       switch (data.label){
         case "新增根目录":
           this.currentNode = {}
           this.$refs.markdown.marktext = ''
-            this.operateNode = this.$refs.dir.$refs.nodes.node
-            break
+          this.operateNode = this.$refs.dir.$refs.nodes.node
+          break
         case "新建":
           this.currentNode = {}
           this.$refs.markdown.marktext = ''
@@ -74,6 +74,11 @@ export default {
       }
     },
     autoSave(goto){
+      // eslint-disable-next-line no-constant-condition
+      if(1==1){//自动保存不要了
+        typeof goto === "function" && goto()
+        return
+      }
       //先判断当前是否有文档
       //1 有文档
       //1.1 文档是否改动
@@ -144,7 +149,7 @@ export default {
       }
       if(util.isNotEmpty(this.lastApiNode.parentid)
           &&params.parentid==this.lastApiNode.parentid
-      &&params.title===this.lastApiNode.title
+          &&params.title===this.lastApiNode.title
           &&params.markdown===this.lastApiNode.markdown){
         this.$message.info("点击过快 或者 上次改动未保存")
         typeof goto === "function" && goto()
@@ -215,36 +220,36 @@ export default {
     },
     pasteNode(parentNode){
       console.log(this.cuteApiNode,parentNode)
-        api.postApi(api.updateParentIdByPrimaryKey,{
-          parentid:parentNode.currentNode.id,
-          id:this.cuteApiNode.id,
-        },res=>{
-          this.$message((res===1)?"成功":"失败")
-          this.$refs.dir.switchContextList(0)
+      api.postApi(api.updateParentIdByPrimaryKey,{
+        parentid:parentNode.currentNode.id,
+        id:this.cuteApiNode.id,
+      },res=>{
+        this.$message((res===1)?"成功":"失败")
+        this.$refs.dir.switchContextList(0)
 
-          let dirnodes = this.$refs.dir.$refs.nodes.node.node
-          let searchnodes = this.$refs.search.$refs.nodes.node.node
-          let lastnodes = this.$refs.last.$refs.nodes.node.node
+        let dirnodes = this.$refs.dir.$refs.nodes.node.node
+        let searchnodes = this.$refs.search.$refs.nodes.node.node
+        let lastnodes = this.$refs.last.$refs.nodes.node.node
 
 
-          this.findNodes(dirnodes,this.cuteApiNode,res=>{
-            res.parentNode.node.splice(res.parentNode.node.indexOf(this.cuteApiNode),1)
-            res.parentNode.childCount = res.parentNode.node.length
-          })
-
-          this.cuteApiNode.parentid = parentNode.currentNode.id
-          parentNode.currentNode.node.push(this.cuteApiNode)
-
-          this.findNodes(searchnodes,this.cuteApiNode,res=>{
-            res.parentid = parentNode.currentNode.id
-          })
-          this.findNodes(lastnodes,this.cuteApiNode,res=>{
-            res.parentid = parentNode.currentNode.id
-          })
-
-        },error=>{
-
+        this.findNodes(dirnodes,this.cuteApiNode,res=>{
+          res.parentNode.node.splice(res.parentNode.node.indexOf(this.cuteApiNode),1)
+          res.parentNode.childCount = res.parentNode.node.length
         })
+
+        this.cuteApiNode.parentid = parentNode.currentNode.id
+        parentNode.currentNode.node.push(this.cuteApiNode)
+
+        this.findNodes(searchnodes,this.cuteApiNode,res=>{
+          res.parentid = parentNode.currentNode.id
+        })
+        this.findNodes(lastnodes,this.cuteApiNode,res=>{
+          res.parentid = parentNode.currentNode.id
+        })
+
+      },error=>{
+
+      })
     },
     keepNodeSame(node){
       //console.log(this.$refs.dir.$refs.nodes.node,this.$refs.search.$refs.nodes.node,this.$refs.last.$refs.nodes.node)
@@ -286,11 +291,19 @@ export default {
       if(e.ctrlKey){//ctrl s 保存
         switch (key){
           case 83:
+            this.save()
             window.event.preventDefault()
-            this.autoSave()
             break
           case 192:
             bus.$emit("switchpage",{})
+            window.event.preventDefault()
+            break
+          case 89://control + y
+            this.$refs.markdown.rollPush()
+            window.event.preventDefault()
+            break
+          case 90://control + z
+            this.$refs.markdown.rollback()
             window.event.preventDefault()
             break
         }
@@ -302,7 +315,7 @@ export default {
             this.keySwitchMenu(e)
             break
           case 49://alt 1 主题1
-              bus.$emit("changeTheme",1)
+            bus.$emit("changeTheme",1)
             break
           case 50://alt 1 主题1
             bus.$emit("changeTheme",2)

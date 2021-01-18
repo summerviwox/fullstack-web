@@ -13,8 +13,8 @@ const nodeutil = {
         node.showNodes =false
         node.parentNode=parentNode
         node.nodeType=type
-        node.markdown = node.markdown.replace("http://222.186.36.75:8888","https://www.summerviwox.com")
-        node.markdown = node.markdown.replace("https://www.summerman.top:7777","https://www.summerviwox.com")
+        node.markdown = node.markdown.replace(/http:\/\/222.186.36.75:8888/g,"https://www.summerviwox.com")
+        node.markdown = node.markdown.replace(/https:\/\/www.summerman.top:7777/g,"https://www.summerviwox.com")
 
     },
     getchildcount(node,type){

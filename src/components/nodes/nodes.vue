@@ -111,7 +111,7 @@ export default {
     },
     //递归获取标题
     findNodeInNodes(node,str){
-      console.log(node.title,node.id,node.parentNode)
+     // console.log(node.title,node.id,node.parentNode)
       str.str = node.parentNode ?
               '&nbsp;<span>></span>&nbsp;'+node.title+ str.str
           :

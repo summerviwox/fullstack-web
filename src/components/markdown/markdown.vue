@@ -8,13 +8,15 @@
     </div>
     <div v-if="contextshow" :style="{'top':contextStyle.top,'left':contextStyle.left,'bottom':contextStyle.bottom}" class="comtextdialog mymaintheme" ref="comtextdialog">
       <span class="item" @click.stop="onContextClick($event,item)" v-for="(item,index) in contextList" :key="index">{{item.label}}</span>
+      <input type="file"   @change="handleFileChange" ref="inputer" style="display: none">
+      <span class="item" @click.stop="openFile()">上传文件</span>
     </div>
 
     <div @click.stop="insertDialogClick" v-if="insertLinkDialogShow" :style="{'top':insertLinkDialogStyle.top,'left':insertLinkDialogStyle.left,'bottom':insertLinkDialogStyle.bottom}" class="insertlinkdialog mymaintheme" ref="insertlinkdialog">
-     <div class="form">
-       <span class="label">描述</span>
-       <el-input class="input"  v-model="insertValue.firstValue" type="text"/>
-     </div>
+      <div class="form">
+        <span class="label">描述</span>
+        <el-input class="input"  v-model="insertValue.firstValue" type="text"/>
+      </div>
       <div class="form">
         <span class="label">链接</span>
         <el-input class="input"  v-model="insertValue.secondValue" type="text"/>
@@ -28,6 +30,7 @@
 <script>
 import md from './mymarkdown'
 import bus from "../../util/bus";
+import api from "../../api/api";
 export default {
   name: "markdown",
   props:{
@@ -35,6 +38,9 @@ export default {
   },
   data:function (){
     return{
+      historymaxlength:20,
+      history:[],
+      currentHistoryIndex:-1,
       marktext:'',
       nodeId:'',
       htmltext:'',
@@ -65,14 +71,10 @@ export default {
           label:'插入图片链接',
           value:2,
         },
-        {
-          label:'上传图片',
-          value:3,
-        },
-        {
-          label:'截图',
-          value:4,
-        },
+        // {
+        //   label:'截图',
+        //   value:4,
+        // },
         {
           label:'插入表格',
           value:5,
@@ -88,7 +90,56 @@ export default {
       ],
     }
   },
+  watch:{
+    marktext:function (n,o) {
+      //console.log("current",this.history,this.currentHistoryIndex)
+      // console.log(o,n)
+      // eslint-disable-next-line no-empty
+      if(this.history.length!=0&&n===this.history[this.currentHistoryIndex]){
+
+      }else{
+        this.history.push(n)
+        if(this.history.length>this.historymaxlength){
+          this.history.shift()
+        }
+        this.currentHistoryIndex = this.history.length-1
+      }
+     // console.log("marktext",this.history,this.currentHistoryIndex)
+    },
+  },
   methods:{
+    //control + z
+    rollback(){
+      //console.log("rollback",this.history,this.currentHistoryIndex)
+      if(this.currentHistoryIndex>0){
+        this.currentHistoryIndex =  this.currentHistoryIndex - 1
+        this.marktext = this.history[this.currentHistoryIndex]
+      }
+    },
+    rollPush(){
+      //console.log("rollPush",this.history,this.currentHistoryIndex)
+      if(this.currentHistoryIndex<this.history.length-1){
+        this.currentHistoryIndex =  this.currentHistoryIndex + 1
+        this.marktext = this.history[this.currentHistoryIndex]
+      }
+    },
+    handleFileChange (e) {
+      let file = e.target.files[0]
+      let size = Math.floor(file.size / 1024);//
+      this.formData=new FormData();//new一个formData事件
+      this.formData.append("file",file); //将file属性添加到formData里
+      //此时formData就是我们要向后台传的参数了
+      api.fileApi(api.upload,this.formData,res=>{
+            this.insertAction(res.data)
+          },
+      error=>{
+
+      })
+    },
+    openFile(){
+      this.insertValue.type = "上传文件"
+      this.$refs.inputer.click()
+    },
     input(){
       this.htmltext = md.render(this.marktext)
     },
@@ -109,13 +160,13 @@ export default {
       this.contextshow = false
       switch (this.insertValue.type){
         case "插入链接":
-         this.showInsertDialog(e)
+          this.showInsertDialog(e)
           break
         case "插入图片链接":
           this.showInsertDialog(e)
           break
         case "插入表格":
-           this.insertAction()
+          this.insertAction()
           break
         case "插入代码块":
           this.insertAction()
@@ -129,7 +180,7 @@ export default {
               id:this.nodeId
             }
           })
-            window.open(path.href,'_blank')
+          window.open(path.href,'_blank')
           break
       }
     },
@@ -156,10 +207,8 @@ export default {
       console.log(this.$refs.markdown)
       this.insertAction()
       this.insertLinkDialogShow = false
-      this.insertValue.firstValue = ''
-      this.insertValue.secondValue = ''
     },
-    insertAction(){
+    insertAction(url){
       let start = this.$refs.markdown.selectionStart
       let value = ''
       switch (this.insertValue.type){
@@ -175,11 +224,26 @@ export default {
         case "插入代码块":
           value = '```java\n\n```'
           break
+        case "上传文件":
+          var end = url.slice(url.lastIndexOf('.')+1,url.length).trim().toLowerCase()
+            console.log(end)
+            if(end ==='bmp'
+                ||end ==='jpg'
+                ||end ==='jpeg'
+                ||end ==='png'
+                ||end ==='gif'
+                ||end ==='tif'){
+              value = '![img]('+url+')'
+            }else{
+              value = '[file]('+url+')'
+            }
+          break
       }
       this.marktext = this.marktext.slice(0,start) + value + this.marktext.slice(start, this.marktext.length)
+      this.insertValue.firstValue = ''
+      this.insertValue.secondValue = ''
     },
     rootclick(){
-      console.log(123)
       this.contextshow = false
       this.insertLinkDialogShow = false
     },

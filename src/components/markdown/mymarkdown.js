@@ -4,7 +4,7 @@ const md = require('markdown-it')({
     // This is only for full CommonMark compatibility.
     breaks:       true,        // Convert '\n' in paragraphs into <br>
     langPrefix:   '',  // CSS language prefix for fenced blocks. Can be
-                                // useful for external highlighters.
+    // useful for external highlighters.
     linkify:      true,        // Autoconvert URL-like text to links
     typographer:  true,        // Enable some language-neutral replacement + quotes beautification
 
@@ -23,5 +23,24 @@ const md = require('markdown-it')({
         hljs:require('highlight.js')
     })
     .use(require('markdown-it-multimd-table'))
+
+//新界面打开
+var defaultRender = md.renderer.rules.link_open || function(tokens, idx, options, env, self) {
+    return self.renderToken(tokens, idx, options);
+};
+
+md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
+    // If you are sure other plugins can't add `target` - drop check below
+    var aIndex = tokens[idx].attrIndex('target');
+
+    if (aIndex < 0) {
+        tokens[idx].attrPush(['target', '_blank']); // add new attribute
+    } else {
+        tokens[idx].attrs[aIndex][1] = '_blank';    // replace value of existing attr
+    }
+
+    // pass token to default renderer.
+    return defaultRender(tokens, idx, options, env, self);
+};
 
 export default md
