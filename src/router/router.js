@@ -6,7 +6,7 @@ const router = new VueRouter({
     routes:[
         {
             path:'/',
-            component:()=>import("@/components/login/Login"),
+            component:()=>import("@/components/login/login"),
         },
         {
             path:'/all',
@@ -33,7 +33,7 @@ const router = new VueRouter({
         },
         {
             path:'/login',
-            component:()=>import("@/components/login/Login"),
+            component:()=>import("@/components/login/login"),
         },
     ]
 })

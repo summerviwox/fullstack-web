@@ -15,7 +15,7 @@ import userde from "./userde";
     import api from "../../api/api";
 
     export default {
-        name: "Login",
+        name: "login",
        data(){
             return{
                 head:"https://www.summerviwox.com/blog/13.png",
@@ -51,29 +51,6 @@ import userde from "./userde";
     }
 </script>
 
-<style scoped>
-    .login-root{
-        width: 100%;
-        height: 100%;
-    }
-    .login-input-content{
-        width: 300px;
-        position: relative;
-        left: 50%;
-        top: 40%;
-        transform: translateX(-50%) translateY(-50%);
-    }
-    .login-head{
-        width: 100px;
-        height: 100px;
-    }
-   .login-input-pwd{
-       margin-top: 10px;
-   }
-    .login-login{
-        margin-top: 10px;
-        height: 35px;
-        width: 100%;
-    }
-
+<style scoped lang="less">
+@import "login.less";
 </style>
