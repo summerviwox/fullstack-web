@@ -7,7 +7,9 @@
       <div  class="html" v-html="htmltext"></div>
     </div>
     <div v-if="contextshow" :style="{'top':contextStyle.top,'left':contextStyle.left,'bottom':contextStyle.bottom}" class="comtextdialog mymaintheme" ref="comtextdialog">
-      <span class="item" @click.stop="onContextClick($event,item)" v-for="(item,index) in contextList" :key="index">{{item.label}}</span>
+      <span  class="itemcontent"  @click.stop="onContextClick($event,item)" v-for="(item,index) in contextList" :key="index">
+        <div class="item"  v-if="item.enable"> {{item.label}}</div>
+      </span>
       <input type="file"   @change="handleFileChange" ref="inputer" style="display: none">
       <span class="item" @click.stop="openFile()">上传文件</span>
     </div>
@@ -31,6 +33,7 @@
 import md from './mymarkdown'
 import bus from "../../util/bus";
 import api from "../../api/api";
+import util from "../../util/util";
 export default {
   name: "markdown",
   props:{
@@ -66,10 +69,12 @@ export default {
         {
           label:'插入链接',
           value:1,
+          enable:true,
         },
         {
           label:'插入图片链接',
           value:2,
+          enable:true,
         },
         // {
         //   label:'截图',
@@ -78,14 +83,22 @@ export default {
         {
           label:'插入表格',
           value:5,
+          enable:true,
         },
         {
           label:'插入代码块',
           value:6,
+          enable:true,
         },
         {
           label:'分享',
           value:7,
+          enable:true,
+        },
+        {
+          label:'加入常用网站',
+          value:8,
+          enable:true,
         },
       ],
     }
@@ -153,6 +166,30 @@ export default {
       this.insertLinkDialogShow = false
       this.toLocalPostion(e,this.contextStyle)
       this.contextshow = true
+      this.contextList.forEach((value,index)=>{
+        if(value.label==='加入常用网站'){
+            value.enable = this.isWebLink()
+        }
+      })
+    },
+    //获取选中的markdown
+    getMarkTextSelection(){
+      let textarea = this.$refs.markdown
+      let start = textarea.selectionStart
+      let end =textarea.selectionEnd
+      if(end!=start){
+        let text = this.marktext.slice(start,end)
+        return text
+      }
+      return ''
+    },
+    //是否是网站
+    isWebLink(){
+      let text = this.getMarkTextSelection()
+      if(text.startsWith('http:')){
+        return true
+      }
+      return false
     },
     onContextClick(e,item){
       console.log(item.label)

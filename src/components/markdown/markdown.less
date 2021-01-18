@@ -36,21 +36,26 @@
     align-items: center;
     flex-direction: column;
     border: #CCCCCC 1px solid;
-    .item{
+    .itemcontent{
+      display: flex;
       &:hover{
         background: #0099FF;
         color: white;
       }
       cursor: pointer;
       text-align: center;
-      width: calc(100% - 10px);
-      padding: 5px 5px;
+      width: calc(100%);
       display: inline-block;
-      border-bottom: #CCCCCC 1px solid;
+      .item{
+        width: 100%;
+        border-bottom: #CCCCCC 1px solid;
+      }
+      &:last-child{
+        border-bottom: none;
+        background: red;
+      }
     }
-    .item:last-child{
-      border-bottom: none;
-    }
+
   }
   .insertlinkdialog{
     box-shadow: 1px 1px 2px grey;
