@@ -73,7 +73,7 @@ export default {
     }
   },
   mounted() {
-    this.switchPage(1)
+    this.switchPage(0)
     bus.$on("currentNodeInfo",this.currentNodeInfo)
     bus.$on("currentSearchNode",this.currentSearchNode)
     bus.$on("switchpage",this.autoSwitchPage)
