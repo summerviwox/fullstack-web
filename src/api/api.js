@@ -92,6 +92,10 @@ const api = {
     login:'/user/login',
     getallWebTag:'/WebTag/getall',
     insertWebTag:'/WebTag/insert',
+    webTag:{
+        update:'/WebTag/updateByPrimaryKey',
+    }
+
 }
 
 export default api

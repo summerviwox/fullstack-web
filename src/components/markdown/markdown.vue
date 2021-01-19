@@ -224,8 +224,11 @@ export default {
           var text = this.getMarkTextSelection()
           var str = text.split("/")
           var a = str[0]+'//'+str[2]
+            if(text.lastIndexOf("/")==text.length){
+              text = text.split(0,text.length-1)
+            }
           api.postApi(api.insertWebTag,{
-            url:a,
+            url:text,
             img:a + "/favicon.ico",
             title:str[2],
           },res=>{
