@@ -90,6 +90,8 @@ const api = {
     selectHtmlById:'/blog/selectHtmlById',
     upload:'/blog/upload',
     login:'/user/login',
+    getallWebTag:'/WebTag/getall',
+    insertWebTag:'/WebTag/insert',
 }
 
 export default api

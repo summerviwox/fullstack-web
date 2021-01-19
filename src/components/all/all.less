@@ -17,6 +17,7 @@ html,body{
     background: var(--toptitlebackground);
     align-items: center;
     .titles{
+      width: 100%;
       margin-left: 200px;
       display: flex;
       flex-direction: row;
@@ -24,6 +25,21 @@ html,body{
         padding: 0px 40px;
         color: white;
         cursor: pointer;
+      }
+    }
+    .dropdown{
+      margin-right: 10px;
+      .el-dropdown-link{
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        .el-icon-arrow-down {
+          font-size: 12px;
+        }
+      }
+      .arrow{
+        margin-top: 5px;
+        margin-left: 10px;
       }
     }
   }

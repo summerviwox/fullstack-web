@@ -1,6 +1,7 @@
 // 用户逻辑
+import util from "../../util/util";
 export default {
     isLogined(){
-        return localStorage.getItem('loginres')!=null&&localStorage.getItem('loginres')!=''
+        return util.isNotEmpty(localStorage.getItem('loginres'))
     }
 }

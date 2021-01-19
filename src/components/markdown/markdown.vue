@@ -117,7 +117,7 @@ export default {
         }
         this.currentHistoryIndex = this.history.length-1
       }
-     // console.log("marktext",this.history,this.currentHistoryIndex)
+      // console.log("marktext",this.history,this.currentHistoryIndex)
     },
   },
   methods:{
@@ -145,9 +145,9 @@ export default {
       api.fileApi(api.upload,this.formData,res=>{
             this.insertAction(res.data)
           },
-      error=>{
+          error=>{
 
-      })
+          })
     },
     openFile(){
       this.insertValue.type = "上传文件"
@@ -168,7 +168,7 @@ export default {
       this.contextshow = true
       this.contextList.forEach((value,index)=>{
         if(value.label==='加入常用网站'){
-            value.enable = this.isWebLink()
+          value.enable = this.isWebLink()
         }
       })
     },
@@ -186,7 +186,8 @@ export default {
     //是否是网站
     isWebLink(){
       let text = this.getMarkTextSelection()
-      if(text.startsWith('http:')){
+      if(text.startsWith('http:')
+          ||text.startsWith('https:')){
         return true
       }
       return false
@@ -218,6 +219,20 @@ export default {
             }
           })
           window.open(path.href,'_blank')
+          break
+        case "加入常用网站":
+          var text = this.getMarkTextSelection()
+          var str = text.split("/")
+          var a = str[0]+'//'+str[2]
+          api.postApi(api.insertWebTag,{
+            url:a,
+            img:a + "/favicon.ico",
+            title:str[2],
+          },res=>{
+            bus.$emit("refreshweblist",{})
+          },error=>{
+
+          })
           break
       }
     },
@@ -263,17 +278,17 @@ export default {
           break
         case "上传文件":
           var end = url.slice(url.lastIndexOf('.')+1,url.length).trim().toLowerCase()
-            console.log(end)
-            if(end ==='bmp'
-                ||end ==='jpg'
-                ||end ==='jpeg'
-                ||end ==='png'
-                ||end ==='gif'
-                ||end ==='tif'){
-              value = '![img]('+url+')'
-            }else{
-              value = '[file]('+url+')'
-            }
+          console.log(end)
+          if(end ==='bmp'
+              ||end ==='jpg'
+              ||end ==='jpeg'
+              ||end ==='png'
+              ||end ==='gif'
+              ||end ==='tif'){
+            value = '![img]('+url+')'
+          }else{
+            value = '[file]('+url+')'
+          }
           break
       }
       this.marktext = this.marktext.slice(0,start) + value + this.marktext.slice(start, this.marktext.length)
