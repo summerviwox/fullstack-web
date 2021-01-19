@@ -1,14 +1,22 @@
 .root{
+  justify-content: center;
   .urlsblock{
     display: flex;
     flex-wrap: wrap;
     margin: 30px;
+    justify-content: center;
+    height: auto;
     .urls{
+      &:hover{
+        background: #cccccc;
+        border-radius: 10px;
+      }
       cursor: pointer;
       margin: 20px;
       .img{
+        padding: 10px;
         width: 100px;
-        height: 100px;
+        height: 50px;
       }
     }
   }
