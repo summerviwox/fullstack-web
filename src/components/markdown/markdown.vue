@@ -10,8 +10,10 @@
       <span  class="itemcontent"  @click.stop="onContextClick($event,item)" v-for="(item,index) in contextList" :key="index">
         <div class="item"  v-if="item.enable"> {{item.label}}</div>
       </span>
-      <input type="file"   @change="handleFileChange" ref="inputer" style="display: none">
+      <span class="itemcontent" >
+          <input type="file"   @change="handleFileChange" ref="inputer" style="display: none">
       <span class="item" @click.stop="openFile()">上传文件</span>
+      </span>
     </div>
 
     <div @click.stop="insertDialogClick" v-if="insertLinkDialogShow" :style="{'top':insertLinkDialogStyle.top,'left':insertLinkDialogStyle.left,'bottom':insertLinkDialogStyle.bottom}" class="insertlinkdialog mymaintheme" ref="insertlinkdialog">

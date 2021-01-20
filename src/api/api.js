@@ -94,6 +94,7 @@ const api = {
     insertWebTag:'/WebTag/insert',
     webTag:{
         update:'/WebTag/updateByPrimaryKey',
+        deleteByPrimaryKey:'/WebTag/deleteByPrimaryKey',
     }
 
 }

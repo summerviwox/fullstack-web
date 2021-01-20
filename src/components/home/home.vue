@@ -1,32 +1,36 @@
 <template>
-<div class="vroot root">
-  <div class="urlsblock">
-    <div class="urls" v-for="(item,index) in urls" :key="index" @click="goTo(item)">
-      <div @contextmenu.prevent="rightClick($event,item)">
-      <el-image :title="item.title" fit="contain" class="img" :src="item.img" ></el-image>
+  <div class="vroot root" ref="root">
+    <div class="urlsblock">
+      <div class="urls" v-for="(item,index) in urls" :key="index" @click="goTo(item)">
+        <div @contextmenu.prevent="rightClick($event,item)">
+          <el-image :title="item.title" fit="contain" class="img" :src="item.img" ></el-image>
+        </div>
       </div>
     </div>
-  </div>
-
-  <el-dialog width="30%" :visible.sync="dialogVisible">
-    <el-form label-width="80px">
-      <el-form-item label="标题">
-        <el-input v-model="currentURl.title" type="text"></el-input>
-      </el-form-item>
-      <el-form-item label="链接">
-        <el-input v-model="currentURl.url" type="text"></el-input>
-      </el-form-item>
-      <el-form-item label="图片链接">
-        <el-input v-model="currentURl.img" type="text"></el-input>
-      </el-form-item>
-    </el-form>
-    <span slot="footer" class="dialog-footer">
+    <div v-if="contextshow" :style="{'top':contextStyle.top,'left':contextStyle.left,'bottom':contextStyle.bottom}" class="comtextdialog mymaintheme" ref="comtextdialog">
+      <div  class="itemcontent"  @click.stop="onContextClick($event,item)" v-for="(item,index) in contextList" :key="index">
+        <div class="item"  v-if="item.enable"> {{item.label}}</div>
+      </div>
+    </div>
+    <el-dialog width="30%" :visible.sync="dialogVisible">
+      <el-form label-width="80px">
+        <el-form-item label="标题">
+          <el-input v-model="currentURl.title" type="text"></el-input>
+        </el-form-item>
+        <el-form-item label="链接">
+          <el-input v-model="currentURl.url" type="text"></el-input>
+        </el-form-item>
+        <el-form-item label="图片链接">
+          <el-input v-model="currentURl.img" type="text"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
     <el-button @click="dialogVisible = false">取 消</el-button>
     <el-button type="primary" @click="makeSure()">确 定</el-button>
   </span>
-  </el-dialog>
+    </el-dialog>
 
-</div>
+  </div>
 </template>
 
 <script>
@@ -34,9 +38,10 @@ import Markdown from "../markdown/markdown";
 import api from "../../api/api";
 import bus from "../../util/bus";
 export default {
-name: "home",
+  name: "home",
   data:function () {
     return{
+      contextshow:false,
       dialogVisible:false,
       urls:[
         // {
@@ -44,13 +49,29 @@ name: "home",
         //   img:'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png',
         //   title:'',
         // }
-      ]
-      ,
+      ],
+      contextStyle:{
+        top:0,
+        left:0,
+        bottom:''
+      },
       currentURl:{
         url:'',
         img:'',
         title:'',
-      }
+      },
+      contextList:[
+        {
+          label:"修改",
+          value:0,
+          enable:true,
+        },
+        {
+          label:"删除",
+          value:1,
+          enable:true,
+        },
+      ],
     }
   },
   methods:{
@@ -59,7 +80,7 @@ name: "home",
     },
     dataApi(){
       api.getApi(api.getallWebTag,{},res=>{
-          this.urls = res
+        this.urls = res
       },error=>{
 
       })
@@ -76,17 +97,59 @@ name: "home",
 
       })
     },
+    deleteApi(){
+      api.postApi(api.webTag.deleteByPrimaryKey,{
+        id:this.currentURl.id,
+          },res=>{
+                this.dataApi()
+          },
+          error=>{
+
+          })
+    },
     rightClick(e,item){
-      this.dialogVisible = true
+      // this.dialogVisible = true
       this.currentURl = item
+      this.toLocalPostion(e,this.contextStyle)
+      this.contextshow = true
     },
     makeSure(){
       this.dialogVisible = false
       this.updateApi()
     },
+    onContextClick(e,item){
+      console.log(e)
+      this.contextshow = false
+      switch (item.label){
+        case "修改":
+          this.dialogVisible = true
+          break
+        case "删除":
+          this.deleteApi()
+          break
+      }
+
+    },
+    toLocalPostion(e,style){
+      let markdownrect = this.$refs.root.getBoundingClientRect();
+      console.log(markdownrect,e)
+      style.left = (e.clientX - markdownrect.left) + 'px'
+      if(e.clientY>markdownrect.height/2){
+        style.top = ''
+        style.bottom = (markdownrect.height - e.clientY + markdownrect.y) + 'px'
+      }else{
+        style.bottom = ''
+        style.top = (e.clientY - markdownrect.y) + 'px'
+      }
+    },
+    rootClick(){
+      this.contextshow = false
+    },
+
   },
   mounted() {
-  bus.$on("refreshweblist",this.dataApi)
+    bus.$on("refreshweblist",this.dataApi)
+    bus.$on("onAllClickEvent",this.rootClick)
     this.dataApi()
     // for(let i=0;i<30;i++){
     //   this.urls.push( {
