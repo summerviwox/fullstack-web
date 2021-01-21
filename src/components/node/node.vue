@@ -1,7 +1,7 @@
 <template>
   <div class="node">
     <div class="h" v-bind:class="{selectedtheme:this.node.selected,unselectedtheme:!this.node.selected}"  @contextmenu.prevent="rightClickNode"  @click="clickNode()">
-      <div class="h" v-bind:style="{'margin-left':10+node.level*20+'px','visibility':imageVisible()}">
+      <div @click.stop="expanClick()" class="h" v-bind:style="{'margin-left':0+node.level*20+'px','visibility':imageVisible(),'padding':'10px'}">
         <img  v-if="node.showNodes"  fit="contain" :src="require('../../assets/down.svg')" class="wimage" />
         <img v-else fit="contain" :src="require('../../assets/right.svg')" class="himage" />
       </div>
@@ -14,7 +14,7 @@
     </div>
     <div class="line mylinetheme"></div>
     <div class="aaaa" v-if="childsVisible()">
-      <node :type="type" @onRightClickNodeEvent="onRightClickNodeEvent" @onclickNodeEvent="onclickNodeEvent" v-for="(item,index) in node.node" :node="item" :key="index"></node>
+      <node :type="type" @expanClickEvent="expanClickEvent" @onRightClickNodeEvent="onRightClickNodeEvent" @onclickNodeEvent="onclickNodeEvent" v-for="(item,index) in node.node" :node="item" :key="index"></node>
     </div>
   </div>
 </template>
@@ -85,6 +85,9 @@ export default {
     clickNode(){
       this.$emit("onclickNodeEvent",this.node)
     },
+    expanClick(e){
+      this.$emit("expanClickEvent",this.node,e)
+    },
     rightClickNode(e){
       this.$emit("onRightClickNodeEvent",this.node,e)
     },
@@ -95,6 +98,10 @@ export default {
     //右键事件回调
     onRightClickNodeEvent(node,e){
       this.$emit("onRightClickNodeEvent",node,e)
+    },
+    //点击展开收缩开关
+    expanClickEvent(node,e){
+      this.$emit("expanClickEvent",node,e)
     },
   },
   mounted() {

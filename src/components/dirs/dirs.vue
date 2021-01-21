@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <nodes ref="nodes" :context-list="contextList" :type="{type:'node'}" @onContextClicked="onContextClicked" @currentNodeInfo="currentNodeInfo" class="myscroller"></nodes>
+    <nodes @expanClickEvent="expanClickEvent" ref="nodes" :context-list="contextList" :type="{type:'node'}" @onContextClicked="onContextClicked" @currentNodeInfo="currentNodeInfo" class="myscroller"></nodes>
   </div>
 </template>
 
@@ -60,9 +60,6 @@ export default {
   },
   methods: {
     currentNodeInfo(node) {
-      this.getApiNodes(node,res=> {
-        this.$set(node,'node',res)
-      })
       this.$emit("currentNodeInfo",node,"dir")
     },
     switchContextList(index){
@@ -74,6 +71,17 @@ export default {
           this.contextList = this.contextListA
           break
       }
+    },
+    //点击展开收缩开关
+    expanClickEvent(node,e){
+      console.log(node)
+      //收缩不掉接口 展开才掉接口
+      if(node.showNodes){
+        this.getApiNodes(node,res=> {
+          this.$set(node,'node',res)
+        })
+      }
+      this.$emit("expanClickEvent",node,e)
     },
     onContextClicked(data){
       this.$emit("onContextClicked",data)

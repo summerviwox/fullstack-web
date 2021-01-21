@@ -48,9 +48,9 @@ export default {
       }
       this.currentNode = node
 
-      this.autoSave(()=>{
-
-      })
+      // this.autoSave(()=>{
+      //
+      // })
     },
     onContextClicked(data){
       this.operateNode = data.currentNode
@@ -93,7 +93,7 @@ export default {
           this.save(goto);
         }else{
           typeof goto === "function" && goto()
-          // this.$message.warning("编辑区域没有更改变化")
+           this.$message.warning("编辑区域没有更改变化")
         }
       }else{
         //当前为刚进入界面空文档||新建的空文档

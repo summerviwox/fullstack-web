@@ -1,6 +1,6 @@
 <template>
   <div ref="nodes" class="root" @click="rootclick">
-    <node @onRightClickNodeEvent="onRightClickNodeEvent" @onclickNodeEvent="onclickNodeEvent"  :type="type" v-for="(item,index) in node.node" :key="index" :node="item" ></node>
+    <node @expanClickEvent="expanClickEvent" @onRightClickNodeEvent="onRightClickNodeEvent" @onclickNodeEvent="onclickNodeEvent"  :type="type" v-for="(item,index) in node.node" :key="index" :node="item" ></node>
     <div v-if="contextshow" :style="{'top':contextStyle.top,'left':contextStyle.left,'bottom':contextStyle.bottom}" class="comtextdialog mymaintheme" ref="comtextdialog">
       <span class="item" @click="onContextClick(item)" v-for="(item,index) in contextList" :key="index">{{item.label}}</span>
     </div>
@@ -65,7 +65,6 @@ export default {
   methods:{
     //点击事件回调
     onclickNodeEvent(node){
-      this.myNodeToggle(node)
       this.myNodeSelected(node)
 
     },
@@ -85,6 +84,11 @@ export default {
       }
       this.contextshow = true
       this.$emit("onRightClickNodeEvent",node,e)
+    },
+    //点击展开收缩开关
+    expanClickEvent(node,e){
+      this.myNodeToggle(node)
+      this.$emit("expanClickEvent",node,e)
     },
     onContextClick(data){
       this.contextshow = false
