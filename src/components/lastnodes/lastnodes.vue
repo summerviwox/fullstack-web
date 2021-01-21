@@ -17,7 +17,7 @@ export default {
       list:[],
       contextList:[
         {
-          label:"删除",
+          label:"本次删除",
           value:1
         },
       ]

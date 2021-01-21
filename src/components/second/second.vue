@@ -67,6 +67,9 @@ export default {
         case "删除":
           this.deleteNode(data.currentNode)
           break
+        case "本次删除":
+          this.removeNode(data.currentNode)
+          break
         case "剪切":
           this.cutNode()
           break
@@ -186,6 +189,7 @@ export default {
         markdown:this.$refs.markdown.marktext,
       }
     },
+    //后台数据删除
     deleteNode(node){
       api.postApi(api.deleteByPrimaryKey,{
         id:node.id
@@ -214,6 +218,14 @@ export default {
       },error=>{
 
       })
+    },
+    //本次删除 仅显示删除
+    removeNode(node){
+      let lastnodes = this.$refs.last.$refs.nodes.node.node
+      this.findNodes(lastnodes,node,res=>{
+        lastnodes.splice(lastnodes.indexOf(node),1)
+      })
+
     },
     //剪切
     cutNode(){
