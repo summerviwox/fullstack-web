@@ -29,7 +29,6 @@ export default {
         let str = nodeutil.getCurrentNodePath(res.data,"")
         node.path = str
         this.$emit("currentNodeInfo",node,"last")
-
       },error=>{
 
       })

@@ -58,7 +58,10 @@ export default {
     },
     currentNodeInfo(node){
       this.infos = node.path.split('&nbsp;<span>></span>&nbsp;')
-      this.infos.shift()
+      console.log(123,this.infos)
+      if(this.infos.length!=0&&this.infos[0]===''){
+        this.infos.shift()
+      }
     },
     currentSearchNode(str){
       this.footerinfo = str
