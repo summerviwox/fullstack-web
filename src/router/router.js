@@ -43,6 +43,10 @@ const router = new VueRouter({
             path:'/login',
             component:()=>import("@/components/login/login"),
         },
+        {
+            path:'/3d',
+            component:()=>import("@/components/3d/3d")
+        },
     ]
 })
 

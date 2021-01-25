@@ -16,6 +16,7 @@
     "markdown-it": "^12.0.4",
     "markdown-it-highlightjs": "^3.4.0",
     "markdown-it-multimd-table": "^4.0.3",
+    "three": "^0.124.0",
     "vue": "^2.6.11",
     "vue-router": "^3.4.9"
   },
