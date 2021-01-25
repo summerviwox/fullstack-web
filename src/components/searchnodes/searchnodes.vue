@@ -23,7 +23,8 @@ export default {
       contextList:[
         {
           label:"删除",
-          value:1
+          value:1,
+          enable:true,
         },
       ]
     }
@@ -40,8 +41,8 @@ export default {
 
       })
     },
-    onContextClicked(data){
-      this.$emit("onContextClicked",data)
+    onContextClicked(e,item){
+      this.$emit("onContextClicked",e,item)
     },
     search(text){
       if(text===""){

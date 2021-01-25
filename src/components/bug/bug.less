@@ -1,0 +1,55 @@
+.bug{
+  width: 100%;
+  height: 0;
+  flex: 1;
+  overflow: hidden;
+  .left{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: 4px 2px;
+    .buglist{
+      flex: 1;
+      overflow-y: auto;
+      height: auto;
+      width: 100%;
+      .bugitem{
+        :hover{
+          background:#a9a9a9;
+        }
+        cursor: pointer;
+        font-size: 12px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border-bottom: 1px #cccccc solid;
+        .bugitemtitle{
+          color: #252629;
+          font-weight: 500;
+          height: 40px;
+          line-height: 40px;
+        }
+        .bugitemdetail{
+          color: #6f7072;
+          font-size: 12px;
+          display: -webkit-box;
+          -webkit-line-clamp:2;
+          -webkit-box-orient: vertical;
+        }
+      }
+    }
+    .pagination{
+      margin-top: 4px;
+      text-align: center;
+    }
+  }
+  .bugdetail{
+    overflow-y: auto;
+    height: auto;
+    margin: 4px 2px;
+    padding: 4px;
+    border: 1px #cccccc solid;
+    width: 0;
+    flex: 1;
+  }
+}

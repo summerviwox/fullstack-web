@@ -1,9 +1,8 @@
 <template>
   <div ref="nodes" class="root" @click="rootclick">
     <node @expanClickEvent="expanClickEvent" @onRightClickNodeEvent="onRightClickNodeEvent" @onclickNodeEvent="onclickNodeEvent"  :type="type" v-for="(item,index) in node.node" :key="index" :node="item" ></node>
-    <div v-if="contextshow" :style="{'top':contextStyle.top,'left':contextStyle.left,'bottom':contextStyle.bottom}" class="comtextdialog mymaintheme" ref="comtextdialog">
-      <span class="item" @click="onContextClick(item)" v-for="(item,index) in contextList" :key="index">{{item.label}}</span>
-    </div>
+    <context-menu @onContextClick="onContextClick"  ref="comtextdialog"   :contextList="contextList">
+    </context-menu>
   </div>
 </template>
 
@@ -12,9 +11,10 @@ import Node from "../node/node";
 import api from "../../api/api";
 import bus from "../../util/bus"
 import nodeutil from "../node/nodeutil";
+import contextMenu from "../contextmenu/contextMenu";
 export default {
   name: "nodes",
-  components: {Node},
+  components: {Node,contextMenu},
   props:{
     type:{
       type:Object,
@@ -27,20 +27,7 @@ export default {
     contextList:{
       type:Array,
       default:function () {
-        return[
-          {
-            label:"新增根目录",
-            value:1
-          },
-          {
-            label:"新建",
-            value:1
-          },
-          {
-            label:"删除",
-            value:1
-          },
-        ]
+        return[]
       }
     },
   },
@@ -54,12 +41,6 @@ export default {
       },
       //nodes:[],
       currentNode:{},
-      contextshow:false,
-      contextStyle:{
-        top:0,
-        left:0,
-        bottom:0,
-      }
     }
   },
   methods:{
@@ -71,18 +52,7 @@ export default {
     //右键事件回调
     onRightClickNodeEvent(node,e){
       this.myNodeSelected(node)
-      let noderect =this.$refs.nodes.getBoundingClientRect()
-      let contextdialogrect =this.$refs.comtextdialog
-      console.log(noderect,e)
-      this.contextStyle.left = (e.clientX - noderect.left) + 'px'
-      if(e.clientY>noderect.bottom/2){
-        this.contextStyle.top=''
-        this.contextStyle.bottom =(noderect.height - e.clientY + noderect.y) + 'px'
-      }else{
-        this.contextStyle.bottom=''
-        this.contextStyle.top =(e.clientY - noderect.y) + 'px'
-      }
-      this.contextshow = true
+      this.$refs.comtextdialog.open(e)
       this.$emit("onRightClickNodeEvent",node,e)
     },
     //点击展开收缩开关
@@ -90,13 +60,13 @@ export default {
       this.myNodeToggle(node)
       this.$emit("expanClickEvent",node,e)
     },
-    onContextClick(data){
-      this.contextshow = false
-      data.currentNode = this.currentNode
-      this.$emit("onContextClicked",data)
+    onContextClick(e,item){
+      this.$refs.comtextdialog.close()
+      item.currentNode = this.currentNode
+      this.$emit("onContextClicked",e,item)
     },
     rootclick(){
-      this.contextshow = false
+      this.$refs.comtextdialog.close()
     },
     myNodeToggle(node){
       //切换效果

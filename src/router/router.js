@@ -2,6 +2,10 @@ import vue from "vue"
 import VueRouter from "vue-router"
 vue.use(VueRouter)
 
+const originpush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+   return originpush.call(this,location).catch(err=>err)
+}
 const router = new VueRouter({
     routes:[
         {
@@ -24,6 +28,10 @@ const router = new VueRouter({
                     path:'/mine',
                     component:()=>import("@/components/mine/mine")
                 },
+                {
+                  path:'/bug',
+                    component:()=>import("@/components/bug/bug")
+                },
 
             ]
         },
@@ -37,4 +45,7 @@ const router = new VueRouter({
         },
     ]
 })
+
+
+
 export default router

@@ -13,6 +13,7 @@
 <script>
 import userde from "./userde";
     import api from "../../api/api";
+import util from "../../util/util";
 
     export default {
         name: "login",
@@ -29,7 +30,8 @@ import userde from "./userde";
             login(){
               let o = {name:this.loginInput.name,pwd:this.loginInput.pwd,time:new Date().getTime()}
               api.postApi(api.login,o,res=>{
-                if(res){
+                console.log(1,res,util.isNotEmpty(res))
+                if(util.isNotEmpty(res)){
                   localStorage.setItem('loginres',JSON.stringify(o) )
                   localStorage.setItem("token",res)
                   this.$router.push({path:'/all'})

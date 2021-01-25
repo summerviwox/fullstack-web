@@ -7,11 +7,11 @@
         </div>
       </div>
     </div>
-    <div v-if="contextshow" :style="{'top':contextStyle.top,'left':contextStyle.left,'bottom':contextStyle.bottom}" class="comtextdialog mymaintheme" ref="comtextdialog">
-      <div  class="itemcontent"  @click.stop="onContextClick($event,item)" v-for="(item,index) in contextList" :key="index">
-        <div class="item"  v-if="item.enable"> {{item.label}}</div>
-      </div>
-    </div>
+
+
+    <context-menu  @onContextClick="onContextClick"  ref="contextdialog" :contextList="contextList">
+      </context-menu>
+
     <el-dialog width="30%" :visible.sync="dialogVisible">
       <el-form label-width="80px">
         <el-form-item label="标题">
@@ -37,11 +37,12 @@
 import Markdown from "../markdown/markdown";
 import api from "../../api/api";
 import bus from "../../util/bus";
+import contextMenu from "../contextmenu/contextMenu";
 export default {
   name: "home",
+  components:{contextMenu},
   data:function () {
     return{
-      contextshow:false,
       dialogVisible:false,
       urls:[
         // {
@@ -50,11 +51,6 @@ export default {
         //   title:'',
         // }
       ],
-      contextStyle:{
-        top:0,
-        left:0,
-        bottom:''
-      },
       currentURl:{
         url:'',
         img:'',
@@ -108,10 +104,8 @@ export default {
           })
     },
     rightClick(e,item){
-      // this.dialogVisible = true
       this.currentURl = item
-      this.toLocalPostion(e,this.contextStyle)
-      this.contextshow = true
+      this.$refs.contextdialog.open(e)
     },
     makeSure(){
       this.dialogVisible = false
@@ -119,7 +113,7 @@ export default {
     },
     onContextClick(e,item){
       console.log(e)
-      this.contextshow = false
+      this.$refs.contextdialog.close()
       switch (item.label){
         case "修改":
           this.dialogVisible = true
@@ -143,7 +137,9 @@ export default {
       }
     },
     rootClick(){
-      this.contextshow = false
+      if(this.$refs.contextdialog){
+        this.$refs.contextdialog.close()
+      }
     },
 
   },

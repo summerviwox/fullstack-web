@@ -56,7 +56,7 @@ const api = {
             if(!res.data){
                 console.log(res)
             }
-            typeof go ==="function"&&go(res.data?res.data:res)
+            typeof go ==="function"&&go(res.data)
         }).catch(error=>{
             console.log(error)
             typeof down ==="function"&&down(error)
@@ -73,7 +73,7 @@ const api = {
             if(!res.data){
                 console.log(res)
             }
-            typeof go ==="function"&&go(res.data?res.data:res)
+            typeof go ==="function"&&go(res.data)
         }).catch(error=>{
             console.log(error)
             typeof down ==="function"&&down(error)
@@ -95,7 +95,12 @@ const api = {
     webTag:{
         update:'/WebTag/updateByPrimaryKey',
         deleteByPrimaryKey:'/WebTag/deleteByPrimaryKey',
-    }
+    },
+    crash:{
+        getCrashList:'/crash/getCrashList',
+        deleteByPrimaryKey:'/crash/deleteByPrimaryKey',
+    },
+
 
 }
 

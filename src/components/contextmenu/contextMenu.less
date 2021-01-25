@@ -1,0 +1,31 @@
+.comtextdialog{
+  z-index: 3000;
+  box-shadow: 1px 1px 2px 1px grey;
+  font-size: 14px;
+  clear: both;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  //border: #CCCCCC 1px solid;
+  .itemcontent{
+    display: flex;
+    &:hover{
+      background: #0099FF;
+      color: white;
+    }
+    cursor: pointer;
+    text-align: center;
+    width: calc(100%);
+    .item{
+      font-size: 15px;
+      padding: 5px 10px;
+      width: 100%;
+      border-bottom: #CCCCCC 1px solid;
+    }
+    &:last-child{
+      border-bottom: none;
+    }
+  }
+
+}

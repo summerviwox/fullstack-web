@@ -22,7 +22,11 @@ const md = require('markdown-it')({
         inline:false,
         hljs:require('highlight.js')
     })
-    .use(require('markdown-it-multimd-table'))
+    .use(require('markdown-it-multimd-table'),{
+        multiline:  true,
+        rowspan:    true,
+        headerless: true,
+    })
 
 //新界面打开
 var defaultRender = md.renderer.rules.link_open || function(tokens, idx, options, env, self) {

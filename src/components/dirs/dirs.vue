@@ -17,41 +17,50 @@ export default {
         contextListA:[
           {
             label:"新增根目录",
-            value:1
+            value:1,
+            enable:true,
           },
           {
             label:"新建",
-            value:2
+            value:2,
+            enable:true,
           },
           {
             label:"删除",
-            value:3
+            value:3,
+            enable:true,
           },
           {
             label:"剪切",
-            value:4
+            value:4,
+            enable:true,
           }
         ],
       contextListB:[
         {
           label:"新增根目录",
-          value:1
+          value:1,
+          enable:true,
         },
         {
           label:"新建",
-          value:2
+          value:2,
+          enable:true,
         },
         {
           label:"删除",
-          value:3
+          value:3,
+          enable:true,
         },
         {
           label:"剪切",
-          value:4
+          value:4,
+          enable:true,
         },
         {
           label:"粘贴",
-          value:5
+          value:5,
+          enable:true,
         },
       ],
       contextList:[],
@@ -83,8 +92,8 @@ export default {
       }
       this.$emit("expanClickEvent",node,e)
     },
-    onContextClicked(data){
-      this.$emit("onContextClicked",data)
+    onContextClicked(e,item){
+      this.$emit("onContextClicked",e,item)
     },
     getApiNodes(parentNode,go) {
       api.getApi(api.selectWithOutHtmlDataByParentId,{

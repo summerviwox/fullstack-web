@@ -1,20 +1,17 @@
 <template>
-  <div class="hroot mymarkdownroot" >
-    <div class="markdownroot">
-      <textarea @contextmenu.prevent="onRightClick" ref="markdown" class="markdown myscroller mymaintheme" @scroll="scroll()" v-model="marktext" v-bind:oninput="input()" type="textarea"></textarea>
+  <div class="hroot mymarkdownroot"  @contextmenu.prevent="onRightClick">
+    <div class="markdownroot" v-if="currentStatus!=2">
+      <textarea ref="markdown" class="markdown myscroller mymaintheme" @scroll="scroll()" v-model="marktext" v-bind:oninput="input()" type="textarea"></textarea>
     </div>
-    <div ref="htmlroot" class="htmlroot myscroller">
+    <div ref="htmlroot" class="htmlroot myscroller" v-if="currentStatus!=1">
       <div  class="html" v-html="htmltext"></div>
     </div>
-    <div v-if="contextshow" :style="{'top':contextStyle.top,'left':contextStyle.left,'bottom':contextStyle.bottom}" class="comtextdialog mymaintheme" ref="comtextdialog">
-      <span  class="itemcontent"  @click.stop="onContextClick($event,item)" v-for="(item,index) in contextList" :key="index">
-        <div class="item"  v-if="item.enable"> {{item.label}}</div>
-      </span>
-      <span class="itemcontent" >
+    <context-menu   @onContextClick="onContextClick"  ref="comtextdialog"  :contextList="contextList">
+         <span class="itemcontent" slot="content">
           <input type="file"   @change="handleFileChange" ref="inputer" style="display: none">
       <span class="item" @click.stop="openFile()">上传文件</span>
       </span>
-    </div>
+    </context-menu>
 
     <div @click.stop="insertDialogClick" v-if="insertLinkDialogShow" :style="{'top':insertLinkDialogStyle.top,'left':insertLinkDialogStyle.left,'bottom':insertLinkDialogStyle.bottom}" class="insertlinkdialog mymaintheme" ref="insertlinkdialog">
       <div class="form">
@@ -36,20 +33,22 @@ import md from './mymarkdown'
 import bus from "../../util/bus";
 import api from "../../api/api";
 import util from "../../util/util";
+import ContextMenu from "../contextmenu/contextMenu";
 export default {
   name: "markdown",
+  components: {ContextMenu},
   props:{
     outmarkdown:String,
   },
   data:function (){
     return{
+      currentStatus:0,//0左右都显示 1只显示左边  2只显示右边
       historymaxlength:20,
       history:[],
       currentHistoryIndex:-1,
       marktext:'',
       nodeId:'',
       htmltext:'',
-      contextshow:false,
       insertLinkDialogShow:false,
       contextStyle:{
         top:0,
@@ -100,6 +99,21 @@ export default {
         {
           label:'加入常用网站',
           value:8,
+          enable:true,
+        },
+        {
+          label:'只显示左边',
+          value:7,
+          enable:true,
+        },
+        {
+          label:'只显示右边',
+          value:7,
+          enable:true,
+        },
+        {
+          label:'都显示',
+          value:7,
           enable:true,
         },
       ],
@@ -166,8 +180,7 @@ export default {
     },
     onRightClick(e){
       this.insertLinkDialogShow = false
-      this.toLocalPostion(e,this.contextStyle)
-      this.contextshow = true
+      this.$refs.comtextdialog.open(e)
       this.contextList.forEach((value,index)=>{
         if(value.label==='加入常用网站'){
           value.enable = this.isWebLink()
@@ -197,7 +210,7 @@ export default {
     onContextClick(e,item){
       console.log(item.label)
       this.insertValue.type = item.label
-      this.contextshow = false
+      this.$refs.comtextdialog.close()
       switch (this.insertValue.type){
         case "插入链接":
           this.showInsertDialog(e)
@@ -239,22 +252,30 @@ export default {
 
           })
           break
+        case "只显示左边":
+          this.currentStatus = 1
+          break
+        case "只显示右边":
+          this.currentStatus = 2
+          break
+        case "都显示":
+          this.currentStatus = 0
+          break
       }
     },
     showInsertDialog(e){
-      this.toLocalPostion(e,this.insertLinkDialogStyle)
+
       this.insertLinkDialogShow = true
     },
     toLocalPostion(e,style){
-      let markdownrect = this.$refs.markdown.getBoundingClientRect();
-      console.log(markdownrect,e)
-      style.left = (e.clientX - markdownrect.left) + 'px'
-      if(e.clientY>markdownrect.height/2){
+      let clientHeight =document.body.clientHeight
+      style.left = e.clientX + 'px'
+      if(e.clientY>clientHeight/2){
         style.top = ''
-        style.bottom = (markdownrect.height - e.clientY + markdownrect.y) + 'px'
+        style.bottom = (clientHeight - e.clientY) + 'px'
       }else{
         style.bottom = ''
-        style.top = (e.clientY - markdownrect.y) + 'px'
+        style.top =e.clientY + 'px'
       }
     },
     insertDialogClick(e){
@@ -301,7 +322,7 @@ export default {
       this.insertValue.secondValue = ''
     },
     rootclick(){
-      this.contextshow = false
+      this.$refs.comtextdialog.close()
       this.insertLinkDialogShow = false
     },
   },

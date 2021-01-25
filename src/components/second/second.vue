@@ -1,5 +1,5 @@
 <template>
-  <div class="hroot root">
+  <div class="hroot second">
     <div class="menu vroot">
       <div class="dirs">
         <dirs @onContextClicked="onContextClicked" @currentNodeInfo="currentNodeInfo"  v-show="currentMenuIndex==0" ref="dir" class="dir"></dirs>
@@ -52,9 +52,9 @@ export default {
       //
       // })
     },
-    onContextClicked(data){
-      this.operateNode = data.currentNode
-      switch (data.label){
+    onContextClicked(e,item){
+      this.operateNode = item.currentNode
+      switch (item.label){
         case "新增根目录":
           this.currentNode = {}
           this.$refs.markdown.marktext = ''
@@ -65,16 +65,16 @@ export default {
           this.$refs.markdown.marktext = ''
           break
         case "删除":
-          this.deleteNode(data.currentNode)
+          this.deleteNode(item.currentNode)
           break
         case "本次删除":
-          this.removeNode(data.currentNode)
+          this.removeNode(item.currentNode)
           break
         case "剪切":
           this.cutNode()
           break
         case "粘贴":
-          this.pasteNode(data)
+          this.pasteNode(item)
           break
       }
     },
