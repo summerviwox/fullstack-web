@@ -6,9 +6,9 @@
             <el-input v-model="loginInput.pwd" placeholder="请输入内容" class="login-input-pwd" show-password></el-input>
             <el-button type="primary" class="login-login" @click="login">登录</el-button>
         </div>
-      <div class="myhero">
-        <mythree1 :option="{width:400,height:400}"></mythree1>
-      </div>
+<!--      <div class="myhero">-->
+<!--        <mythree1 :option="{width:400,height:400}"></mythree1>-->
+<!--      </div>-->
     </div>
 </template>
 
@@ -20,7 +20,7 @@ import Mythree1 from "../mythree/mythree1";
 
     export default {
         name: "login",
-      components: {Mythree1},
+      // components: {Mythree1},
       data(){
             return{
                 head:"https://www.summerviwox.com/blog/13.png",
