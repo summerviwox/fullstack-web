@@ -5,7 +5,8 @@
         <div class="title" @click="switchPage(0)" v-bind:style="{'color':currentIndex==0?'#0099FF':'#ffffff'}">主页</div>
         <div  class="title" @click="switchPage(1)" v-bind:style="{'color':currentIndex==1?'#0099FF':'#ffffff'}">附页</div>
         <div  class="title" @click="switchPage(2)" v-bind:style="{'color':currentIndex==2?'#0099FF':'#ffffff'}">bug</div>
-<!--        <div  class="title" @click="switchPage(2)" v-bind:style="{'color':currentIndex==2?'#0099FF':'#ffffff'}">个人中心</div>-->
+        <div  class="title" @click="switchPage(3)" v-bind:style="{'color':currentIndex==3?'#0099FF':'#ffffff'}">英雄</div>
+        <!--        <div  class="title" @click="switchPage(2)" v-bind:style="{'color':currentIndex==2?'#0099FF':'#ffffff'}">个人中心</div>-->
         <div class="gap" style="flex: 1;width: 0"></div>
         <el-dropdown class="dropdown" @command="dropDownClick">
           <span class="el-dropdown-link">
@@ -27,19 +28,16 @@
     <div class="footer" v-if="currentIndex==1" >
       <myfooter :infos="infos" ref="footer"></myfooter>
     </div>
-    <div class="hero">
-      <mythree1 :option="{width:200,height:200}"></mythree1>
-    </div>
   </div>
 </template>
 
 <script>
 import bus from "../../util/bus";
 import myfooter from "../footer/myfooter";
-import Mythree1 from "../mythree/mythree1";
+import Mythree from "../mythree/mythree";
 export default {
   name: "all",
-  components: {Mythree1, myfooter},
+  components: { myfooter},
   data:function (){
     return{
       currentIndex:0,
@@ -47,7 +45,8 @@ export default {
       pageUrl:[
         "/home",
         "/second",
-          "/bug",
+        "/bug",
+        "/hero",
         "/mine",
       ],
       personalList:[

@@ -16,11 +16,11 @@
 import userde from "./userde";
     import api from "../../api/api";
 import util from "../../util/util";
-import Mythree1 from "../mythree/mythree1";
+import Mythree from "../mythree/mythree";
 
     export default {
         name: "login",
-      // components: {Mythree1},
+      // components: {Mythree},
       data(){
             return{
                 head:"https://www.summerviwox.com/blog/13.png",

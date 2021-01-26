@@ -32,6 +32,10 @@ const router = new VueRouter({
                   path:'/bug',
                     component:()=>import("@/components/bug/bug")
                 },
+                {
+                    path:'/hero',
+                    component:()=>import("@/components/hero/hero")
+                },
 
             ]
         },
@@ -46,14 +50,6 @@ const router = new VueRouter({
         {
             path:'/mythree',
             component:()=>import("@/components/mythree/mythree")
-        },
-        {
-            path:'/mythree1',
-            component:()=>import("@/components/mythree/mythree1")
-        },
-        {
-            path:'/mythreegltf',
-            component:()=>import("@/components/mythree/mythreegltf")
         },
     ]
 })

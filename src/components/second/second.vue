@@ -9,6 +9,9 @@
       <nodesearch ref="nodesearch" @onEnterSearch="onEnterSearch" @switchMenu="switchMenu"></nodesearch>
     </div>
     <markdown ref="markdown" class="view"></markdown>
+<!--    <div class="hero">-->
+<!--      <mythree :option="{width:200,height:200}"></mythree>-->
+<!--    </div>-->
   </div>
 </template>
 
@@ -23,10 +26,11 @@ import Lastnodes from "../lastnodes/lastnodes";
 import Dirs from "../dirs/dirs";
 import nodeutil from "../node/nodeutil";
 import util from "../../util/util";
+import Mythree from "../mythree/mythree";
 export default {
   name: "second",
   // eslint-disable-next-line vue/no-unused-components
-  components: {Dirs, Lastnodes, Searchnodes, Markdown, Nodes,nodesearch},
+  components: {Mythree, Dirs, Lastnodes, Searchnodes, Markdown, Nodes,nodesearch},
   data:function (){
     return{
       currentMenuIndex:0,
