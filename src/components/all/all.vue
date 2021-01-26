@@ -27,15 +27,19 @@
     <div class="footer" v-if="currentIndex==1" >
       <myfooter :infos="infos" ref="footer"></myfooter>
     </div>
+    <div class="hero">
+      <mythree1 :option="{width:200,height:200}"></mythree1>
+    </div>
   </div>
 </template>
 
 <script>
 import bus from "../../util/bus";
 import myfooter from "../footer/myfooter";
+import Mythree1 from "../mythree/mythree1";
 export default {
   name: "all",
-  components: {myfooter},
+  components: {Mythree1, myfooter},
   data:function (){
     return{
       currentIndex:0,
