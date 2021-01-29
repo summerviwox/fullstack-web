@@ -1,4 +1,5 @@
-const md = require('markdown-it')({
+
+const md = require('mymarkdownit')({
     html:         true,        // Enable HTML tags in source
     xhtmlOut:     true,        // Use '/' to close single tags (<br />).
     // This is only for full CommonMark compatibility.
@@ -15,12 +16,12 @@ const md = require('markdown-it')({
     // and ['«\xA0', '\xA0»', '‹\xA0', '\xA0›'] for French (including nbsp).
     quotes: '“”‘’',
 })
-    .use(require('markdown-it-highlightjs'),{
+    .use(require('markdown-it-highlightjs/core'),{
         auto:true,
         code:true,
         register:null,
         inline:false,
-        hljs:require('highlight.js')
+        hljs:require('myhljs')
     })
     .use(require('markdown-it-multimd-table'),{
         multiline:  true,

@@ -327,7 +327,6 @@ export default {
         }
       }
       if(e.altKey){
-        console.log('alt',key)
         switch (key){
           case 192://切换目录
             this.keySwitchMenu(e)

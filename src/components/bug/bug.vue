@@ -4,7 +4,11 @@
     <div class="buglist myscroller mymaintheme" >
       <div class="bugitem" v-for="(item,index) in crashlist" :key="index" @click="bugClick(item)" @contextmenu.prevent="ListRightClick($event,item)" v-bind:class="{selectedtheme:selectRow.id == item.id,unselectedtheme:selectRow.id != item.id}">
         <div>
-          <div class="bugitemtitle"> {{"("+item.id + ")" + item.platform}}</div>
+          <div class="bugitemtitle">
+          <div class="front">{{item.id +"&nbsp;"+item.platform}}</div>
+            <div class="mid"></div>
+            <div class="right">{{item.timestr}}</div>
+          </div>
           <div class="bugitemdetail"> {{item.error}}</div>
         </div>
       </div>
@@ -65,7 +69,7 @@ name: "bug",
   methods:{
     getCrashListApi(){
       api.getApi(api.crash.getCrashList,{
-        page:this.pagereq.page,
+        page:this.pagereq.page-1,
         pagesize:this.pagereq.pagesize,
       },res=>{
         this.crashlist = res.data

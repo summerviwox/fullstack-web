@@ -3,8 +3,24 @@ import App from './App.vue'
 import router from "./router/router";
 import './common/common.less'
 import 'element-ui/lib/theme-chalk/index.css';
-import ele from 'element-ui'
-Vue.use(ele)
+import {
+    Pagination,
+    Dialog,
+    Dropdown,
+    DropdownMenu,
+    DropdownItem,
+    Input,
+    Button,
+    Image,
+} from 'element-ui'
+Vue.use(Pagination)
+Vue.use(Dialog)
+Vue.use(Dropdown)
+Vue.use(DropdownMenu)
+Vue.use(DropdownItem)
+Vue.use(Input)
+Vue.use(Button)
+Vue.use(Image)
 
 new Vue({
     router,
