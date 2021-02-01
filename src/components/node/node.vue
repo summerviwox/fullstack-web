@@ -1,6 +1,6 @@
 <template>
   <div class="node">
-    <div class="h" v-bind:class="{selectedtheme:this.node.selected,unselectedtheme:!this.node.selected}"  @contextmenu.prevent="rightClickNode"  @click="clickNode()">
+    <div class="h itemnode" v-bind:class="{selectedtheme:this.node.selected,unselectedtheme:!this.node.selected}"  @contextmenu.prevent="rightClickNode"  @click="clickNode()">
       <div @click.stop="expanClick()" class="h" v-bind:style="{'margin-left':0+node.level*20+'px','visibility':imageVisible(),'padding':'10px'}">
         <img  v-if="node.showNodes"  fit="contain" :src="require('../../assets/down.svg')" class="wimage" />
         <img v-else fit="contain" :src="require('../../assets/right.svg')" class="himage" />
