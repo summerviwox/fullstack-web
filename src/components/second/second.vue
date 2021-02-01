@@ -83,6 +83,7 @@ export default {
       }
     },
     autoSave(goto){
+      console.log(this.$message)
       // eslint-disable-next-line no-constant-condition
       // if(1==1){//自动保存不要了
       //   typeof goto === "function" && goto()

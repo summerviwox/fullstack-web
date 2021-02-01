@@ -12,6 +12,7 @@ import {
     Input,
     Button,
     Image,
+    Message,
 } from 'element-ui'
 Vue.use(Pagination)
 Vue.use(Dialog)
@@ -21,6 +22,9 @@ Vue.use(DropdownItem)
 Vue.use(Input)
 Vue.use(Button)
 Vue.use(Image)
+Vue.use(Message)
+
+Vue.prototype.$message = Message;
 
 new Vue({
     router,

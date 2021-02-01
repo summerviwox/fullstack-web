@@ -15,7 +15,7 @@ module.exports = {
                 }
             },
             plugins:[
-                new WebpackBundleAnalyzerPlugin()
+                //new WebpackBundleAnalyzerPlugin()
             ],
             externals:{
                  // "element-ui":"ele",
