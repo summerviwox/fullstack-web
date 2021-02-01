@@ -1,0 +1,29 @@
+#app{
+  position: relative;
+
+  .loginanim-leave-active{
+    animation: opacityb 0.5s ease;
+  }
+  .loginanim-enter-active{
+    animation: opacitya 2s ease;
+  }
+
+  @-webkit-keyframes opacitya{
+    from{
+      opacity: 0;
+    }
+    to{
+      opacity: 1;
+    }
+  }
+  @-webkit-keyframes opacityb{
+    0%{
+      opacity: 1;
+    }
+
+    100%{
+      opacity: 0;
+      transform: scale(0);
+    }
+  }
+}

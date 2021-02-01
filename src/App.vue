@@ -1,6 +1,8 @@
 <template>
     <div id="app">
+      <transition :name="animname">
         <router-view></router-view>
+      </transition>
     </div>
 </template>
 
@@ -13,6 +15,7 @@
         },
         data:function (){
             return{
+              animname:'',
                 theme:[
                     {
                         background:'white',
@@ -56,6 +59,16 @@
               document.body.style.setProperty('--bordercolor',this.theme[index].bordercolor)
             }
         },
+      watch:{
+        $route(to,from){
+          console.log(123,to,from)
+          if(from.path ==='/login' && to.path ==='/all'){
+            this.animname = 'loginanim'
+          }else{
+            this.animname = ''
+          }
+        },
+      },
         mounted() {
             this.changeTheme(1)
             bus.$on("changeTheme",this.changeTheme)
@@ -65,5 +78,6 @@
 </script>
 
 
-<style>
+<style lang="less">
+@import "App";
 </style>
