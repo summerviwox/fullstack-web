@@ -159,7 +159,7 @@ export default {
       this.formData.append("file",file); //将file属性添加到formData里
       //此时formData就是我们要向后台传的参数了
       api.fileApi(api.upload,this.formData,res=>{
-            this.insertAction(process.env.VUE_APP_DOMAIN+res.data)
+            this.insertAction("https://"+process.env.VUE_APP_DOMAIN+res.data)
           },
           error=>{
 
