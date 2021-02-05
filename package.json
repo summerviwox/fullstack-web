@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "vue-cli-service serve --mode dev",
     "build dev": "vue-cli-service build  --mode dev",
-    "upload": "node upload/index.js",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -32,7 +31,7 @@
     "cross-env": "^7.0.3",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
-    "scp2": "^0.5.0",
+    "scp2": "0.1.0-b1",
     "vue-template-compiler": "^2.6.11",
     "webpack-bundle-analyzer": "^4.4.0"
   },

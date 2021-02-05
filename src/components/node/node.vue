@@ -22,7 +22,6 @@
 <script>
 import api from "../../api/api";
 import nodeutil from "./nodeutil";
-
 export default {
   name: "node",
   props:{

@@ -6,7 +6,7 @@ const word = ora("正在发布到"+config.domain+"\n")
 word.start()
 console.log(chalk.green(config.domain))
 scpClient.scp(
-    'devdist/',
+    './devdist',
     {
         host:config.domain,
         username:config.username,
