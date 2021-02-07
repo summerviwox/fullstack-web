@@ -73,7 +73,7 @@ export default {
             child.receiveShadow = true;
           }
 
-        } );
+        });
         scene.remove(this.object)
         this.object = object
         scene.add( object );

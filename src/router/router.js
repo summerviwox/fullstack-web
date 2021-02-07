@@ -36,6 +36,10 @@ const router = new VueRouter({
                     path:'/hero',
                     component:()=>import("@/components/hero/hero")
                 },
+                {
+                  path:'/photo',
+                    component:()=>import("@/components/photo/photo")
+                },
 
             ]
         },

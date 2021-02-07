@@ -61,7 +61,6 @@
         },
       watch:{
         $route(to,from){
-          console.log(123,to,from)
           if(from.path ==='/login' && to.path ==='/all'){
             this.animname = 'loginanim'
           }else{

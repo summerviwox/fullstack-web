@@ -2,11 +2,7 @@
   <div class="all vroot" @click="onAllClick">
     <div class="top">
       <div class="titles">
-        <div class="title" @click="switchPage(0)" v-bind:style="{'color':currentIndex==0?'#0099FF':'#ffffff'}">主页</div>
-        <div  class="title" @click="switchPage(1)" v-bind:style="{'color':currentIndex==1?'#0099FF':'#ffffff'}">附页</div>
-        <div  class="title" @click="switchPage(2)" v-bind:style="{'color':currentIndex==2?'#0099FF':'#ffffff'}">bug</div>
-        <div  class="title" @click="switchPage(3)" v-bind:style="{'color':currentIndex==3?'#0099FF':'#ffffff'}">英雄</div>
-        <!--        <div  class="title" @click="switchPage(2)" v-bind:style="{'color':currentIndex==2?'#0099FF':'#ffffff'}">个人中心</div>-->
+        <div class="title" v-for="(item,index) in title" :key="index" @click="switchPage(item)" v-bind:style="{'color':current.index==item.index?'#0099FF':'#ffffff'}">{{item.label}}</div>
         <div class="gap" style="flex: 1;width: 0"></div>
         <el-dropdown class="dropdown" @command="dropDownClick">
           <span class="el-dropdown-link">
@@ -25,7 +21,7 @@
         <router-view></router-view>
       </keep-alive>
     </div>
-    <div class="footer" v-if="currentIndex==1" >
+    <div class="footer" v-if="current.index==1" >
       <myfooter :infos="infos" ref="footer"></myfooter>
     </div>
   </div>
@@ -40,14 +36,34 @@ export default {
   components: { myfooter},
   data:function (){
     return{
-      currentIndex:0,
+      current:0,
       infos:[],
-      pageUrl:[
-        "/home",
-        "/second",
-        "/bug",
-        "/hero",
-        "/mine",
+      title:[
+        {
+          label:"主页",
+          index:0,
+          url:"/home",
+        },
+        {
+          label:"笔记",
+          index:1,
+          url:"/second",
+        },
+        {
+          label:"bug",
+          index:2,
+          url:"/bug",
+        },
+        {
+          label:"模型",
+          index:3,
+          url:"/hero",
+        },
+        {
+          label:"相册",
+          index:4,
+          url:"/photo",
+        },
       ],
       personalList:[
         {
@@ -64,14 +80,12 @@ export default {
     }
   },
   methods:{
-    switchPage(index){
-      this.currentIndex = index
-      this.$router.push({path:this.pageUrl[index]})
+    switchPage(current){
+      this.current = current
+      this.$router.push({path:current.url})
     },
     autoSwitchPage(){
-      this.currentIndex = (this.currentIndex+1)%3
-      //console.log(this.currentIndex)
-      this.switchPage(this.currentIndex)
+      this.switchPage(this.title[(this.current.index+1)%this.title.length])
     },
     currentNodeInfo(node){
       this.infos = node.path.split('&nbsp;<span>></span>&nbsp;')

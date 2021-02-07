@@ -1,6 +1,6 @@
 import axios from "axios";
 import router from "../router/router";
-let url = process.env.VUE_APP_URL
+let url = 'https://'+process.env.VUE_APP_DOMAIN
 
 let instance = axios.create({})
 instance.interceptors.request.use(
@@ -79,28 +79,30 @@ const api = {
             typeof down ==="function"&&down(error)
         })
     },
-    selectWithOutHtmlDataByParentId:'/blog/selectWithOutHtmlDataByParentId',
-    search:'/blog/search',
-    selectParentsById:'/blog/selectParentsById',
-    selectMarkdownById:'/blog/selectMarkdownById',
-    updateByPrimaryKey:'/blog/updateByPrimaryKey',
-    insert:'/blog/insert',
-    deleteByPrimaryKey:'/blog/deleteByPrimaryKey',
-    updateParentIdByPrimaryKey:'/blog/updateParentIdByPrimaryKey',
-    selectHtmlById:'/blog/selectHtmlById',
-    upload:'/blog/upload',
-    login:'/user/login',
-    getallWebTag:'/WebTag/getall',
-    insertWebTag:'/WebTag/insert',
+    selectWithOutHtmlDataByParentId:'/record-b/blog/selectWithOutHtmlDataByParentId',
+    search:'/record-b/blog/search',
+    selectParentsById:'/record-b/blog/selectParentsById',
+    selectMarkdownById:'/record-b/blog/selectMarkdownById',
+    updateByPrimaryKey:'/record-b/blog/updateByPrimaryKey',
+    insert:'/record-b/blog/insert',
+    deleteByPrimaryKey:'/record-b/blog/deleteByPrimaryKey',
+    updateParentIdByPrimaryKey:'/record-b/blog/updateParentIdByPrimaryKey',
+    selectHtmlById:'/record-b/blog/selectHtmlById',
+    upload:'/record-b/blog/upload',
+    login:'/record-b/user/login',
+    getallWebTag:'/record-b/WebTag/getall',
+    insertWebTag:'/record-b/WebTag/insert',
     webTag:{
-        update:'/WebTag/updateByPrimaryKey',
-        deleteByPrimaryKey:'/WebTag/deleteByPrimaryKey',
+        update:'/record-b/WebTag/updateByPrimaryKey',
+        deleteByPrimaryKey:'/record-b/WebTag/deleteByPrimaryKey',
     },
     crash:{
-        getCrashList:'/crash/getCrashList',
-        deleteByPrimaryKey:'/crash/deleteByPrimaryKey',
+        getCrashList:'/record-b/crash/getCrashList',
+        deleteByPrimaryKey:'/record-b/crash/deleteByPrimaryKey',
     },
-
+    picture:{
+        getAllRecordsDescLimit:'/record/record/getAllRecordsDescLimit',
+    },
 
 }
 
