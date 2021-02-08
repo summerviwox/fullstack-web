@@ -54,11 +54,11 @@ export default {
           index:2,
           url:"/bug",
         },
-        {
-          label:"模型",
-          index:3,
-          url:"/hero",
-        },
+        // {
+        //   label:"模型",
+        //   index:3,
+        //   url:"/hero",
+        // },
         {
           label:"相册",
           index:4,
