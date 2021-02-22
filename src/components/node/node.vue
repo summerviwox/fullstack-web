@@ -1,11 +1,11 @@
 <template>
   <div class="node">
-    <div class="h itemnode" v-bind:class="{selectedtheme:this.node.selected,unselectedtheme:!this.node.selected}"  @contextmenu.prevent="rightClickNode"  @click="clickNode()">
-      <div @click.stop="expanClick()" class="h" v-bind:style="{'margin-left':0+node.level*20+'px','visibility':imageVisible(),'padding':'10px'}">
+    <div @click.stop="expanClick()" class="h itemnode" v-bind:class="{selectedtheme:this.node.selected,unselectedtheme:!this.node.selected}"  @contextmenu.prevent="rightClickNode">
+      <div  class="h" v-bind:style="{'margin-left':0+node.level*20+'px','visibility':imageVisible(),'padding':'10px'}">
         <img  v-if="node.showNodes"  fit="contain" :src="require('../../assets/down.svg')" class="wimage" />
         <img v-else fit="contain" :src="require('../../assets/right.svg')" class="himage" />
       </div>
-      <div class="title textstyletitle" :title="node.title">
+      <div class="title textstyletitle" :title="node.title"  @click.stop="clickNode()">
         <div class="text">{{node.title}}</div>
         <div v-if="!(node.childCount)||node.childCount==0" class="childcount"></div>
         <div v-else class="childcount">{{'('+node.childCount+')'}}</div>
