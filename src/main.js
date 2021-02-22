@@ -13,6 +13,7 @@ import {
     Button,
     Image,
     Message,
+    InputNumber,
 } from 'element-ui'
 Vue.use(Pagination)
 Vue.use(Dialog)
@@ -23,6 +24,7 @@ Vue.use(Input)
 Vue.use(Button)
 Vue.use(Image)
 Vue.use(Message)
+Vue.use(InputNumber)
 
 Vue.prototype.$message = Message;
 

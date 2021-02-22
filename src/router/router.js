@@ -40,6 +40,10 @@ const router = new VueRouter({
                   path:'/photo',
                     component:()=>import("@/components/photo/photo")
                 },
+                {
+                  path: '/nodetree',
+                    component:()=>import("@/components/notetree/nodetree")
+                },
 
             ]
         },

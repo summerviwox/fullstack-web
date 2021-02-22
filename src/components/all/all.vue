@@ -64,6 +64,11 @@ export default {
           index:4,
           url:"/photo",
         },
+        {
+          label:"结构",
+          index:5,
+          url:"/nodetree",
+        },
       ],
       personalList:[
         {

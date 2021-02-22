@@ -1,5 +1,5 @@
 <template>
-  <div class="vroot root" ref="root">
+  <div class="homeroot" ref="root">
     <div class="urlsblock">
       <div class="urls" v-for="(item,index) in urls" :key="index" @click="goTo(item)">
         <div @contextmenu.prevent="rightClick($event,item)">
@@ -76,7 +76,9 @@ export default {
     },
     dataApi(){
       api.getApi(api.getallWebTag,{},res=>{
-        this.urls = res
+        this.urls .push(...res)
+      //  this.urls .push(...res)
+       // this.urls .push(...res)
       },error=>{
 
       })
