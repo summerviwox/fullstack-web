@@ -118,7 +118,9 @@ name: "bug",
       }
     },
     rootClick(){
-      this.$refs.comtextdialog.close()
+      if(this.$refs.comtextdialog){
+        this.$refs.comtextdialog.close()
+      }
     },
   },
   mounted() {

@@ -36,7 +36,8 @@ export default {
   components: { myfooter},
   data:function (){
     return{
-      current:0,
+      current:{},
+      currentIndex:0,
       infos:[],
       title:[
         {
@@ -64,10 +65,15 @@ export default {
           index:4,
           url:"/photo",
         },
+        // {
+        //   label:"结构",
+        //   index:5,
+        //   url:"/nodetree",
+        // },
         {
-          label:"结构",
-          index:5,
-          url:"/nodetree",
+          label:"个人中心",
+          index:6,
+          url:"/mine",
         },
       ],
       personalList:[
@@ -76,21 +82,26 @@ export default {
           value:0,
           enalbe:true,
         },
-        {
-          label:'个人中心',
-          value:1,
-          enalbe:true,
-        },
+        // {
+        //   label:'个人中心',
+        //   value:1,
+        //   enalbe:true,
+        // },
       ]
     }
   },
   methods:{
     switchPage(current){
       this.current = current
+      this.title.forEach((v,i)=>{
+        if(current.label===v.label){
+          this.currentIndex = i
+        }
+      })
       this.$router.push({path:current.url})
     },
     autoSwitchPage(){
-      this.switchPage(this.title[(this.current.index+1)%this.title.length])
+      this.switchPage(this.title[(this.currentIndex+1)%this.title.length])
     },
     currentNodeInfo(node){
       this.infos = node.path.split('&nbsp;<span>></span>&nbsp;')
@@ -113,13 +124,13 @@ export default {
           this.$router.push({path:'login',query:{}})
           break
         case 1:
-          this.switchPage(2)
+          this.switchPage(this.title[4])
           break
       }
     }
   },
   mounted() {
-    this.switchPage(0)
+    this.switchPage(this.title[0])
     bus.$on("currentNodeInfo",this.currentNodeInfo)
     bus.$on("currentSearchNode",this.currentSearchNode)
     bus.$on("switchpage",this.autoSwitchPage)

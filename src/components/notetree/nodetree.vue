@@ -14,7 +14,8 @@ export default {
   name: "nodetree",
   data:function(){
     return{
-      inputnumbernum:4,
+      inputnumbernum:5,
+      apiData:[],
     }
   },
   methods:{
@@ -22,6 +23,7 @@ export default {
         api.getTestApi(api.blog.selectBlogSunburst,{
           deep:this.inputnumbernum
         },res=>{
+          this.apiData = res.data
           var mychart = echarts.init(document.getElementById("nodetreecontainer"))
           var option = {
             series:{
@@ -47,8 +49,17 @@ export default {
     handleChange(){
         this.init()
     },
+    keepDataInit(){//保证有界面
+        console.log(this.apiData)
+        if(this.apiData.length==0){
+          this.init()
+        }
+    },
   },
   mounted() {
+
+  },
+  activated() {
     this.handleChange()
   }
 }

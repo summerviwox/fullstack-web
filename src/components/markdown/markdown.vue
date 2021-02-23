@@ -323,7 +323,9 @@ export default {
       this.insertValue.secondValue = ''
     },
     rootclick(){
-      this.$refs.comtextdialog.close()
+      if( this.$refs.comtextdialog){
+        this.$refs.comtextdialog.close()
+      }
       this.insertLinkDialogShow = false
     },
   },

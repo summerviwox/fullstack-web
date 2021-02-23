@@ -12,6 +12,7 @@
 <!--    <div class="hero">-->
 <!--      <mythree :option="{width:200,height:200}"></mythree>-->
 <!--    </div>-->
+    <nodetree ref="nodetree" v-show="nodetreeVisible"  class="notetree"></nodetree>
   </div>
 </template>
 
@@ -27,12 +28,14 @@ import Dirs from "../dirs/dirs";
 import nodeutil from "../node/nodeutil";
 import util from "../../util/util";
 import Mythree from "../mythree/mythree";
+import Nodetree from "@/components/notetree/nodetree";
 export default {
   name: "second",
   // eslint-disable-next-line vue/no-unused-components
-  components: {Mythree, Dirs, Lastnodes, Searchnodes, Markdown, Nodes,nodesearch},
+  components: {Nodetree, Mythree, Dirs, Lastnodes, Searchnodes, Markdown, Nodes,nodesearch},
   data:function (){
     return{
+      nodetreeVisible:true,
       currentMenuIndex:0,
       searchNodes:[],
       currentNode:{},
@@ -306,7 +309,7 @@ export default {
   mounted() {
     document.onkeydown=e=>{
       let key = e.keyCode;
-      console.log(key)
+      console.log("onkeydown",key)
       if(e.ctrlKey){//ctrl s 保存
         switch (key){
           case 83:
@@ -338,8 +341,8 @@ export default {
           case 50://alt 1 主题1
             bus.$emit("changeTheme",2)
             break
-          case 51://alt 1 主题1
-            bus.$emit("changeTheme",3)
+          case 90://alt z 显示旭日图
+            this.nodetreeVisible = !this.nodetreeVisible
             break
         }
       }

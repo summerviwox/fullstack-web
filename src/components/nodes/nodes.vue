@@ -66,7 +66,9 @@ export default {
       this.$emit("onContextClicked",e,item)
     },
     rootclick(){
-      this.$refs.comtextdialog.close()
+      if(this.$refs.comtextdialog){
+        this.$refs.comtextdialog.close()
+      }
     },
     myNodeToggle(node){
       //切换效果
