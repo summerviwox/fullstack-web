@@ -44,6 +44,11 @@ const router = new VueRouter({
                   path: '/nodetree',
                     component:()=>import("@/components/notetree/nodetree")
                 },
+                {
+                    path:'/mydir',
+                    component:()=>import("@/components/mydir/mydir")
+                },
+
 
             ]
         },

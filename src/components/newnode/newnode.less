@@ -1,0 +1,32 @@
+.newnode{
+  width: 100%;
+  .node{
+    .title{
+      &:hover{
+        background-color:#CCCCCC;
+      }
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+      height: 40px;
+      line-height: 40px;
+      .arrow{
+        padding: 10px 10px;
+        height: 15px;
+      }
+      .childcount{
+        margin-left: 3px;
+        color:#2ECCFA;
+        font-size: 10px;
+      }
+    }
+    .toggleon{
+      transform: rotate(90deg);
+    }
+    .toggleoff{
+      transform: rotate(0deg);
+    }
+  }
+}

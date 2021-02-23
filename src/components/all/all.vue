@@ -21,7 +21,7 @@
         <router-view></router-view>
       </keep-alive>
     </div>
-    <div class="footer" v-if="current.index==1" >
+    <div class="footer" v-if="current.index==1||current.index==7" >
       <myfooter :infos="infos" ref="footer"></myfooter>
     </div>
   </div>
@@ -74,6 +74,11 @@ export default {
           label:"个人中心",
           index:6,
           url:"/mine",
+        },
+        {
+          label:"mydir",
+          index:7,
+          url:"/mydir",
         },
       ],
       personalList:[

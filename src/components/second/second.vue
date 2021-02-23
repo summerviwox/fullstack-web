@@ -35,7 +35,7 @@ export default {
   components: {Nodetree, Mythree, Dirs, Lastnodes, Searchnodes, Markdown, Nodes,nodesearch},
   data:function (){
     return{
-      nodetreeVisible:true,
+      nodetreeVisible:false,
       currentMenuIndex:0,
       searchNodes:[],
       currentNode:{},

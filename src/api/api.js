@@ -142,6 +142,7 @@ const api = {
     },
     blog:{
         selectBlogSunburst:'/record-b/blog/selectBlogSunburst',
+        selectTreeNode:'/record-b/blog/selectTreeNode',
     },
 
 }
