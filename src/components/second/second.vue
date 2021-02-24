@@ -307,46 +307,46 @@ export default {
     }
   },
   mounted() {
-    document.onkeydown=e=>{
-      let key = e.keyCode;
-      console.log("onkeydown",key)
-      if(e.ctrlKey){//ctrl s 保存
-        switch (key){
-          case 83:
-            this.autoSave()
-            window.event.preventDefault()
-            break
-          case 192:
-            bus.$emit("switchpage",{})
-            window.event.preventDefault()
-            break
-          case 89://control + y
-            this.$refs.markdown.rollPush()
-            window.event.preventDefault()
-            break
-          case 90://control + z
-            this.$refs.markdown.rollback()
-            window.event.preventDefault()
-            break
-        }
-      }
-      if(e.altKey){
-        switch (key){
-          case 192://切换目录
-            this.keySwitchMenu(e)
-            break
-          case 49://alt 1 主题1
-            bus.$emit("changeTheme",1)
-            break
-          case 50://alt 1 主题1
-            bus.$emit("changeTheme",2)
-            break
-          case 90://alt z 显示旭日图
-            this.nodetreeVisible = !this.nodetreeVisible
-            break
-        }
-      }
-    }
+    // document.onkeydown=e=>{
+    //   let key = e.keyCode;
+    //   console.log("onkeydown",key)
+    //   if(e.ctrlKey){//ctrl s 保存
+    //     switch (key){
+    //       case 83:
+    //         this.autoSave()
+    //         window.event.preventDefault()
+    //         break
+    //       case 192:
+    //         bus.$emit("switchpage",{})
+    //         window.event.preventDefault()
+    //         break
+    //       case 89://control + y
+    //         this.$refs.markdown.rollPush()
+    //         window.event.preventDefault()
+    //         break
+    //       case 90://control + z
+    //         this.$refs.markdown.rollback()
+    //         window.event.preventDefault()
+    //         break
+    //     }
+    //   }
+    //   if(e.altKey){
+    //     switch (key){
+    //       case 192://切换目录
+    //         this.keySwitchMenu(e)
+    //         break
+    //       case 49://alt 1 主题1
+    //         bus.$emit("changeTheme",1)
+    //         break
+    //       case 50://alt 1 主题1
+    //         bus.$emit("changeTheme",2)
+    //         break
+    //       case 90://alt z 显示旭日图
+    //         this.nodetreeVisible = !this.nodetreeVisible
+    //         break
+    //     }
+    //   }
+    // }
 
   }
 }

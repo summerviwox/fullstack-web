@@ -1,6 +1,7 @@
 import axios from "axios";
 import router from "../router/router";
 import util from "@/util/util";
+import bus from "@/util/bus";
 let url = 'https://'+process.env.VUE_APP_DOMAIN
 let testUrl = 'https://'+process.env.VUE_APP_DOMAIN+":444"
 
@@ -51,9 +52,13 @@ const api = {
             method:"get",
             params:params,
         }).then(res=>{
+            if(util.isNotEmpty(res.data.errorMessage)){
+                console.log(bus.$message,res.data.errorMessage)
+                bus.$message.error(res.data.errorMessage)
+            }
             typeof go ==="function"&&go(res.data)
         }).catch(error=>{
-            console.log(error)
+            bus.$message.error(error)
             typeof down ==="function"&&down(error)
         })
     },
@@ -63,12 +68,13 @@ const api = {
             method:"post",
             data:data,
         }).then(res=>{
-            if(!res.data){
-                console.log(res)
+            if(util.isNotEmpty(res.data.errorMessage)){
+                console.log(bus.$message,res.data.errorMessage)
+                bus.$message.error(res.data.errorMessage)
             }
             typeof go ==="function"&&go(res.data)
         }).catch(error=>{
-            console.log(error)
+            bus.$message.error(error)
             typeof down ==="function"&&down(error)
         })
     },
@@ -80,12 +86,13 @@ const api = {
             accept:'file',
             headers: { 'Content-Type': 'multipart/form-data' },
         }).then(res=>{
-            if(!res.data){
-                console.log(res)
+            if(util.isNotEmpty(res.data.errorMessage)){
+                console.log(bus.$message,res.data.errorMessage)
+                bus.$message.error(res.data.errorMessage)
             }
             typeof go ==="function"&&go(res.data)
         }).catch(error=>{
-            console.log(error)
+            bus.$message.error(error)
             typeof down ==="function"&&down(error)
         })
     },
@@ -95,9 +102,13 @@ const api = {
             method:"get",
             params:params,
         }).then(res=>{
+            if(util.isNotEmpty(res.data.errorMessage)){
+                console.log(bus.$message,res.data.errorMessage)
+                bus.$message.error(res.data.errorMessage)
+            }
             typeof go ==="function"&&go(res.data)
         }).catch(error=>{
-            console.log(error)
+            bus.$message.error(error)
             typeof down ==="function"&&down(error)
         })
     },
@@ -107,12 +118,13 @@ const api = {
             method:"post",
             data:data,
         }).then(res=>{
-            if(!res.data){
-                console.log(res)
+            if(util.isNotEmpty(res.data.errorMessage)){
+                console.log(bus.$message,res.data.errorMessage)
+                bus.$message.error(res.data.errorMessage)
             }
             typeof go ==="function"&&go(res.data)
         }).catch(error=>{
-            console.log(error)
+            bus.$message.error(error)
             typeof down ==="function"&&down(error)
         })
     },

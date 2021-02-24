@@ -1,12 +1,26 @@
 <template>
-<div class="mydir">
-  <div class="menu">
-    <newnodes ref="newnodes" class="newnodes" :nodes="newnodesApiData" @callBackMT="callBackMT"></newnodes>
-    <nodesearch  ref="nodesearch" ></nodesearch>
+  <div class="mydir">
+    <div class="menu">
+      <div class="top">
+        <newnodes
+            v-show="dirOrSearch"
+            ref="mynewnodes"
+            class="mynewnodes"
+            :nodes="newnodesApiData"
+            @callBackMT="callBackMT"></newnodes>
+        <mysearchnodes
+            @callBackMT="callBackMT"
+            v-show="!dirOrSearch"
+            :nodes="searchedNode"></mysearchnodes>
+      </div>
+      <div class="bottom">
+        <img @click="switchMenu"  class="switch" :src="require('../../assets/dir.png')"/>
+        <nodesearch @onEnterSearch="onEnterSearchMT"  ref="nodesearch" ></nodesearch>
+      </div>
+    </div>
+    <newmarkdown :node="selectedNode" ref="markdown" class="markdown"></newmarkdown>
+    <nodetree ref="nodetree" v-show="nodetreeVisible"  class="notetree"></nodetree>
   </div>
-  <markdown ref="markdown" class="markdown"></markdown>
-  <nodetree ref="nodetree" v-show="nodetreeVisible"  class="notetree"></nodetree>
-</div>
 </template>
 
 <script>
@@ -18,10 +32,12 @@ import Nodetree from "@/components/notetree/nodetree";
 import Nodesearch from "@/components/nodesearch/nodesearch";
 import newnodesUtil from "@/components/newnodes/newnodesUtil";
 import util from "@/util/util";
+import Newmarkdown from "@/components/markdown/newmarkdown";
+import Mysearchnodes from "@/components/mysearchnodes/mysearchnodes";
 
 export default {
   name: "mydir",
-  components: {Nodesearch, Nodetree, Markdown, Newnodes},
+  components: {Mysearchnodes, Newmarkdown, Nodesearch, Nodetree, Newnodes},
   data:function (){
     return{
       nodetreeVisible:false,
@@ -29,6 +45,8 @@ export default {
 
       ],
       selectedNode:{},
+      searchedNode:[],
+      dirOrSearch:true,
     }
   },
   methods:{
@@ -36,94 +54,67 @@ export default {
       //console.log(data,method)
       switch (method){
         case "selectedNodeMT":
+          // this.selectedNode = data
           this.getMarkDownMT(data)
           break
         case "onContextClickMT":
           console.log(data)
+          this.selectedNode = data.data
           switch (data.item.label){
             case "新增根目录":
-              var rootnode = {
-                level:0,
-                nodes:[],
-                parentid:0,
-                title:"新建笔记",
-                html:"",
-                ctime:new Date().getTime(),
-                utime:new Date().getTime(),
-                type:0,
-                markdown:"# 新建笔记",
-                toggle:true,
-              }
-              api.postApi(api.insert,rootnode,res=>{
-                rootnode.id = res.data.id
-                this.newnodesApiData.push(rootnode)
-                this.$refs.newnodes.selectedNode = rootnode
-                this.$refs.markdown.marktext = rootnode.markdown
-              })
+              //this.$refs.markdown.marktext = data.data.markdown
               break
             case "新建":
-              var node = {
-                level:data.data.level+1,
-                nodes:[],
-                parentid:data.data.id,
-                html:"",
-                ctime:new Date().getTime(),
-                utime:new Date().getTime(),
-                type:0,
-                title:"新建笔记",
-                markdown:"# 新建笔记",
-                toggle:false,
-              }
-              api.postApi(api.insert,node,res=>{
-                node.id = res.data.id
-                data.data.nodes.push(node)
-                data.data.toggle = true
-                this.$refs.newnodes.selectedNode = node
-                this.$refs.markdown.marktext = node.markdown
-              })
+              // this.$refs.markdown.marktext = data.data.markdown
               break
             case "删除":
-              var parent = [{}]
-
-              newnodesUtil.getParentNode(this.newnodesApiData,data.data.id,parent)
-              console.log(parent[0])
-              if(util.isNotEmpty(parent[0])){
-                parent[0].splice(parent[0].indexOf(data.data),1)
-              }
-
-              // api.postApi(api.deleteByPrimaryKey,{id:data.data.id},res=>{
-              //   if(res.data==1){
-              //     newnodesUtil.getParentNode(this.newnodesApiData,data.data.id,parent)
-              //     if(util.isNotEmpty(parent[0])){
-              //       parent[0].removeChild(data.data)
-              //     }
-              //   }
-              // })
+              //  this.$refs.markdown.marktext = ""
               break
-            // case "本次删除":
-            //   this.removeNode(item.currentNode)
-            //   break
-            // case "剪切":
-            //   this.cutNode()
-            //   break
-            // case "粘贴":
-            //   this.pasteNode(item)
-            //   break
+            case "粘贴":
+              //  this.$refs.markdown.marktext =data.data.markdown
+              break
           }
+          break
+        case "gotoMT":
+          this.dirOrSearch = true
+            console.log(this.$refs.mynewnodes,data.event.clientY)
+           this.$refs.mynewnodes.$el.scrollTo(0,data.event.clientY)
+          this.$refs.mynewnodes.scrollToCurrentNodeMT(data.event)
           break
       }
     },
     getMarkDownMT(item){
       console.log(item)
       if(item.id.toString().startsWith("new")){
-        this.$refs.markdown.marktext = item.markdown
+        //this.$refs.markdown.marktext = item.markdown
         return
       }
       api.postApi(api.selectMarkdownById,{id:item.id},res=>{
         item.markdown = res.data.markdown
-        this.$refs.markdown.marktext = item.markdown
+        this.selectedNode = item
       })
     },
+    onEnterSearchMT(text){
+      api.postApi(api.search,{
+        markdown:text
+      },res=>{
+        console.log(res.data)
+        let result = []
+        res.data.forEach((v,i)=>{
+          newnodesUtil.findSearchNodeInNodes({nodes:this.newnodesApiData},v,result)
+        })
+        result.forEach((v,i)=>{
+          newnodesUtil.expandNode(v)
+        })
+        this.searchedNode = result
+        this.dirOrSearch = false
+        console.log(result,this.newnodesApiData)
+      })
+    },
+    switchMenu(){
+      this.dirOrSearch = !this.dirOrSearch
+    },
+
   },
   mounted() {
     console.log(123)

@@ -31,6 +31,7 @@
 import bus from "../../util/bus";
 import myfooter from "../footer/myfooter";
 import Mythree from "../mythree/mythree";
+import util from "@/util/util";
 export default {
   name: "all",
   components: { myfooter},
@@ -48,7 +49,7 @@ export default {
         {
           label:"笔记",
           index:1,
-          url:"/second",
+          url:"/mydir",
         },
         {
           label:"bug",
@@ -75,11 +76,11 @@ export default {
           index:6,
           url:"/mine",
         },
-        {
-          label:"mydir",
-          index:7,
-          url:"/mydir",
-        },
+        // {
+        //   label:"mydir",
+        //   index:7,
+        //   url:"/mydir",
+        // },
       ],
       personalList:[
         {
@@ -135,7 +136,14 @@ export default {
     }
   },
   mounted() {
-    this.switchPage(this.title[0])
+    console.log(1111,this.$route)
+    let a ;
+    this.title.forEach((v,i)=>{
+      if(this.$route.path===v.url){
+        a = v
+      }
+    })
+    this.switchPage(util.isEmpty(a)?this.title[0]:a)
     bus.$on("currentNodeInfo",this.currentNodeInfo)
     bus.$on("currentSearchNode",this.currentSearchNode)
     bus.$on("switchpage",this.autoSwitchPage)

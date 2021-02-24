@@ -9,9 +9,10 @@
             @contextmenu.prevent="callBackMT('contextmenuMT',{data:item,event:$event})"
       >
         <img class="arrow" v-bind:class="{toggleon:item.toggle,toggleoff:!item.toggle}" :style="{visibility:item.nodes.length!=0?'visible':'hidden'}" :src="require('../../assets/right.svg')" @click.stop="callBackMT('toggle',item)"/>
-        <div>{{item.title}}</div>
+        <div class="text">{{item.title}}</div>
         <div class="childcount">{{item.nodes.length==0?'':item.nodes.length}}</div>
       </div>
+      <div class="line mylinetheme"></div>
       <newnode v-show="item.toggle"  class="children" :nodes="item.nodes" @callBackMT="callBackMT" :data="data">
 
       </newnode>
