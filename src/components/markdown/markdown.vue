@@ -243,7 +243,7 @@ export default {
             if(text.lastIndexOf("/")==text.length){
               text = text.split(0,text.length-1)
             }
-          api.postApi(api.insertWebTag,{
+          api.postApi(api.insertWebTag,true,{
             url:text,
             img:a + "/favicon.ico",
             title:str[2],

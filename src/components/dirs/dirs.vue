@@ -96,7 +96,7 @@ export default {
       this.$emit("onContextClicked",e,item)
     },
     getApiNodes(parentNode,go) {
-      api.getApi(api.selectWithOutHtmlDataByParentId,{
+      api.getApi(api.selectWithOutHtmlDataByParentId,true,{
         id:parentNode?parentNode.id:0
       },res=> {
         for(let i=0;i<res.length;i++){

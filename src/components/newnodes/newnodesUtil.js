@@ -35,6 +35,19 @@ const newnodesUtil = {
         }
         node.toggle = true
         this.expandNode(node.parentNode)
-    }
+    },
+    countMyHeight(node,result){
+        let parentNode = node.parentNode
+        if(util.isEmpty(parentNode)||parentNode.id==0){
+            return
+        }
+         for(let i=0;i<parentNode.nodes.length;i++){
+             result+=1
+             if(parentNode.nodes[i]==node){
+                 break
+             }
+         }
+         this.countMyHeight(parentNode,result)
+    },
 }
 export default newnodesUtil

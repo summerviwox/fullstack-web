@@ -34,7 +34,7 @@ import Mythree from "../mythree/mythree";
             login(){
 
               let o = {name:this.loginInput.name,pwd:this.loginInput.pwd,time:new Date().getTime()}
-              api.postApi(api.login,o,res=>{
+              api.postApi(api.login,true,o,res=>{
                 if(util.isNotEmpty(res)){
                   localStorage.setItem('loginres',JSON.stringify(o) )
                   localStorage.setItem("token",res)

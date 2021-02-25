@@ -23,7 +23,6 @@ Vue.use(DropdownItem)
 Vue.use(Input)
 Vue.use(Button)
 Vue.use(Image)
-Vue.use(Message)
 Vue.use(InputNumber)
 
 Vue.prototype.$message = Message;

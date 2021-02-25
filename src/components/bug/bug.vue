@@ -68,7 +68,7 @@ name: "bug",
   },
   methods:{
     getCrashListApi(){
-      api.getApi(api.crash.getCrashList,{
+      api.getApi(api.crash.getCrashList,true,{
         page:this.pagereq.page-1,
         pagesize:this.pagereq.pagesize,
       },res=>{
@@ -95,7 +95,7 @@ name: "bug",
       if(util.isEmpty(this.selectRow.id)){
         return
       }
-      api.postApi(api.crash.deleteByPrimaryKey,{id:this.selectRow.id},res=>{
+      api.postApi(api.crash.deleteByPrimaryKey,true,{id:this.selectRow.id},res=>{
         if(res==1){
           this.$message.success(this.selectRow.id+ " 删除成功")
           this.getCrashListApi()

@@ -1,7 +1,7 @@
 <template>
-  <div ref="newnodes" class="newnodes myscroller">
+  <div  ref="newnodes" class="newnodesa myscroller">
     <newnode ref="newnode" :nodes="nodes" @callBackMT="callBackMT" :data="{selectedNode:selectedNode}"></newnode>
-    <context-menu @onContextClick="onContextClickMT"  ref="contextdialog"   :contextList="contextList"></context-menu>
+<!--    <context-menu @onContextClick="onContextClickMT"  ref="contextdialog"   :contextList="contextList"></context-menu>-->
   </div>
 </template>
 
@@ -18,7 +18,8 @@ export default {
   props:{
     nodes:Array,
   },
-  components: {ContextMenu, Newnode},
+  // components: {ContextMenu, Newnode},
+  components: { Newnode},
   data:function (){
     return{
       selectedNode:{},
@@ -59,9 +60,11 @@ export default {
     }
   },
   methods:{
-    scrollToCurrentNodeMT(e){
-      console.log(e)
-      this.$refs.newnodes.scrollTo(0,100)
+    scrollToCurrentNodeMT(item){
+      let result = {result:0}
+      newnodesUtil.countMyHeight(item,result)
+      console.log(result)
+      this.$refs.newnodes.scrollTo(0,result.result*40)
     },
     callBackMT(method,data){
       console.log(method,data)
@@ -95,7 +98,7 @@ export default {
             markdown:"# 新建笔记",
             toggle:true,
           }
-          api.postApi(api.insert,rootnode,res=>{
+          api.postApi(api.insert,true,rootnode,res=>{
             rootnode.id = res.data.id
             this.nodes.push(rootnode)
             this.selectedNode = rootnode
@@ -116,7 +119,7 @@ export default {
             markdown:"# 新建笔记",
             toggle:false,
           }
-          api.postApi(api.insert,node,res=>{
+          api.postApi(api.insert,true,node,res=>{
             node.id = res.data.id
             this.selectedNode.nodes.push(node)
             this.selectedNode.toggle = true
@@ -125,7 +128,7 @@ export default {
           })
           break
         case "删除":
-          api.postApi(api.deleteByPrimaryKey,{id:this.selectedNode.id},res=>{
+          api.postApi(api.deleteByPrimaryKey,true,{id:this.selectedNode.id},res=>{
             if(res.data==1){
               var parent = [{}]
               newnodesUtil.getParentNode(this.nodes,this.selectedNode.id,parent)
@@ -141,7 +144,7 @@ export default {
           this.cutNode = this.selectedNode
           break
         case "粘贴":
-          api.postApi(api.updateParentIdByPrimaryKey,{
+          api.postApi(api.updateParentIdByPrimaryKey,true,{
             parentid:this.selectedNode.id,
             id:this.cutNode.id
           },res=>{

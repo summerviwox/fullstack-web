@@ -86,7 +86,6 @@ export default {
       }
     },
     autoSave(goto){
-      console.log(this.$message)
       // eslint-disable-next-line no-constant-condition
       // if(1==1){//自动保存不要了
       //   typeof goto === "function" && goto()
@@ -127,7 +126,7 @@ export default {
       this.currentNode.html = this.$refs.markdown.htmltext
       this.currentNode.title = nodeutil.getFirstLineStr(this.$refs.markdown.marktext)
       let data = this.currentNode
-      api.postApi(api.updateByPrimaryKey,{
+      api.postApi(api.updateByPrimaryKey,true,{
         id:data.id,
         parentid:data.parentid,
         markdown:data.markdown,
@@ -169,7 +168,7 @@ export default {
         return
       }
 
-      api.postApi(api.insert,params,res=>{
+      api.postApi(api.insert,true,params,res=>{
             this.currentNode = res.data
             this.operateNode = {}
             this.lastApiNode={}
@@ -199,7 +198,7 @@ export default {
     },
     //后台数据删除
     deleteNode(node){
-      api.postApi(api.deleteByPrimaryKey,{
+      api.postApi(api.deleteByPrimaryKey,true,{
         id:node.id
       },res=>{
         if(res.data==1){
@@ -242,7 +241,7 @@ export default {
     },
     pasteNode(parentNode){
       console.log(this.cuteApiNode,parentNode)
-      api.postApi(api.updateParentIdByPrimaryKey,{
+      api.postApi(api.updateParentIdByPrimaryKey,true,{
         parentid:parentNode.currentNode.id,
         id:this.cuteApiNode.id,
       },res=>{

@@ -75,7 +75,7 @@ export default {
       window.open(item.url,"_blank")
     },
     dataApi(){
-      api.getApi(api.getallWebTag,{},res=>{
+      api.getApi(api.getallWebTag,true,{},res=>{
         this.urls .push(...res)
       //  this.urls .push(...res)
        // this.urls .push(...res)
@@ -84,7 +84,7 @@ export default {
       })
     },
     updateApi(){
-      api.postApi(api.webTag.update,{
+      api.postApi(api.webTag.update,true,{
         id:this.currentURl.id,
         url:this.currentURl.url,
         img:this.currentURl.img,
@@ -96,7 +96,7 @@ export default {
       })
     },
     deleteApi(){
-      api.postApi(api.webTag.deleteByPrimaryKey,{
+      api.postApi(api.webTag.deleteByPrimaryKey,true,{
         id:this.currentURl.id,
           },res=>{
                 this.dataApi()

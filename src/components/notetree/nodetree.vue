@@ -20,7 +20,7 @@ export default {
   },
   methods:{
       init(){
-        api.getTestApi(api.blog.selectBlogSunburst,{
+        api.getApi(api.blog.selectBlogSunburst,true,{
           deep:this.inputnumbernum
         },res=>{
           this.apiData = res.data
@@ -57,10 +57,10 @@ export default {
     },
   },
   mounted() {
-
+    this.handleChange()
   },
   activated() {
-    this.handleChange()
+
   }
 }
 </script>

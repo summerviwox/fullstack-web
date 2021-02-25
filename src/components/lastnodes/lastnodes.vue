@@ -26,7 +26,7 @@ export default {
   },
   methods:{
     currentNodeInfo(node){
-      api.postApi(api.selectParentsById,node,res=>{
+      api.postApi(api.selectParentsById,true,node,res=>{
         let str = nodeutil.getCurrentNodePath(res.data,"")
         node.path = str
         this.$emit("currentNodeInfo",node,"last")

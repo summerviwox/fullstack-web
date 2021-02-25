@@ -32,7 +32,7 @@ export default {
   },
   methods:{
     currentNodeInfo(node){
-      api.postApi(api.selectParentsById,node,res=>{
+      api.postApi(api.selectParentsById,true,node,res=>{
         let str = nodeutil.getCurrentNodePath(res.data,"")
         node.path = str
         this.$emit("currentNodeInfo",node,"search")
@@ -49,7 +49,7 @@ export default {
         this.$message.warning("至少输入一些内容")
         return
       }
-      api.postApi(api.search,{
+      api.postApi(api.search,true,{
         markdown:text
       },res=> {
         this.$refs.nodes.node.node = res.data

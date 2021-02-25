@@ -3,14 +3,15 @@
     <div class="menu">
       <div class="top">
         <newnodes
-            v-show="dirOrSearch"
+            :style="{'z-index':styleDir}"
             ref="mynewnodes"
             class="mynewnodes"
             :nodes="newnodesApiData"
             @callBackMT="callBackMT"></newnodes>
         <mysearchnodes
+            :style="{'z-index':styleSearch}"
+            class="mysearchnodes"
             @callBackMT="callBackMT"
-            v-show="!dirOrSearch"
             :nodes="searchedNode"></mysearchnodes>
       </div>
       <div class="bottom">
@@ -40,6 +41,8 @@ export default {
   components: {Mysearchnodes, Newmarkdown, Nodesearch, Nodetree, Newnodes},
   data:function (){
     return{
+      styleDir:100,
+      styleSearch:99,
       nodetreeVisible:false,
       newnodesApiData:[
 
@@ -76,10 +79,11 @@ export default {
           }
           break
         case "gotoMT":
-          this.dirOrSearch = true
-            console.log(this.$refs.mynewnodes,data.event.clientY)
-           this.$refs.mynewnodes.$el.scrollTo(0,data.event.clientY)
-          this.$refs.mynewnodes.scrollToCurrentNodeMT(data.event)
+          this.styleDir = 101
+            this.styleSearch = 100
+           // console.log(this.$refs.mynewnodes,data.event.clientY)
+          // this.$refs.mynewnodes.$el.scrollTo(0,data.event.clientY)
+          this.$refs.mynewnodes.scrollToCurrentNodeMT(data.data)
           break
       }
     },
@@ -89,16 +93,16 @@ export default {
         //this.$refs.markdown.marktext = item.markdown
         return
       }
-      api.postApi(api.selectMarkdownById,{id:item.id},res=>{
+      api.postApi(api.selectMarkdownById,true,{id:item.id},res=>{
         item.markdown = res.data.markdown
         this.selectedNode = item
       })
     },
     onEnterSearchMT(text){
-      api.postApi(api.search,{
+      api.postApi(api.search,true,{
         markdown:text
       },res=>{
-        console.log(res.data)
+       // console.log(res.data)
         let result = []
         res.data.forEach((v,i)=>{
           newnodesUtil.findSearchNodeInNodes({nodes:this.newnodesApiData},v,result)
@@ -107,19 +111,26 @@ export default {
           newnodesUtil.expandNode(v)
         })
         this.searchedNode = result
-        this.dirOrSearch = false
-        console.log(result,this.newnodesApiData)
+        this.styleDir = 100
+        this.styleSearch = 101
+        //console.log(result,this.newnodesApiData)
       })
     },
     switchMenu(){
-      this.dirOrSearch = !this.dirOrSearch
+      if(this.styleSearch==100){
+        this.styleSearch ==101
+        this.styleDir = 100
+      }else{
+        this.styleSearch ==100
+        this.styleDir = 101
+      }
     },
 
   },
   mounted() {
-    console.log(123)
-    api.getTestApi(api.blog.selectTreeNode,{},res=>{
-      console.log(res)
+    //console.log(123)
+    api.getApi(api.blog.selectTreeNode,true,{},res=>{
+     // console.log(res)
       this.newnodesApiData = res.data
     })
   }

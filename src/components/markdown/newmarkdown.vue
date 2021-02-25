@@ -153,7 +153,7 @@ export default {
          switch (e.key){
            case "s":
              e.preventDefault()
-             api.postApi(api.updateByPrimaryKey,{
+             api.postApi(api.updateByPrimaryKey,true,{
                id:this.node.id,
                parentid:util.isEmpty(this.node.parentId)?this.node.parentid:this.node.parentId,
                markdown:this.node.markdown,
@@ -280,7 +280,7 @@ export default {
             if(text.lastIndexOf("/")==text.length){
               text = text.split(0,text.length-1)
             }
-          api.postApi(api.insertWebTag,{
+          api.postApi(api.insertWebTag,true,{
             url:text,
             img:a + "/favicon.ico",
             title:str[2],

@@ -18,7 +18,7 @@ export default {
   methods:{},
   mounted() {
     this.id = this.$route.query.id
-    api.postApi(api.selectHtmlById,{
+    api.postApi(api.selectHtmlById,true,{
       id:this.id
     },res=>{
         this.html = res.data.html

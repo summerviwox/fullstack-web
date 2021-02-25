@@ -46,35 +46,54 @@ instance.interceptors.response.use(
 )
 
 const api = {
-    getApi(moudle,params,go,down){
+    log(moudle,success,res){
+        console.log(moudle,success,res,)
+        if(success){
+            if(util.isNotEmpty(res.data)&&util.isNotEmpty(res.data.errorMessage)){
+                bus.$message({
+                    type:'error',
+                    message:res.data.errorMessage,
+                    offset:100,
+                    duration:2000,
+                })
+            }else{
+                bus.$message({
+                    type:'success',
+                    message:"成功",
+                    offset:100,
+                    duration:2000,
+                })
+            }
+        }else{
+            bus.$message({
+                type:'error',
+                message:res,
+            })
+        }
+    },
+    getApi(moudle,show,params,go,down){
         instance.request({
             url:url+moudle,
             method:"get",
             params:params,
         }).then(res=>{
-            if(util.isNotEmpty(res.data.errorMessage)){
-                console.log(bus.$message,res.data.errorMessage)
-                bus.$message.error(res.data.errorMessage)
-            }
+            show&&this.log(moudle,true,res)
             typeof go ==="function"&&go(res.data)
         }).catch(error=>{
-            bus.$message.error(error)
+            this.log(moudle,false,error)
             typeof down ==="function"&&down(error)
         })
     },
-    postApi(moudle,data,go,down){
+    postApi(moudle,show,data,go,down){
         instance.request({
             url:url+moudle,
             method:"post",
             data:data,
         }).then(res=>{
-            if(util.isNotEmpty(res.data.errorMessage)){
-                console.log(bus.$message,res.data.errorMessage)
-                bus.$message.error(res.data.errorMessage)
-            }
+            this.log(moudle,true,res)
             typeof go ==="function"&&go(res.data)
         }).catch(error=>{
-            bus.$message.error(error)
+            this.log(moudle,false,error)
             typeof down ==="function"&&down(error)
         })
     },
@@ -86,13 +105,10 @@ const api = {
             accept:'file',
             headers: { 'Content-Type': 'multipart/form-data' },
         }).then(res=>{
-            if(util.isNotEmpty(res.data.errorMessage)){
-                console.log(bus.$message,res.data.errorMessage)
-                bus.$message.error(res.data.errorMessage)
-            }
+            this.log(moudle,true,res)
             typeof go ==="function"&&go(res.data)
         }).catch(error=>{
-            bus.$message.error(error)
+            this.log(moudle,false,error)
             typeof down ==="function"&&down(error)
         })
     },
@@ -102,13 +118,10 @@ const api = {
             method:"get",
             params:params,
         }).then(res=>{
-            if(util.isNotEmpty(res.data.errorMessage)){
-                console.log(bus.$message,res.data.errorMessage)
-                bus.$message.error(res.data.errorMessage)
-            }
+            this.log(moudle,true,res)
             typeof go ==="function"&&go(res.data)
         }).catch(error=>{
-            bus.$message.error(error)
+            this.log(moudle,false,error)
             typeof down ==="function"&&down(error)
         })
     },
@@ -118,13 +131,10 @@ const api = {
             method:"post",
             data:data,
         }).then(res=>{
-            if(util.isNotEmpty(res.data.errorMessage)){
-                console.log(bus.$message,res.data.errorMessage)
-                bus.$message.error(res.data.errorMessage)
-            }
+            this.log(moudle,true,res)
             typeof go ==="function"&&go(res.data)
         }).catch(error=>{
-            bus.$message.error(error)
+            this.log(moudle,false,error)
             typeof down ==="function"&&down(error)
         })
     },

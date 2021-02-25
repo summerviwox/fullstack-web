@@ -53,7 +53,7 @@ export default {
   methods:{
     getDataApi(){
       this.pagedata.can = false
-      api.getApi(api.picture.getAllRecordsDescLimit,{
+      api.getApi(api.picture.getAllRecordsDescLimit,true,{
         limit:this.pagedata.currentpage-1,
         pagesize:this.pagedata.pagesize,
       },(res)=>{
