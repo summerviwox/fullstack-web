@@ -153,7 +153,7 @@ export default {
          switch (e.key){
            case "s":
              e.preventDefault()
-             api.postApi(api.updateByPrimaryKey,true,{
+             api.postApi(api.updateByPrimaryKey,false,{
                id:this.node.id,
                parentid:util.isEmpty(this.node.parentId)?this.node.parentid:this.node.parentId,
                markdown:this.node.markdown,

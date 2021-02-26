@@ -47,7 +47,7 @@ instance.interceptors.response.use(
 
 const api = {
     log(moudle,success,res){
-        console.log(moudle,success,res,)
+        console.log(moudle,success,res)
         if(success){
             if(util.isNotEmpty(res.data)&&util.isNotEmpty(res.data.errorMessage)){
                 bus.$message({
@@ -90,7 +90,7 @@ const api = {
             method:"post",
             data:data,
         }).then(res=>{
-            this.log(moudle,true,res)
+            show&&this.log(moudle,true,res)
             typeof go ==="function"&&go(res.data)
         }).catch(error=>{
             this.log(moudle,false,error)

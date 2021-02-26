@@ -1,7 +1,7 @@
 <template>
   <div  ref="newnodes" class="newnodesa myscroller">
     <newnode ref="newnode" :nodes="nodes" @callBackMT="callBackMT" :data="{selectedNode:selectedNode}"></newnode>
-<!--    <context-menu @onContextClick="onContextClickMT"  ref="contextdialog"   :contextList="contextList"></context-menu>-->
+   <context-menu @onContextClick="onContextClickMT"  ref="contextdialog"   :contextList="contextList"></context-menu>
   </div>
 </template>
 
@@ -18,8 +18,7 @@ export default {
   props:{
     nodes:Array,
   },
-  // components: {ContextMenu, Newnode},
-  components: { Newnode},
+   components: {ContextMenu, Newnode},
   data:function (){
     return{
       selectedNode:{},
@@ -62,9 +61,14 @@ export default {
   methods:{
     scrollToCurrentNodeMT(item){
       let result = {result:0}
+      this.nodes.forEach((v,i)=>{
+        newnodesUtil.closeAllNode(v)
+      })
       newnodesUtil.countMyHeight(item,result)
-      console.log(result)
-      this.$refs.newnodes.scrollTo(0,result.result*40)
+      setTimeout(()=>{
+        this.selectedNode = item
+        this.$refs.newnodes.scrollTo(0,(result.result-1)*41)
+      },1000)
     },
     callBackMT(method,data){
       console.log(method,data)

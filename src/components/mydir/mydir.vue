@@ -15,7 +15,7 @@
             :nodes="searchedNode"></mysearchnodes>
       </div>
       <div class="bottom">
-        <img @click="switchMenu"  class="switch" :src="require('../../assets/dir.png')"/>
+        <img @click="switchMenu(booleanDir)"  class="switch" :src="require('../../assets/dir.png')"/>
         <nodesearch @onEnterSearch="onEnterSearchMT"  ref="nodesearch" ></nodesearch>
       </div>
     </div>
@@ -43,6 +43,7 @@ export default {
     return{
       styleDir:100,
       styleSearch:99,
+      booleanDir:true,
       nodetreeVisible:false,
       newnodesApiData:[
 
@@ -79,10 +80,11 @@ export default {
           }
           break
         case "gotoMT":
-          this.styleDir = 101
-            this.styleSearch = 100
+         this.switchMenu(false)
            // console.log(this.$refs.mynewnodes,data.event.clientY)
           // this.$refs.mynewnodes.$el.scrollTo(0,data.event.clientY)
+            console.log(111,data.data)
+            this.selectedNode = data.data
           this.$refs.mynewnodes.scrollToCurrentNodeMT(data.data)
           break
       }
@@ -107,22 +109,22 @@ export default {
         res.data.forEach((v,i)=>{
           newnodesUtil.findSearchNodeInNodes({nodes:this.newnodesApiData},v,result)
         })
-        result.forEach((v,i)=>{
-          newnodesUtil.expandNode(v)
-        })
+        // result.forEach((v,i)=>{
+        //   newnodesUtil.expandNode(v)
+        // })
         this.searchedNode = result
-        this.styleDir = 100
-        this.styleSearch = 101
+        this.switchMenu(true)
         //console.log(result,this.newnodesApiData)
       })
     },
-    switchMenu(){
-      if(this.styleSearch==100){
-        this.styleSearch ==101
+    switchMenu(is){
+      this.booleanDir = !is
+      if(this.booleanDir){
+        this.styleSearch ==99
         this.styleDir = 100
       }else{
         this.styleSearch ==100
-        this.styleDir = 101
+        this.styleDir = 99
       }
     },
 

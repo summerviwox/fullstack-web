@@ -36,18 +36,35 @@ const newnodesUtil = {
         node.toggle = true
         this.expandNode(node.parentNode)
     },
+    closeAllNode(node){
+        node.toggle = false
+        node.nodes.forEach((v)=>{
+            v.toggle = false
+            this.closeAllNode(v)
+        })
+    },
     countMyHeight(node,result){
         let parentNode = node.parentNode
         if(util.isEmpty(parentNode)||parentNode.id==0){
             return
         }
+        parentNode.toggle = true
          for(let i=0;i<parentNode.nodes.length;i++){
-             result+=1
+             result.result+=1
              if(parentNode.nodes[i]==node){
                  break
+             }else{
+                 //this.findChildNodeNum(parentNode.nodes[i].nodes,result)
              }
          }
          this.countMyHeight(parentNode,result)
     },
+
+    findChildNodeNum(nodes,result){
+        nodes.forEach((v,i)=>{
+            result.result+=1
+            this.findChildNodeNum(v.nodes,result)
+        })
+    }
 }
 export default newnodesUtil
