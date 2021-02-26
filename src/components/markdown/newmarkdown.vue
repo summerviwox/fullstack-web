@@ -6,7 +6,7 @@
           ref="markdown"
           class="markdown myscroller mymaintheme"
           @scroll="scroll()"
-          v-model="node.markdown"
+          v-model="marktext"
           v-bind:oninput="input()"
           type="textarea"></textarea>
     </div>
@@ -128,17 +128,21 @@ export default {
     }
   },
   watch:{
-    node:function (n,o) {
-      if(util.isEmpty(n.markdown)){
-        n.markdown = ""
+    node:function(n,o){
+      console.log("node",n)
+      this.marktext = n.markdown
+    },
+    marktext:function (n,o) {
+      if(util.isEmpty(n)){
+        n = ""
       }
       //console.log("current",this.history,this.currentHistoryIndex)
       // console.log(o,n)
       // eslint-disable-next-line no-empty
-      if(this.history.length!=0&&n.markdown===this.history[this.currentHistoryIndex]){
+      if(this.history.length!=0&&n===this.history[this.currentHistoryIndex]){
 
       }else{
-        this.history.push(n.markdown)
+        this.history.push(n)
         if(this.history.length>this.historymaxlength){
           this.history.shift()
         }
@@ -156,19 +160,25 @@ export default {
              api.postApi(api.updateByPrimaryKey,false,{
                id:this.node.id,
                parentid:util.isEmpty(this.node.parentId)?this.node.parentid:this.node.parentId,
-               markdown:this.node.markdown,
+               markdown:this.marktext,
                html:this.htmltext,
-               title:nodeutil.getFirstLineStr(this.node.markdown),
+               title:nodeutil.getFirstLineStr(this.marktext),
                ctime:new Date().getTime(),
                utime:new Date().getTime(),
                type:0
              },res=>{
                 if(res==1){
-                  this.node.title = nodeutil.getFirstLineStr(this.node.markdown),
+                  this.node.title = nodeutil.getFirstLineStr(this.marktext),
                   this.$message.success("成功")
                 }
 
              })
+             break
+           case "z":
+             this.rollback()
+             break
+           case "y":
+             this.rollPush()
              break
          }
       }
@@ -179,14 +189,14 @@ export default {
       //console.log("rollback",this.history,this.currentHistoryIndex)
       if(this.currentHistoryIndex>0){
         this.currentHistoryIndex =  this.currentHistoryIndex - 1
-        this.node.markdown = this.history[this.currentHistoryIndex]
+        this.marktext = this.history[this.currentHistoryIndex]
       }
     },
     rollPush(){
       //console.log("rollPush",this.history,this.currentHistoryIndex)
       if(this.currentHistoryIndex<this.history.length-1){
         this.currentHistoryIndex =  this.currentHistoryIndex + 1
-        this.node.markdown = this.history[this.currentHistoryIndex]
+        this.marktext = this.history[this.currentHistoryIndex]
       }
     },
     handleFileChange (e) {
@@ -208,7 +218,8 @@ export default {
       this.$refs.inputer.click()
     },
     input(){
-      this.htmltext = md.render(util.isEmpty(this.node.markdown)?"":this.node.markdown)
+      console.log("input")
+      this.htmltext = md.render(util.isEmpty(this.marktext)?"":this.marktext)
     },
     scroll(){
       let markdown =  this.$refs.markdown;
@@ -231,7 +242,7 @@ export default {
       let start = textarea.selectionStart
       let end =textarea.selectionEnd
       if(end!=start){
-        let text = this.node.markdown.slice(start,end)
+        let text = this.marktext.slice(start,end)
         return text
       }
       return ''
@@ -355,7 +366,7 @@ export default {
           }
           break
       }
-      this.node.markdown = this.node.markdown.slice(0,start) + value + this.node.markdown.slice(start, this.marktext.length)
+      this.marktext = this.marktext.slice(0,start) + value + this.marktext.slice(start, this.marktext.length)
       this.insertValue.firstValue = ''
       this.insertValue.secondValue = ''
     },
