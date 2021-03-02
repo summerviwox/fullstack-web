@@ -2,7 +2,7 @@
   <div class="photoroot">
     <div class="album" >
       <div class="photocontent" v-for="(item,index) in photos" :key="index">
-        <div class="imagecontent"  @click="imageClick(item)">
+        <div class="imagecontent"  @click="clickMT('imageClick',item)">
           <el-image v-if="item.atype === 'image'" class="elimage" fit="none"  :src="item.url" lazy>
             <template slot="error">
               <el-image class="elimage" fit="none"  :src="item.originUrl" lazy></el-image>
@@ -18,16 +18,19 @@
 
       </div>
     </div>
-    <el-pagination
-        class="pagination"
-        background
-        layout="prev, pager, next"
-        :current-page.sync="pagedata.currentpage"
-        @current-change="pageChange"
-        :pager-count="11"
-        :page-size="pagedata.pagesize"
-        :total.sync="pagedata.total">
-    </el-pagination>
+    <div class="bottom">
+      <el-pagination
+          class="pagination"
+          background
+          layout="prev, pager, next"
+          :current-page.sync="pagedata.currentpage"
+          @current-change="pageChange"
+          :pager-count="11"
+          :page-size="pagedata.pagesize"
+          :total.sync="pagedata.total">
+      </el-pagination>
+      <el-button @click="clickMT('refresh',{})" class="refresh" size="small" type="primary" icon="el-icon-refresh"></el-button>
+    </div>
   </div>
 </template>
 
@@ -92,9 +95,16 @@ export default {
         this.getDataApi()
       }
     },
-    imageClick(item){
-      console.log(item.url)
-      window.open(item.originUrl,"_blank")
+    clickMT(method,item){
+      switch (method){
+        case "imageClick":
+          console.log(item.url)
+          window.open(item.originUrl,"_blank")
+          break
+        case "refresh":
+          this.getDataApi()
+          break
+      }
     },
   },
   mounted() {

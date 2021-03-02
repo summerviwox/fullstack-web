@@ -5,12 +5,12 @@
         <newnodes
             :style="{'z-index':styleDir}"
             ref="mynewnodes"
-            class="mynewnodes"
+            class="mynewnodes mymaintheme"
             :nodes="newnodesApiData"
             @callBackMT="callBackMT"></newnodes>
         <mysearchnodes
             :style="{'z-index':styleSearch}"
-            class="mysearchnodes"
+            class="mysearchnodes mymaintheme"
             @callBackMT="callBackMT"
             :nodes="searchedNode"></mysearchnodes>
       </div>
@@ -95,7 +95,7 @@ export default {
         //this.$refs.markdown.marktext = item.markdown
         return
       }
-      api.postApi(api.selectMarkdownById,true,{id:item.id},res=>{
+      api.postApi(api.selectMarkdownById,false,{id:item.id},res=>{
         item.markdown = res.data.markdown
         this.selectedNode = item
       })
