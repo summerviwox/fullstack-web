@@ -2,12 +2,12 @@
   <div class="mydir">
     <div class="menu">
       <div class="top">
-        <newnodes
+        <dir-nodes
             :style="{'z-index':styleDir}"
             ref="mynewnodes"
             class="mynewnodes mymaintheme"
-            :nodes="newnodesApiData"
-            @callBackMT="callBackMT"></newnodes>
+            :dir-nodes-data="dirNodesDataFromServer"
+            @callBackMT="callBackMT"></dir-nodes>
         <mysearchnodes
             :style="{'z-index':styleSearch}"
             class="mysearchnodes mymaintheme"
@@ -19,36 +19,42 @@
         <nodesearch @onEnterSearch="onEnterSearchMT"  ref="nodesearch" ></nodesearch>
       </div>
     </div>
-    <newmarkdown :node="selectedNode" ref="markdown" class="markdown"></newmarkdown>
+    <my-markdown :my-markdown-data="selectedNode" ref="markdown" class="markdown"></my-markdown>
     <nodetree ref="nodetree" v-show="nodetreeVisible"  class="notetree"></nodetree>
   </div>
 </template>
 
 <script>
 import nodeutil from "@/components/node/nodeutil";
-import Newnodes from "@/components/newnodes/newnodes";
 import api from "@/api/api";
-import Markdown from "@/components/markdown/markdown";
+
 import Nodetree from "@/components/notetree/nodetree";
 import Nodesearch from "@/components/nodesearch/nodesearch";
 import newnodesUtil from "@/components/newnodes/newnodesUtil";
 import util from "@/util/util";
-import Newmarkdown from "@/components/markdown/newmarkdown";
 import Mysearchnodes from "@/components/mysearchnodes/mysearchnodes";
+import DirNodes from "@/components/newnodes/dir-nodes";
+import MyMarkdown from "@/components/markdown/my-markdown";
 
 export default {
-  name: "mydir",
-  components: {Mysearchnodes, Newmarkdown, Nodesearch, Nodetree, Newnodes},
+  name: "myDir",
+  components: {MyMarkdown, DirNodes, Mysearchnodes, Nodesearch, Nodetree},
   data:function (){
     return{
       styleDir:100,
       styleSearch:99,
       booleanDir:true,
       nodetreeVisible:false,
-      newnodesApiData:[
+      dirNodesDataFromServer:[
 
       ],
-      selectedNode:{},
+      selectedNode:{
+        id:-1,
+        parentid:0,
+        title:"",
+        html:"",
+        type:0,
+      },
       searchedNode:[],
       dirOrSearch:true,
     }
@@ -58,7 +64,6 @@ export default {
       //console.log(data,method)
       switch (method){
         case "selectedNodeMT":
-          // this.selectedNode = data
           this.getMarkDownMT(data)
           break
         case "onContextClickMT":
@@ -80,22 +85,22 @@ export default {
           }
           break
         case "gotoMT":
-         this.switchMenu(false)
-           // console.log(this.$refs.mynewnodes,data.event.clientY)
+          this.switchMenu(false)
+          // console.log(this.$refs.mynewnodes,data.event.clientY)
           // this.$refs.mynewnodes.$el.scrollTo(0,data.event.clientY)
-            console.log(111,data.data)
-            this.selectedNode = data.data
+          console.log(111,data.data)
+          this.selectedNode = data.data
           this.$refs.mynewnodes.scrollToCurrentNodeMT(data.data)
           break
       }
     },
     getMarkDownMT(item){
-      console.log(item)
       if(item.id.toString().startsWith("new")){
         //this.$refs.markdown.marktext = item.markdown
         return
       }
       api.postApi(api.selectMarkdownById,false,{id:item.id},res=>{
+        // nodeutil.copyDataFromNodeToNode(res.data,this.selectedNode)
         item.markdown = res.data.markdown
         this.selectedNode = item
       })
@@ -104,17 +109,12 @@ export default {
       api.postApi(api.search,true,{
         markdown:text
       },res=>{
-       // console.log(res.data)
         let result = []
         res.data.forEach((v,i)=>{
-          newnodesUtil.findSearchNodeInNodes({nodes:this.newnodesApiData},v,result)
+          newnodesUtil.findSearchNodeInNodes({nodes:this.dirNodesDataFromServer},v,result)
         })
-        // result.forEach((v,i)=>{
-        //   newnodesUtil.expandNode(v)
-        // })
         this.searchedNode = result
         this.switchMenu(true)
-        //console.log(result,this.newnodesApiData)
       })
     },
     switchMenu(is){
@@ -132,13 +132,12 @@ export default {
   mounted() {
     //console.log(123)
     api.getApi(api.blog.selectTreeNode,true,{},res=>{
-     // console.log(res)
-      this.newnodesApiData = res.data
+      this.dirNodesDataFromServer = res.data
     })
   }
 }
 </script>
 
 <style scoped lang="less">
-@import "mydir.less";
+@import "my-dir";
 </style>

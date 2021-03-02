@@ -21,10 +21,6 @@ const router = new VueRouter({
                     component:()=>import("@/components/home/home")
                 },
                 {
-                    path:'/second',
-                    component:()=>import("@/components/second/second")
-                },
-                {
                     path:'/mine',
                     component:()=>import("@/components/mine/mine")
                 },
@@ -46,7 +42,7 @@ const router = new VueRouter({
                 },
                 {
                     path:'/mydir',
-                    component:()=>import("@/components/mydir/mydir")
+                    component:()=>import("@/components/mydir/my-dir")
                 },
 
 

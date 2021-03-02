@@ -1,4 +1,11 @@
 const nodeutil = {
+    copyDataFromNodeToNode(from,to){
+        to.id = from.id
+
+        to.parentid = from.parentid
+        to.title = from.title
+        to.markdown = from.markdown
+    },
     getFirstLineStr(str){
         let title =  str.indexOf('\n')==-1?str:str.substring(0,str.indexOf('\n'))
         if(title.indexOf("# ")!=-1){
@@ -21,7 +28,7 @@ const nodeutil = {
         if((type==="node")&&node.node){
             return node.node.length==0?"":"("+node.node.length+")"
         }
-       return ''
+        return ''
     },
     getCurrentNodePath(data,str){
         if(data.childBlog.length==0){

@@ -1,24 +1,24 @@
 <template>
   <div  ref="newnodes" class="newnodesa myscroller">
-    <newnode ref="newnode" :nodes="nodes" @callBackMT="callBackMT" :data="{selectedNode:selectedNode}"></newnode>
+    <dir-node ref="newnode" :dir-node-data="dirNodesData"   @callBackMT="callBackMT" :data="{selectedNode:selectedNode}"></dir-node>
    <context-menu @onContextClick="onContextClickMT"  ref="contextdialog"   :contextList="contextList"></context-menu>
   </div>
 </template>
 
 <script>
-import Newnode from "@/components/newnode/newnode";
 import ContextMenu from "@/components/contextmenu/contextMenu";
 import bus from "@/util/bus";
 import api from "@/api/api";
 import newnodesUtil from "@/components/newnodes/newnodesUtil";
 import util from "@/util/util";
-
+import DirNode from "@/components/newnode/dir-node";
+import common from "@/common/common";
 export default {
-  name: "newnodes",
+  name: "dirNodes",
   props:{
-    nodes:Array,
+    dirNodesData:Array,
   },
-   components: {ContextMenu, Newnode},
+   components: {DirNode, ContextMenu},
   data:function (){
     return{
       selectedNode:{},
@@ -61,7 +61,7 @@ export default {
   methods:{
     scrollToCurrentNodeMT(item){
       let result = {result:0}
-      this.nodes.forEach((v,i)=>{
+      this.dirNodesData.forEach((v,i)=>{
         newnodesUtil.closeAllNode(v)
       })
       newnodesUtil.countMyHeight(item,result)
@@ -71,7 +71,6 @@ export default {
       },1000)
     },
     callBackMT(method,data){
-      console.log(method,data)
       switch (method){
         case "selectedNodeMT":
           this.selectedNode = data
@@ -104,10 +103,9 @@ export default {
           }
           api.postApi(api.insert,true,rootnode,res=>{
             rootnode.id = res.data.id
-            this.nodes.push(rootnode)
+            this.dirNodesData.push(rootnode)
             this.selectedNode = rootnode
             this.$emit("callBackMT",{data:this.selectedNode,item:item},'onContextClickMT')
-            // this.$refs.markdown.marktext = rootnode.markdown
           })
           break
         case "新建":
@@ -135,7 +133,7 @@ export default {
           api.postApi(api.deleteByPrimaryKey,true,{id:this.selectedNode.id},res=>{
             if(res.data==1){
               var parent = [{}]
-              newnodesUtil.getParentNode(this.nodes,this.selectedNode.id,parent)
+              newnodesUtil.getParentNode(this.dirNodesData,this.selectedNode.id,parent)
               if(util.isNotEmpty(parent[0])){
                 parent[0].splice(parent[0].indexOf(this.selectedNode),1)
                 this.$emit("callBackMT",{data:{},item:item},'onContextClickMT')
@@ -155,7 +153,7 @@ export default {
             if(res==1){
               this.$message.success("成功")
               var parent = [{}]
-              newnodesUtil.getParentNode(this.nodes,this.tempCutNode.id,parent)
+              newnodesUtil.getParentNode(this.dirNodesData,this.tempCutNode.id,parent)
               if(util.isNotEmpty(parent[0])){
                 parent[0].splice(parent[0].indexOf(this.tempCutNode),1)
               }
@@ -186,5 +184,5 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "newnodes.less";
+@import "dir-nodes";
 </style>

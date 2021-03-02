@@ -1,47 +1,43 @@
 <template>
-  <div class="newnode">
-    <div class="node" v-for="(item,index) in nodes" :key="index">
+  <div class="dir-node-root">
+    <div class="node" v-for="(item,index) in dirNodeData" :key="index">
       <div class="title"
-           v-bind:class="{selectedtheme:booleanSelected(item),
-         unselectedtheme:!booleanSelected(item)}"
+           v-bind:class="{selectedtheme:booleanSelectedMT(item),
+         unselectedtheme:!booleanSelectedMT(item)}"
            :style="{paddingLeft:item.level*30+'px'}"
            @click="callBackMT('selectedNodeMT',item)"
-            @contextmenu.prevent="callBackMT('contextmenuMT',{data:item,event:$event})"
+           @contextmenu.prevent="callBackMT('contextmenuMT',{data:item,event:$event})"
       >
         <img class="arrow" v-bind:class="{toggleon:item.toggle,toggleoff:!item.toggle}" :style="{visibility:item.nodes.length!=0?'visible':'hidden'}" :src="require('../../assets/right.svg')" @click.stop="callBackMT('toggle',item)"/>
         <div class="text">{{item.title}}</div>
         <div class="childcount">{{item.nodes.length==0?'':item.nodes.length}}</div>
       </div>
       <div class="line mylinetheme"></div>
-      <newnode v-show="item.toggle"  class="children" :nodes="item.nodes" @callBackMT="callBackMT" :data="data">
-
-      </newnode>
+      <dir-node v-show="item.toggle"  class="children" :dir-node-data="item.nodes" @callBackMT="callBackMT" :data="data"></dir-node>
     </div>
   </div>
 </template>
 
 <script>
-import nodeutil from "@/components/node/nodeutil";
 import util from "@/util/util";
-
 export default {
-  name: "newnode",
+  name: "dirNode",
   props:{
-    nodes:Array,
+    dirNodeData:Array,
     data:Object,
   },
   data:function (){
     return{
-      dbclickouttime:200,//双击判定时间
-      timeout:{},
+
     }
   },
   methods:{
     callBackMT(method,data){
       this.$emit("callBackMT",method,data)
     },
-    booleanSelected(item){
-      return  util.isEmpty(this.data.selectedNode)?false:
+    booleanSelectedMT(item){
+      return  util.isEmpty(this.data.selectedNode)?
+          false:
           this.data.selectedNode.id == item.id
     },
     testId(){
@@ -55,5 +51,5 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "newnode.less";
+@import "dir-node";
 </style>

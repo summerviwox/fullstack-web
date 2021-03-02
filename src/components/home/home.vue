@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import Markdown from "../markdown/markdown";
+
 import api from "../../api/api";
 import bus from "../../util/bus";
 import contextMenu from "../contextmenu/contextMenu";

@@ -49,7 +49,7 @@ export default {
         {
           label:"笔记",
           index:1,
-          url:"/mydir",
+          url:"/myDir",
         },
         {
           label:"bug",

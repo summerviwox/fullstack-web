@@ -1,7 +1,13 @@
 <template>
   <div class="hroot mymarkdownroot"  @contextmenu.prevent="onRightClick">
     <div class="markdownroot" v-if="currentStatus!=2">
-      <textarea ref="markdown" class="markdown myscroller mymaintheme" @scroll="scroll()" v-model="marktext" v-bind:oninput="input()" type="textarea"></textarea>
+      <textarea
+          @keydown="keyWatch"
+          ref="markdown"
+          class="markdown myscroller mymaintheme"
+          @scroll="scroll()"
+          v-model="marktext"
+          type="textarea"></textarea>
     </div>
     <div ref="htmlroot" class="htmlroot myscroller" v-if="currentStatus!=1">
       <div  class="html" v-html="htmltext"></div>
@@ -29,24 +35,26 @@
 </template>
 
 <script>
-import md from './mymarkdown'
+import md from './markdownutil'
 import bus from "../../util/bus";
 import api from "../../api/api";
 import util from "../../util/util";
 import ContextMenu from "../contextmenu/contextMenu";
+import nodeutil from "@/components/node/nodeutil";
+
 export default {
-  name: "markdown",
+  name: "myMarkdown",
   components: {ContextMenu},
   props:{
-    outmarkdown:String,
+    myMarkdownData:Object,
   },
   data:function (){
     return{
+      marktext:"",
       currentStatus:0,//0左右都显示 1只显示左边  2只显示右边
       historymaxlength:20,
       history:[],
       currentHistoryIndex:-1,
-      marktext:'',
       nodeId:'',
       htmltext:'',
       insertLinkDialogShow:false,
@@ -120,7 +128,15 @@ export default {
     }
   },
   watch:{
+    myMarkdownData:function(n,o){
+      console.log("node",n)
+      this.marktext = n.markdown
+      this.htmltext = md.render(util.isEmpty(this.marktext)?"":this.marktext)
+    },
     marktext:function (n,o) {
+      if(util.isEmpty(n)){
+        n = ""
+      }
       //console.log("current",this.history,this.currentHistoryIndex)
       // console.log(o,n)
       // eslint-disable-next-line no-empty
@@ -134,9 +150,42 @@ export default {
         this.currentHistoryIndex = this.history.length-1
       }
       // console.log("marktext",this.history,this.currentHistoryIndex)
+      this.htmltext = md.render(util.isEmpty(this.marktext)?"":this.marktext)
     },
   },
   methods:{
+    keyWatch(e){
+      if(e.ctrlKey){
+         switch (e.key){
+           case "s":
+             e.preventDefault()
+             api.postApi(api.updateByPrimaryKey,false,{
+               id:this.myMarkdownData.id,
+               parentid:util.isEmpty(this.myMarkdownData.parentId)?this.myMarkdownData.parentid:this.myMarkdownData.parentId,
+               markdown:this.marktext,
+               html:this.htmltext,
+               title:nodeutil.getFirstLineStr(this.marktext),
+               ctime:new Date().getTime(),
+               utime:new Date().getTime(),
+               type:0
+             },res=>{
+                if(res==1){
+                  this.myMarkdownData.title = nodeutil.getFirstLineStr(this.marktext),
+                  this.$message.success("成功")
+                }
+
+             })
+             break
+           case "z":
+             this.rollback()
+             break
+           case "y":
+             this.rollPush()
+             break
+         }
+      }
+      console.log(e)
+    },
     //control + z
     rollback(){
       //console.log("rollback",this.history,this.currentHistoryIndex)
@@ -169,9 +218,6 @@ export default {
       console.log(11,process.env)
       this.insertValue.type = "上传文件"
       this.$refs.inputer.click()
-    },
-    input(){
-      this.htmltext = md.render(this.marktext)
     },
     scroll(){
       let markdown =  this.$refs.markdown;
@@ -231,7 +277,7 @@ export default {
           var path = this.$router.resolve({
             path:'/html',
             query:{
-              id:this.nodeId
+              id:this.myMarkdownData.id
             }
           })
           window.open(path.href,'_blank')

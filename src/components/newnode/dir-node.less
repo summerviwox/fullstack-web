@@ -1,4 +1,4 @@
-.newnode{
+.dir-node-root{
   width: 100%;
   .node{
     .title{
@@ -37,5 +37,14 @@
     .toggleoff{
       transform: rotate(0deg);
     }
+  }
+
+  .showchild{
+    transition: opacity ease 1s;
+    opacity:100%;
+  }
+  .hidechild{
+    transition: opacity ease 1s;
+    opacity: 0;
   }
 }
