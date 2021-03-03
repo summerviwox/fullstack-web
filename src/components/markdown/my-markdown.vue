@@ -35,12 +35,12 @@
 </template>
 
 <script>
-import md from './markdownutil'
+import md from './markdown-util'
 import bus from "../../util/bus";
 import api from "../../api/api";
 import util from "../../util/util";
 import ContextMenu from "../contextmenu/contextMenu";
-import nodeutil from "@/components/node/nodeutil";
+import dirNodesUtil from "@/components/dirnodes/dir-nodes-util";
 
 export default {
   name: "myMarkdown",
@@ -129,7 +129,6 @@ export default {
   },
   watch:{
     myMarkdownData:function(n,o){
-      console.log("node",n)
       this.marktext = n.markdown
       this.htmltext = md.render(util.isEmpty(this.marktext)?"":this.marktext)
     },
@@ -164,13 +163,13 @@ export default {
                parentid:util.isEmpty(this.myMarkdownData.parentId)?this.myMarkdownData.parentid:this.myMarkdownData.parentId,
                markdown:this.marktext,
                html:this.htmltext,
-               title:nodeutil.getFirstLineStr(this.marktext),
+               title:dirNodesUtil.getFirstLineStr(this.marktext),
                ctime:new Date().getTime(),
                utime:new Date().getTime(),
                type:0
              },res=>{
                 if(res==1){
-                  this.myMarkdownData.title = nodeutil.getFirstLineStr(this.marktext),
+                  this.myMarkdownData.title = dirNodesUtil.getFirstLineStr(this.marktext),
                   this.$message.success("成功")
                 }
 

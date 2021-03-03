@@ -1,20 +1,25 @@
 <template>
-  <div class="mysearchnodes myscroller">
-    <div
-        @click="gotoMT(item,$event)"
-        class="item"
-        v-for="(item,index) in nodes"
-        :key="index">
-      <div class="title">{{item.title}}</div>
-      <div class="detail">{{item.markdown}}</div>
-      <div class="line mylinetheme"></div>
+  <div class="mysearchnodes-root">
+    <div class="myscroller scroll">
+      <div
+          @click="gotoMT(item,$event)"
+          class="item"
+          v-for="(item,index) in nodes"
+          :key="index">
+        <div class="title">{{item.title}}</div>
+        <div class="detail">{{item.markdown}}</div>
+        <div class="line mylinetheme"></div>
+      </div>
     </div>
+    <nodata v-show="nodes.length==0"></nodata>
   </div>
 </template>
 
 <script>
+import Nodata from "@/components/nodata/nodata";
 export default {
   name: "mysearchnodes",
+  components: {Nodata},
   props:{
     nodes:Array,
   },

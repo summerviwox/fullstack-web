@@ -15,7 +15,7 @@
             :nodes="searchedNode"></mysearchnodes>
       </div>
       <div class="bottom">
-        <img @click="switchMenu(booleanDir)"  class="switch" :src="require('../../assets/dir.png')"/>
+        <img @click="switchMenu(booleanDir)"  class="switch" :src="require('../../assets/dir.svg')"/>
         <nodesearch @onEnterSearch="onEnterSearchMT"  ref="nodesearch" ></nodesearch>
       </div>
     </div>
@@ -25,16 +25,16 @@
 </template>
 
 <script>
-import nodeutil from "@/components/node/nodeutil";
 import api from "@/api/api";
 
 import Nodetree from "@/components/notetree/nodetree";
 import Nodesearch from "@/components/nodesearch/nodesearch";
-import newnodesUtil from "@/components/newnodes/newnodesUtil";
+import dirNodesUtil from "@/components/dirnodes/dir-nodes-util";
 import util from "@/util/util";
 import Mysearchnodes from "@/components/mysearchnodes/mysearchnodes";
-import DirNodes from "@/components/newnodes/dir-nodes";
+import DirNodes from "@/components/dirnodes/dir-nodes";
 import MyMarkdown from "@/components/markdown/my-markdown";
+import bus from "@/util/bus";
 
 export default {
   name: "myDir",
@@ -60,14 +60,15 @@ export default {
     }
   },
   methods:{
+    abc(){
+
+    },
     callBackMT(data,method){
-      //console.log(data,method)
       switch (method){
         case "selectedNodeMT":
           this.getMarkDownMT(data)
           break
         case "onContextClickMT":
-          console.log(data)
           this.selectedNode = data.data
           switch (data.item.label){
             case "新增根目录":
@@ -86,13 +87,11 @@ export default {
           break
         case "gotoMT":
           this.switchMenu(false)
-          // console.log(this.$refs.mynewnodes,data.event.clientY)
-          // this.$refs.mynewnodes.$el.scrollTo(0,data.event.clientY)
-          console.log(111,data.data)
-          this.selectedNode = data.data
+          this.callBackMT(data.data,"selectedNodeMT")
           this.$refs.mynewnodes.scrollToCurrentNodeMT(data.data)
           break
       }
+      bus.$emit("callBackMT",data,method)
     },
     getMarkDownMT(item){
       if(item.id.toString().startsWith("new")){
@@ -102,6 +101,7 @@ export default {
       api.postApi(api.selectMarkdownById,false,{id:item.id},res=>{
         // nodeutil.copyDataFromNodeToNode(res.data,this.selectedNode)
         item.markdown = res.data.markdown
+        dirNodesUtil.handleErrorMarkdownDomainMT(item)
         this.selectedNode = item
       })
     },
@@ -111,7 +111,7 @@ export default {
       },res=>{
         let result = []
         res.data.forEach((v,i)=>{
-          newnodesUtil.findSearchNodeInNodes({nodes:this.dirNodesDataFromServer},v,result)
+          dirNodesUtil.findSearchNodeInNodes({nodes:this.dirNodesDataFromServer},v,result)
         })
         this.searchedNode = result
         this.switchMenu(true)
@@ -132,6 +132,9 @@ export default {
   mounted() {
     //console.log(123)
     api.getApi(api.blog.selectTreeNode,true,{},res=>{
+      res.data.forEach((v)=>{
+        dirNodesUtil.handleInitServeNodesDataMT(v)
+      })
       this.dirNodesDataFromServer = res.data
     })
   }

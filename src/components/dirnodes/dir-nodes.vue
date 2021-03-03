@@ -1,6 +1,6 @@
 <template>
   <div  ref="newnodes" class="newnodesa myscroller">
-    <dir-node ref="newnode" :dir-node-data="dirNodesData"   @callBackMT="callBackMT" :data="{selectedNode:selectedNode}"></dir-node>
+    <dir-node  ref="newnode" :dir-node-data="dirNodesData"  @callBackMT="callBackMT" :data="{selectedNode:selectedNode}"></dir-node>
    <context-menu @onContextClick="onContextClickMT"  ref="contextdialog"   :contextList="contextList"></context-menu>
   </div>
 </template>
@@ -9,9 +9,9 @@
 import ContextMenu from "@/components/contextmenu/contextMenu";
 import bus from "@/util/bus";
 import api from "@/api/api";
-import newnodesUtil from "@/components/newnodes/newnodesUtil";
+import dirNodesUtil from "@/components/dirnodes/dir-nodes-util";
 import util from "@/util/util";
-import DirNode from "@/components/newnode/dir-node";
+import DirNode from "@/components/dirnodes/dirnode/dir-node";
 import common from "@/common/common";
 export default {
   name: "dirNodes",
@@ -62,9 +62,9 @@ export default {
     scrollToCurrentNodeMT(item){
       let result = {result:0}
       this.dirNodesData.forEach((v,i)=>{
-        newnodesUtil.closeAllNode(v)
+        dirNodesUtil.closeAllNode(v)
       })
-      newnodesUtil.countMyHeight(item,result)
+      dirNodesUtil.countMyHeight(item,result)
       setTimeout(()=>{
         this.selectedNode = item
         this.$refs.newnodes.scrollTo(0,(result.result-1)*41)
@@ -83,7 +83,8 @@ export default {
           this.$refs.contextdialog.open(data.event)
           break
       }
-      this.$emit("callBackMT",data,method)
+    //  this.$emit("callBackMT",data,method)
+      this.$listeners.callBackMT(data,method)
     },
     onContextClickMT(e,item){
       this.$refs.contextdialog.close()
@@ -133,7 +134,7 @@ export default {
           api.postApi(api.deleteByPrimaryKey,true,{id:this.selectedNode.id},res=>{
             if(res.data==1){
               var parent = [{}]
-              newnodesUtil.getParentNode(this.dirNodesData,this.selectedNode.id,parent)
+              dirNodesUtil.getParentNode(this.dirNodesData,this.selectedNode.id,parent)
               if(util.isNotEmpty(parent[0])){
                 parent[0].splice(parent[0].indexOf(this.selectedNode),1)
                 this.$emit("callBackMT",{data:{},item:item},'onContextClickMT')
@@ -153,14 +154,14 @@ export default {
             if(res==1){
               this.$message.success("成功")
               var parent = [{}]
-              newnodesUtil.getParentNode(this.dirNodesData,this.tempCutNode.id,parent)
+              dirNodesUtil.getParentNode(this.dirNodesData,this.tempCutNode.id,parent)
               if(util.isNotEmpty(parent[0])){
                 parent[0].splice(parent[0].indexOf(this.tempCutNode),1)
               }
             this.tempCutNode.level = this.selectedNode.level+1
               this.tempCutNode.parentid = this.selectedNode.id
               this.tempCutNode.utime =new Date().getTime()
-              newnodesUtil.updateNodeLevel(this.tempCutNode)
+              dirNodesUtil.updateNodeLevel(this.tempCutNode)
               this.selectedNode.nodes.push(this.tempCutNode)
               this.cutNode ={}
               this.$emit("callBackMT",{data:this.selectedNode,item:item},'onContextClickMT')
@@ -178,6 +179,7 @@ export default {
     },
   },
   mounted() {
+    console.log(this.$listeners)
     bus.$on("onAllClickEvent",this.rootclick)
   }
 }

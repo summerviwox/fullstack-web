@@ -35,7 +35,6 @@ export default {
 
     },
     open(e){
-      console.log("contextmenu",e)
       let clientHeight =document.body.clientHeight
       this.contextStyle.left = e.clientX + 'px'
       if(e.clientY>clientHeight/2){

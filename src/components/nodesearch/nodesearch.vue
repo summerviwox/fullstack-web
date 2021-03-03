@@ -1,8 +1,8 @@
 <template>
   <div class="nodesearch">
 
-    <input @keyup.enter="onEnterSearch()" class="text myinputtheme" v-model="text" maxlength="23" type="text"/>
-    <img class="img" src="../../assets/search.png"/>
+    <input @keyup.enter="onEnterSearch()" class="text myinputtheme" v-model="text" maxlength="28" type="text"/>
+    <img v-if="text.length!=0" @click="onClearInputMT" class="img" src="../../assets/remove.svg"/>
   </div>
 </template>
 
@@ -40,6 +40,9 @@ export default {
       this.switchMenuIndex(1)
       this.$emit("onEnterSearch",this.text)
     },
+    onClearInputMT(){
+      this.text = ""
+    }
   },
   mounted() {
 

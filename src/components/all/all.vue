@@ -32,6 +32,7 @@ import bus from "../../util/bus";
 import myfooter from "../footer/myfooter";
 import Mythree from "../mythree/mythree";
 import util from "@/util/util";
+import dirNodesUtil from "@/components/dirnodes/dir-nodes-util";
 export default {
   name: "all",
   components: { myfooter},
@@ -122,7 +123,6 @@ export default {
       bus.$emit("onAllClickEvent",{})
     },
     dropDownClick(index){
-      console.log(index)
       switch (index){
         case 0:
           localStorage.removeItem('loginres')
@@ -133,10 +133,21 @@ export default {
           this.switchPage(this.title[4])
           break
       }
+    },
+    callBackMT(data,method){
+        switch (method){
+          case "selectedNodeMT":
+              var result = []
+            this.infos = []
+              dirNodesUtil.getCurrentNodeDirPath(data,result)
+              for(let i=result.length-1;i>=0;i--){
+                this.infos.push(result[i].title)
+              }
+            break
+        }
     }
   },
   mounted() {
-    console.log(1111,this.$route)
     let a ;
     this.title.forEach((v,i)=>{
       if(this.$route.path===v.url){
@@ -147,6 +158,7 @@ export default {
     bus.$on("currentNodeInfo",this.currentNodeInfo)
     bus.$on("currentSearchNode",this.currentSearchNode)
     bus.$on("switchpage",this.autoSwitchPage)
+    bus.$on("callBackMT",this.callBackMT)
   }
 }
 </script>

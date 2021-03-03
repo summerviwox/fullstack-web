@@ -1,10 +1,33 @@
 import util from "@/util/util";
 
-const newnodesUtil = {
+const dirNodesUtil = {
+    getFirstLineStr(str){
+        let title =  str.indexOf('\n')==-1?str:str.substring(0,str.indexOf('\n'))
+        if(title.indexOf("# ")!=-1){
+            title = title.substring(2,title.length)
+        }
+        return title.trim()
+    },
+    handleErrorMarkdownDomainMT(node){
+        node.markdown = node.markdown.replace(/http:\/\/222.186.36.75:8888/g,"https://www.summerviwox.com")
+        node.markdown = node.markdown.replace(/https:\/\/www.summerman.top:7777/g,"https://www.summerviwox.com")
+    },
+
+    handleInitServeNodesDataMT(node){
+        node.nodes.forEach((v,i)=>{
+            v.parentNode = node
+            this.handleInitServeNodesDataMT(v)
+        })
+    },
+    getCurrentNodeDirPath(currentNode,result){
+        if(currentNode){
+            result.push(currentNode)
+            this.getCurrentNodeDirPath(currentNode.parentNode,result)
+        }
+    },
     getParentNode(treenode,id,parent){
         treenode.forEach((v,i)=>{
             if(v.id==id){
-                console.log(v.id)
                 parent[0] = treenode
                 return
             }else{
@@ -20,7 +43,7 @@ const newnodesUtil = {
     },
     findSearchNodeInNodes(node,search,result){
         node.nodes.forEach((v,i)=>{
-            v.parentNode = node
+           // v.parentNode = node
             if(v.id==search.id){
                 v.markdown = search.markdown
                 result.push(v)
@@ -67,4 +90,4 @@ const newnodesUtil = {
         })
     }
 }
-export default newnodesUtil
+export default dirNodesUtil
