@@ -50,6 +50,11 @@ export default {
           value:5,
           enable:false,
         },
+        {
+          label:"树状图",
+          value:6,
+          enable:true,
+        },
       ],
     }
   },
@@ -108,7 +113,7 @@ export default {
             this.selectedNode = rootnode
             this.$emit("callBackMT",{data:this.selectedNode,item:item},'onContextClickMT')
           })
-          break
+          return
         case "新建":
           var node = {
             level:this.selectedNode.level+1,
@@ -129,7 +134,7 @@ export default {
             this.selectedNode = node
             this.$emit("callBackMT",{data:this.selectedNode,item:item},'onContextClickMT')
           })
-          break
+          return
         case "删除":
           api.postApi(api.deleteByPrimaryKey,true,{id:this.selectedNode.id},res=>{
             if(res.data==1){
@@ -145,7 +150,7 @@ export default {
         case "剪切":
           this.tempCutNode = this.selectedNode
           this.cutNode = this.selectedNode
-          break
+          return
         case "粘贴":
           api.postApi(api.updateParentIdByPrimaryKey,true,{
             parentid:this.selectedNode.id,
@@ -167,10 +172,10 @@ export default {
               this.$emit("callBackMT",{data:this.selectedNode,item:item},'onContextClickMT')
             }
           })
-          break
+          return
       }
 
-      //this.$emit("callBackMT",{data:this.selectedNode,item:item},'onContextClickMT')
+      this.$emit("callBackMT",{data:this.selectedNode,item:item},'onContextClickMT')
     },
     rootclick(){
       if(this.$refs.contextdialog){

@@ -35,6 +35,15 @@ const dirNodesUtil = {
             }
         })
     },
+    getNodeById(nodes,id,node){
+        nodes.forEach(v=>{
+            if(v.id==id){
+                node.node = v
+                return
+            }
+            this.getNodeById(v.nodes,id,node)
+        })
+    },
     updateNodeLevel(treeNode){
        treeNode.nodes.forEach((v,i)=>{
            v.level = treeNode.level +1

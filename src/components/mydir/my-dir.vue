@@ -20,7 +20,7 @@
       </div>
     </div>
     <my-markdown :my-markdown-data="selectedNode" ref="markdown" class="markdown"></my-markdown>
-    <nodetree ref="nodetree" v-show="nodetreeVisible"  class="notetree"></nodetree>
+    <nodetree @callBackMT="callBackMT" ref="nodetree"  class="notetree"></nodetree>
   </div>
 </template>
 
@@ -44,7 +44,6 @@ export default {
       styleDir:100,
       styleSearch:99,
       booleanDir:true,
-      nodetreeVisible:false,
       dirNodesDataFromServer:[
 
       ],
@@ -56,8 +55,10 @@ export default {
         type:0,
       },
       searchedNode:[],
-      dirOrSearch:true,
+      showLeftMenuType:0,
     }
+  },
+  watch:{
   },
   methods:{
     abc(){
@@ -83,12 +84,23 @@ export default {
             case "粘贴":
               //  this.$refs.markdown.marktext =data.data.markdown
               break
+            case "树状图":
+              this.$refs.nodetree.switchShowNoteTreeMT()
+              break
           }
           break
         case "gotoMT":
           this.switchMenu(false)
           this.callBackMT(data.data,"selectedNodeMT")
           this.$refs.mynewnodes.scrollToCurrentNodeMT(data.data)
+          break
+        case "onSelectedNodeTreeNode":
+          console.log(data,data.data)
+            var node = {node:{}}
+            dirNodesUtil.getNodeById(this.dirNodesDataFromServer,data.data.blog.id,node)
+            console.log(node.node)
+          this.callBackMT(node.node,"selectedNodeMT")
+          this.$refs.mynewnodes.scrollToCurrentNodeMT(node.node)
           break
       }
       bus.$emit("callBackMT",data,method)
