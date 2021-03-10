@@ -40,7 +40,8 @@ export default {
         this.mychart.getZr().off("click")
       }
         api.getApi(api.blog.selectBlogSunburst,true,{
-          deep:this.inputnumbernum
+          deep:this.inputnumbernum,
+          userid:0
         },res=>{
           this.apiData = res.data
           if(util.isEmpty(this.mychart)){

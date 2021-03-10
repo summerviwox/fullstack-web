@@ -143,7 +143,7 @@ export default {
   },
   mounted() {
     //console.log(123)
-    api.getApi(api.blog.selectTreeNode,true,{},res=>{
+    api.getApi(api.blog.selectTreeNode,true,{userid:0},res=>{
       res.data.forEach((v)=>{
         dirNodesUtil.handleInitServeNodesDataMT(v)
       })

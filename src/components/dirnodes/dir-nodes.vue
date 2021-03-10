@@ -96,6 +96,7 @@ export default {
       switch (item.label){
         case "新增根目录":
           var rootnode = {
+            userid:localStorage.getItem("userid"),
             level:0,
             nodes:[],
             parentid:0,
@@ -116,6 +117,7 @@ export default {
           return
         case "新建":
           var node = {
+            userid:localStorage.getItem("userid"),
             level:this.selectedNode.level+1,
             nodes:[],
             parentid:this.selectedNode.id,

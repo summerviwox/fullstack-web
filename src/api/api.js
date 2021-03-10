@@ -2,6 +2,7 @@ import axios from "axios";
 import router from "../router/router";
 import util from "@/util/util";
 import bus from "@/util/bus";
+import md5 from "md5"
 let url = 'https://'+process.env.VUE_APP_DOMAIN
 let testUrl = 'https://'+process.env.VUE_APP_DOMAIN+":444"
 
@@ -11,18 +12,12 @@ instance.interceptors.request.use(
         const token = localStorage.getItem("token")
         switch (config.method.trim()){
             case "get":
-                if(config.url.startsWith(testUrl)){
-                    config.params.token = 'summerviwox'
-                }else{
-                    config.params.token = token
-                }
+                config.params.token =token
+                config.params.userid = localStorage.getItem("userid")
                 break
             case "post":
-                if(config.url.startsWith(testUrl)){
-                    config.headers["token"] = 'summerviwox'
-                }else{
-                    config.headers["token"] = token
-                }
+                config.headers["token"] =token
+                config.data.userid = localStorage.getItem("userid")
                 break
         }
         return config

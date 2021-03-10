@@ -126,6 +126,7 @@ export default {
       switch (index){
         case 0:
           localStorage.removeItem('loginres')
+          localStorage.removeItem('userid')
           localStorage.setItem('loginres','')
           this.$router.push({path:'login',query:{}})
           break

@@ -17,6 +17,7 @@ import userde from "./userde";
     import api from "../../api/api";
 import util from "../../util/util";
 import Mythree from "../mythree/mythree";
+import md5 from "md5";
 
     export default {
         name: "login",
@@ -32,12 +33,12 @@ import Mythree from "../mythree/mythree";
        },
         methods:{
             login(){
-
-              let o = {name:this.loginInput.name,pwd:this.loginInput.pwd,time:new Date().getTime()}
+              let o = {name:this.loginInput.name,pwd:md5(this.loginInput.pwd),time:new Date().getTime()}
               api.postApi(api.login,true,o,res=>{
                 if(util.isNotEmpty(res)){
-                  localStorage.setItem('loginres',JSON.stringify(o) )
-                  localStorage.setItem("token",res)
+                  localStorage.setItem('loginres',JSON.stringify(res) )
+                  localStorage.setItem("userid",res.id)
+                  localStorage.setItem("token",res.token)
                   this.$router.push({path:'/all'})
                 }else{
                   this.$message.error("登录失败")
