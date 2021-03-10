@@ -155,7 +155,7 @@ const api = {
         deleteByPrimaryKey:'/record-b/crash/deleteByPrimaryKey',
     },
     picture:{
-        getAllRecordsDescLimit:'/record/record/getAllRecordsDescLimit',
+        getAllRecordsDescLimit:'/record-b/record/getAllRecordsDescLimitInNew',
     },
     blog:{
         selectBlogSunburst:'/record-b/blog/selectBlogSunburst',

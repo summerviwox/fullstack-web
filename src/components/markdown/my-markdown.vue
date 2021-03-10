@@ -168,7 +168,7 @@ export default {
                utime:new Date().getTime(),
                type:0
              },res=>{
-                if(res==1){
+                if(res.data==1){
                   this.myMarkdownData.title = dirNodesUtil.getFirstLineStr(this.marktext),
                   this.$message.success("成功")
                 }

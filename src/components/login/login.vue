@@ -35,10 +35,10 @@ import md5 from "md5";
             login(){
               let o = {name:this.loginInput.name,pwd:md5(this.loginInput.pwd),time:new Date().getTime()}
               api.postApi(api.login,true,o,res=>{
-                if(util.isNotEmpty(res)){
-                  localStorage.setItem('loginres',JSON.stringify(res) )
-                  localStorage.setItem("userid",res.id)
-                  localStorage.setItem("token",res.token)
+                if(util.isNotEmpty(res.data)){
+                  localStorage.setItem('loginres',JSON.stringify(res.data) )
+                  localStorage.setItem("userid",res.data.id)
+                  localStorage.setItem("token",res.data.token)
                   this.$router.push({path:'/all'})
                 }else{
                   this.$message.error("登录失败")

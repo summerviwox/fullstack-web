@@ -96,7 +96,7 @@ name: "bug",
         return
       }
       api.postApi(api.crash.deleteByPrimaryKey,true,{id:this.selectRow.id},res=>{
-        if(res==1){
+        if(res.data==1){
           this.$message.success(this.selectRow.id+ " 删除成功")
           this.getCrashListApi()
           this.selectRow = {}

@@ -77,7 +77,7 @@ export default {
     dataApi(){
       api.getApi(api.getallWebTag,true,{},res=>{
         this.urls = []
-        this.urls .push(...res)
+        this.urls .push(...res.data)
       //  this.urls .push(...res)
        // this.urls .push(...res)
       },error=>{

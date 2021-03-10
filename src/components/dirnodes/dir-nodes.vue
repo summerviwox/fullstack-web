@@ -158,7 +158,7 @@ export default {
             parentid:this.selectedNode.id,
             id:this.cutNode.id
           },res=>{
-            if(res==1){
+            if(res.data==1){
               this.$message.success("成功")
               var parent = [{}]
               dirNodesUtil.getParentNode(this.dirNodesData,this.tempCutNode.id,parent)
