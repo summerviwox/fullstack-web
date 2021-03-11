@@ -17,11 +17,15 @@
       </div>
     </div>
     <div class="container mymaintheme mid">
-      <keep-alive>
-        <router-view></router-view>
-      </keep-alive>
+      <div style="position: absolute;overflow:hidden;width: 100%;height: 100%;display: flex;flex-direction: column">
+        <transition :name="transition">
+          <keep-alive>
+          <router-view></router-view>
+          </keep-alive>
+        </transition>
+      </div>
     </div>
-    <div class="footer" v-if="current.index==1||current.index==7" >
+    <div class="footer" v-show="false">
       <myfooter :infos="infos" ref="footer"></myfooter>
     </div>
   </div>
@@ -38,6 +42,7 @@ export default {
   components: { myfooter},
   data:function (){
     return{
+      transition:"flip-ltr",
       current:{},
       currentIndex:0,
       infos:[],
@@ -97,7 +102,29 @@ export default {
       ]
     }
   },
+  watch:{
+    $route(to,from){
+      let f = this.title.filter(item=>{
+        return item.url===from.path
+      })[0]
+      let t = this.title.filter(item=>{
+        return item.url===to.path
+      })[0]
+      if(f.index>t.index){
+        this.transition = "flip-ltr"
+      }else{
+        this.transition = "flip-rtl"
+      }
+     // console.log(f,t,from,to)
+    },
+  },
   methods:{
+    allRootOnKeyDownEvent(e){
+      console.log(e)
+      if(e.alt){
+        let a=0
+      }
+    },
     switchPage(current){
       this.current = current
       this.title.forEach((v,i)=>{
@@ -160,10 +187,12 @@ export default {
     bus.$on("currentSearchNode",this.currentSearchNode)
     bus.$on("switchpage",this.autoSwitchPage)
     bus.$on("callBackMT",this.callBackMT)
+
   }
 }
 </script>
 
 <style scoped lang="less">
 @import "all";
+@import "my-transition";
 </style>

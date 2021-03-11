@@ -1,5 +1,5 @@
 <template>
-  <div ref="nodetreeroot" class="nodetree-root" :style="{'z-index':zindex}" >
+  <div v-show="nodetreeshow" ref="nodetreeroot" class="nodetree-root"   >
     <div ref="nodetreecontainer"  id="nodetreecontainer"></div>
     <el-input-number size="small" class="el-input-number" v-model="inputnumbernum" @change="handleChange" :min="1" :max="6" label="描述文字"></el-input-number>
   </div>
@@ -15,22 +15,21 @@ export default {
   name: "nodetree",
   data:function(){
     return{
+      nodetreeshow:false,
       inputnumbernum:5,
       apiData:[],
-      zindex:-1,
       mychart:"",
     }
   },
   methods:{
     switchShowNoteTreeMT(){
       this.showHideNoteTreeMT()
-      if(this.zindex==1000){
+      if(this.nodetreeshow){
         this.init()
       }
     },
     showHideNoteTreeMT(){
-      this.zindex = this.zindex ==-1?1000:-1
-      console.log(this.zindex)
+      this.nodetreeshow = !this.nodetreeshow
     },
       init(){
       if(util.isNotEmpty(this.mychart)){
@@ -50,6 +49,7 @@ export default {
           let bound = this.$refs.nodetreeroot.getBoundingClientRect()
           this.$refs.nodetreecontainer.style.height = bound.height
           this.$refs.nodetreecontainer.style.width = bound.width
+          this.mychart.resize(bound.width,bound.height)
           this.mychart.getZr().on("click",params=>{
             if(util.isEmpty(params.target)){
               this.showHideNoteTreeMT()

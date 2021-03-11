@@ -1,6 +1,6 @@
 <template>
   <div class="photoroot">
-    <div class="album" >
+    <div class="album myscroller" >
       <div class="photocontent" v-for="(item,index) in photos" :key="index">
         <div class="imagecontent"  @click="clickMT('imageClick',item)">
           <el-image v-if="item.atype === 'image'" class="elimage" fit="none"  :src="item.url" lazy>
