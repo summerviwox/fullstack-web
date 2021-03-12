@@ -110,10 +110,12 @@ export default {
       let t = this.title.filter(item=>{
         return item.url===to.path
       })[0]
-      if(f.index>t.index){
-        this.transition = "flip-ltr"
-      }else{
-        this.transition = "flip-rtl"
+      if(util.isNotEmpty(f)&&util.isNotEmpty(t)){
+        if(f.index>t.index){
+          this.transition = "flip-ltr"
+        }else{
+          this.transition = "flip-rtl"
+        }
       }
      // console.log(f,t,from,to)
     },
